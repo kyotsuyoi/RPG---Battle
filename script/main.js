@@ -190,7 +190,10 @@ function animate(){
                     }
                     
                     player.hp -= result  
-                    console.log('hp:'+player.hp)
+
+                    display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result})
+                    displays.push(display)
+                    //console.log('hp:'+player.hp)
 
                     if(player.hp <= 0){
                         return
