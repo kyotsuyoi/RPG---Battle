@@ -14,86 +14,127 @@ var grounds = new Array()
 var enemies = [
     new Enemy({
         id : '01',
-        x : 500, y : 500
+        x : 50, y : 50
     }),
     new Enemy({
         id : '02',
-        x : 700, y : 500
-    })
-    ,
+        x : 70, y : 50
+    }),
     new Enemy({
         id : '03',
-        x : 700, y : 600
-    })
-    ,
+        x : 70, y : 70
+    }),
     new Enemy({
         id : '04',
-        x : 700, y : 700
-    })
-    ,
+        x : 60, y : 60
+    }),
     new Enemy({
         id : '05',
-        x : 600, y : 600
+        x : 50, y : 70
+    })
+
+    ,
+
+    new Enemy({
+        id : '06',
+        x : 650, y : 50
+    }),
+    new Enemy({
+        id : '07',
+        x : 670, y : 50
+    }),
+    new Enemy({
+        id : '08',
+        x : 670, y : 70
+    })    ,
+    new Enemy({
+        id : '09',
+        x : 660, y : 60
+    }),
+    new Enemy({
+        id : '10',
+        x : 650, y : 70
     })
 ]
 
 const platforms = [
     new Platform({
-        x : 42*0, y : 200
+        x : 42*0, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*1, y : 200
+        x : 42*1, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*2, y : 200
+        x : 42*2, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*3, y : 200
+        x : 42*3, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*4, y : 200
+        x : 42*4, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*5, y : 200
+        x : 42*5, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*6, y : 200
+        x : 42*6, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*7, y : 200
+        x : 42*7, y : 200, cropWidth : 0, cropHeight : 0
     }), 
-    // new Platform({
-    //     x : 42*8, y : 200
-    // }), 
-    // new Platform({
-    //     x : 42*9, y : 200
-    // }), 
-    // new Platform({
-    //     x : 42*10, y : 200
-    // }), 
+
     new Platform({
-        x : 42*11, y : 200
+        x : 42*11, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*12, y : 200
+        x : 42*12, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*13, y : 200
+        x : 42*13, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*14, y : 200
+        x : 42*14, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*15, y : 200
+        x : 42*15, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*16, y : 200
+        x : 42*16, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*17, y : 200
+        x : 42*17, y : 200, cropWidth : 0, cropHeight : 0
     }), 
     new Platform({
-        x : 42*18, y : 200
+        x : 42*18, y : 200, cropWidth : 0, cropHeight : 0
+    })
+    ,
+
+    new Platform({
+        x : 465, y : 500, cropWidth : (45*11)-14, cropHeight : (45*3)-7, spriteType : 'wood_axe'
+    }),
+    new Platform({
+        x : 435, y : 500, cropWidth : (45*3)-6, cropHeight : (45*7)+5, spriteType : 'cutted_wood'
+    }),
+    new Platform({
+        x : 400, y : 0, cropWidth : (45*8)-8, cropHeight : (45*6)-13, spriteType : 'grain_sack'
+    }),
+    new Platform({
+        x : 440, y : 0, cropWidth : (45*3)-6, cropHeight : (45*7)+5, spriteType : 'cutted_wood'
+    }),
+    new Platform({
+        x : 370, y : 0, cropWidth : (45*6)-15, cropHeight : (45*7)+8, spriteType : 'open_grain_sack'
+    })
+]
+
+const roofs = [
+    new Roof({
+        x : 335, y : 200, cropWidth : (45*10)-3, cropHeight : (45*9)-2
+    }),
+    new Roof({
+        x : 420, y : 200, cropWidth : (45*11)-28, cropHeight : (45*9)-2
+    }),
+    new Roof({
+        x : 380, y : 200, cropWidth : (45*10)+9.5, cropHeight : (45*9)-2
     })
 ]
 
@@ -201,6 +242,10 @@ function animate(){
     enemies = enemies.filter(enemy => enemy.hp > 0)
     
     player.update()
+
+    roofs.forEach(roof =>{
+        roof.draw()
+    })
     
     displays.forEach(display => {
         display.draw()
@@ -209,7 +254,6 @@ function animate(){
             displays = displays.filter(display => display.time > 0)
         }
     })
-
 }
 
 player.draw()

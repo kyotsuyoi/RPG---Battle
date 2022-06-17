@@ -1,8 +1,8 @@
 class Player{
     constructor(){
         this.position ={
-            x : 100,
-            y : 100
+            x : 400,
+            y : 700
         }
         this.velocity={
             x : 0,
@@ -19,7 +19,7 @@ class Player{
 
         this.power = 14
         this.agility = 6
-        this.dexterity = 12
+        this.dexterity = 15
         this.vitality = 12
 
         this.max_hp = hp_value(this.vitality, this.power)

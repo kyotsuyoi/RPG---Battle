@@ -15,13 +15,15 @@ class Enemy{
 
         this.frames = 0
         this.count = 0
-        this.jumpCount = 0
 
-        this.patrol_time = 1000
+        this.patrol_time_wait = 1000
+        this.in_patrol_time = 0
         this.patrol_x = 0
         this.patrol_y = 0
         this.in_battle = false
         this.in_patrol = false
+        
+        this.in_patrol_time = 0
 
         this.attack_wait = 0
 
@@ -126,8 +128,14 @@ function enemy_action(enemy){
             enemy.attack_wait -= 1
         }
 
+        enemy.in_patrol_time+=1
+        if(enemy.in_patrol_time>1000){
+            enemy.in_patrol_time = 0
+            enemy.in_patrol = false
+        }
+
         if(!enemy.in_battle){
-            if(enemy.patrol_time <= 0){
+            if(enemy.patrol_time_wait <= 0){
 
                 if(!enemy.in_patrol){
                     enemy.in_patrol = true   
@@ -176,15 +184,15 @@ function enemy_action(enemy){
                 }                
 
                 if(enemy.patrol_x == Math.round(enemy.position.x) && enemy.patrol_y == Math.round(enemy.position.y)){                                                   
-                    enemy.patrol_time = 1000                    
+                    enemy.patrol_time_wait = 1000                    
                     enemy.in_patrol = false  
                 }
 
             }else{
-                enemy.patrol_time = enemy.patrol_time-4
+                enemy.patrol_time_wait = enemy.patrol_time_wait-4
             }
         }else{
-            enemy.patrol_time = 1000  
+            enemy.patrol_time_wait = 1000  
             enemy.patrol_x = 0
             enemy.patrol_y = 0              
             enemy.in_patrol = false 

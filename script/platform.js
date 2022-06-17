@@ -1,16 +1,43 @@
 class Platform {
-    constructor({x, y}){
+    constructor({x, y, cropWidth, cropHeight, spriteType}){
         this.position = {
             x,
             y
         }
         this.width = 42
-        this.height = 42
-        
+        this.height = 42        
+
         this.sprite = createImage('img/wall01.png')
 
+        switch(spriteType){
+            case 'wood_axe':
+                this.width = 32
+                this.height = 32
+                this.sprite = createImage('img/path_and_object.png')
+            break
+
+            case 'cutted_wood':
+                this.width = 32
+                this.height = 32
+                this.sprite = createImage('img/path_and_object.png')
+            break
+
+            case 'grain_sack':
+                this.width = 32
+                this.height = 32
+                this.sprite = createImage('img/path_and_object.png')
+            break
+            
+            case 'open_grain_sack':
+                this.width = 32
+                this.height = 32
+                this.sprite = createImage('img/path_and_object.png')
+            break
+        }
+
         this.currentSprite = this.sprite
-        this.currentCropWidth = 0
+        this.cropWidth = cropWidth
+        this.cropHeight = cropHeight
     }
 
     draw(){
@@ -19,10 +46,10 @@ class Platform {
 
         context.drawImage(          
             this.currentSprite, 
-            this.currentCropWidth * 1,
-            0,
-            42, //largura
-            42, //altura
+            this.cropWidth,
+            this.cropHeight,
+            this.width, //largura
+            this.height, //altura
             this.position.x, 
             this.position.y,
             this.width,
