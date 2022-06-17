@@ -1,5 +1,3 @@
-//import platform from './img/platform.png'
-
 const background = document.getElementById('background')
 const context = background.getContext('2d')
 
@@ -8,27 +6,10 @@ background.height = 800
 
 let scrollOffset = 0
 
-
 var damages = new Array();
 var displays = new Array();
-
-// class Platform {
-//     constructor({x, y}){
-//         this.position = {
-//             x,
-//             y
-//         }
-//         this.width = 30
-//         this.height = 30
-//     }
-
-//     draw(){
-//         context.fillStyle = 'blue'
-//         context.fillRect(this.position.x, this.position.y, this.width, this.height)
-//     }
-// }
-
 const player = new Player()
+var grounds = new Array()
 
 var enemies = [
     new Enemy({
@@ -56,14 +37,82 @@ var enemies = [
     })
 ]
 
-// const platforms = [
-//     new Platform({
-//         x : 200, y : 100
-//     }), 
-//     new Platform({
-//         x : 500, y : 200
-//     })
-// ]
+const platforms = [
+    new Platform({
+        x : 42*0, y : 200
+    }), 
+    new Platform({
+        x : 42*1, y : 200
+    }), 
+    new Platform({
+        x : 42*2, y : 200
+    }), 
+    new Platform({
+        x : 42*3, y : 200
+    }), 
+    new Platform({
+        x : 42*4, y : 200
+    }), 
+    new Platform({
+        x : 42*5, y : 200
+    }), 
+    new Platform({
+        x : 42*6, y : 200
+    }), 
+    new Platform({
+        x : 42*7, y : 200
+    }), 
+    // new Platform({
+    //     x : 42*8, y : 200
+    // }), 
+    // new Platform({
+    //     x : 42*9, y : 200
+    // }), 
+    // new Platform({
+    //     x : 42*10, y : 200
+    // }), 
+    new Platform({
+        x : 42*11, y : 200
+    }), 
+    new Platform({
+        x : 42*12, y : 200
+    }), 
+    new Platform({
+        x : 42*13, y : 200
+    }), 
+    new Platform({
+        x : 42*14, y : 200
+    }), 
+    new Platform({
+        x : 42*15, y : 200
+    }), 
+    new Platform({
+        x : 42*16, y : 200
+    }), 
+    new Platform({
+        x : 42*17, y : 200
+    }), 
+    new Platform({
+        x : 42*18, y : 200
+    })
+]
+
+function gound_construct_x(y, fold){
+    var count = 0
+    while(count <= fold){
+        var ground = new Ground({
+            x : 45*count, y : y
+        })
+        grounds.push(ground)
+        count++
+    }
+}
+
+gound_construct_x(0,17)
+gound_construct_x(45,17)
+gound_construct_x(90,17)
+gound_construct_x(90+45,17)
+gound_construct_x(90+45+45,17)
 
 function createImage(imageSrc){
     const image = new Image()
@@ -110,10 +159,18 @@ function animate(){
     requestAnimationFrame(animate)
     context.clearRect(0, 0, background.width, background.height)  
     context.closePath() 
+
+    grounds.forEach(ground => {
+        ground.draw()
+    })
     
-    // platforms.forEach(platform => {
-    //     platform.draw()        
-    // })    
+    platforms.forEach(platform => {
+        platform.draw()  
+        platform_colision(player, platform)
+        enemies.forEach(enemy => {
+            platform_colision(enemy, platform)
+        })
+    })    
 
     enemies.sort((a,b) => a.position.y - b.position.y);
 

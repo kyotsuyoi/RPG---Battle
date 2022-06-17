@@ -1,4 +1,3 @@
-
 class Player{
     constructor(){
         this.position ={
@@ -117,8 +116,11 @@ class Player{
             context.arc(player.position.x + player.width/2, player.position.y + player.height/2, 2, 0, 2 * Math.PI, false)
             context.fillStyle = 'black'
             context.fill()
-        }
-        
+
+            this.speed = speed_value(this.agility)/2
+        }else{
+            this.speed = speed_value(this.agility)
+        }        
     }
 
     update(){
