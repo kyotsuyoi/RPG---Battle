@@ -18,6 +18,9 @@ const keys = {
     },
     power_attack : {
         pressed : false
+    },
+    defense : {
+        pressed : false
     }
 }
 
@@ -149,6 +152,16 @@ function keyCodeDown(keyCode){
                         damages.push(damage)
                     break                    
                 }
+
+                console.log('keydown:'+ keyCode)
+            }
+        break
+
+        case 103:
+            if(!keys.defense.pressed && player.sp>=5){
+                console.log('keydown:'+ keyCode)
+                keys.defense.pressed = true  
+                player.defending = true
             }
         break
     }
@@ -178,6 +191,11 @@ function keyCodeUp(keyCode){
 
         case 100:
             keys.power_attack.pressed = false  
+        break
+
+        case 103:
+            keys.defense.pressed = false  
+            player.defending = false
         break
     }
 

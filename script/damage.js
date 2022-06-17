@@ -165,11 +165,19 @@ function damage_action(damage){
                 
                 var is_hit = dexterity_vs_flee(enemy.dexterity, player.agility)
                     
-                if(is_hit){                        
-                    var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.defense)
-                    player.hp -= result                     
-                    display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
-                    displays.push(display)
+                if(is_hit){    
+
+                    if(player.defending && player.sp >= 5){                        
+                        player.sp -= 5
+                    }else{
+                        if(player.sp <= 4){
+                            player.defending = false
+                        }
+                        var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.defense)
+                        player.hp -= result                     
+                        display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
+                        displays.push(display)
+                    }
 
                     console.log('enemy_damage:'+result)
                     

@@ -108,7 +108,8 @@ function animate(){
     }
 
     requestAnimationFrame(animate)
-    context.clearRect(0, 0, background.width, background.height)     
+    context.clearRect(0, 0, background.width, background.height)  
+    context.closePath() 
     
     // platforms.forEach(platform => {
     //     platform.draw()        

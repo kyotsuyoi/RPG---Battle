@@ -17,6 +17,7 @@ class Player{
         this.count = 0
         this.isAttack = false
         this.isWalking = false
+        this.defending = false
 
         this.power = 14
         this.agility = 6
@@ -100,6 +101,24 @@ class Player{
         var bar_value = (40 * sp_percent) / 100
         context.fillStyle = 'blue'        
         context.fillRect(this.position.x, this.position.y + this.height+4, bar_value, 3)
+
+        if(this.defending){
+            var radius = 10
+
+            context.beginPath()
+            context.arc(player.position.x + player.width/2, player.position.y + (player.height/4)*3, radius, 0, 2 * Math.PI, false)
+            context.fillStyle = '#777877'
+            context.fill()
+
+            context.lineWidth = 2
+            context.strokeStyle = 'black'
+            context.stroke()             
+            
+            context.beginPath()
+            context.arc(player.position.x + player.width/2, player.position.y + player.height/2, 2, 0, 2 * Math.PI, false)
+            context.fillStyle = 'black'
+            context.fill()
+        }
         
     }
 
