@@ -6,10 +6,11 @@ background.height = 800
 
 let scrollOffset = 0
 
-var damages = new Array();
-var displays = new Array();
+var damages = new Array()
+var displays = new Array()
 const player = new Player()
 var grounds = new Array()
+var weapons = new Array()
 
 var enemies = [
     new Enemy({
@@ -227,9 +228,9 @@ function animate(){
         player.power_attack_wait -= 1
     }
     
-    damages.forEach(damage => {
-        damage_action(damage)  
-        damage.update()    
+    damages.forEach(damage => {  
+        damage_action(damage)   
+        damage.update() 
     })
     
     padLoop()
@@ -241,7 +242,20 @@ function animate(){
 
     enemies = enemies.filter(enemy => enemy.hp > 0)
     
+    weapons.forEach(weapon => {
+        if(weapon.side == 'up'){
+            weapon.update() 
+        }      
+    })
+
     player.update()
+
+    weapons = weapons.filter(weapon => weapon.frames <= 3)
+    weapons.forEach(weapon => {
+        if(weapon.side != 'up'){
+            weapon.update() 
+        }      
+    })
 
     roofs.forEach(roof =>{
         roof.draw()
@@ -253,7 +267,7 @@ function animate(){
         if(display.time <= 0){
             displays = displays.filter(display => display.time > 0)
         }
-    })
+    })    
 }
 
 player.draw()

@@ -29,46 +29,53 @@ class Damage{
         this.bonus_attack = 0
         this.bonus_dexterity = 0
 
-        if(type == 'power_blade'){
+        this.sprites = {
+            sprite : createImage('img/sword_attack.png'),
+            cropWidth : 42,
+            width : this.width            
+        }
+
+        this.type = type
+        
+        if(this.type == 'power_blade'){
             this.attack_wait = 30
             this.power = 40
             this.bonus_attack = 15
             this.bonus_dexterity = 5
             this.width = 100
             this.height = 100
+            this.sprites.sprite = createImage('img/power_sword_attack.png')
+            this.time = 60
         }
 
-        this.sprites = {
-            right : createImage('img/sword_attack_right.png'),
-            left : createImage('img/sword_attack_left.png'),
-            up : createImage('img/sword_attack_up.png'),
-            down : createImage('img/sword_attack_down.png'),
-            cropWidth : 42,
-            width : this.width            
-        }
-
-        this.currentSprite = this.sprites.down
+        this.currentSprite = this.sprites.sprite
         this.currentCropWidth = 42
+        this.currentCropHeight = 0
 
+        this.side = side
         switch (side){
             case 'up':
                 this.position.x = (x + 42 /2) - (this.height/2)
                 this.position.y = y - this.height
+                this.currentCropHeight = 42*2
             break
 
             case 'down':
                 this.position.x = (x + 42 /2) - (this.height/2)
                 this.position.y = y + 42 
+                this.currentCropHeight = 42*3
             break
 
             case 'left':
                 this.position.x = x - this.width
                 this.position.y = this.position.y = (y + 42 /2) - (this.height/2) 
+                this.currentCropHeight = 0
             break
 
             case 'right':
                 this.position.x = x + 42 
                 this.position.y = (y + 42 /2) - (this.height/2)
+                this.currentCropHeight = 42
             break
         }
     }
@@ -80,7 +87,7 @@ class Damage{
         context.drawImage(          
             this.currentSprite, 
             this.currentCropWidth * this.frames,
-            0,
+            this.currentCropHeight,
             this.currentCropWidth, //largura
             42, //altura
             this.position.x, 
@@ -92,6 +99,11 @@ class Damage{
 
     update(){
         this.count++
+        if(this.type == 'power_blade'){
+            if(this.count==5 || this.count==10 || this.count==20 || this.count==30){
+                this.frames++
+            }
+        }else
         if (this.count==3 || this.count==6 || this.count==9 || this.count==12){
             this.frames++
         }
@@ -112,7 +124,7 @@ function damage_action(damage){
         damages.pop(damage)
     }else{
         damage.time -= 1
-        damage.draw()
+        //damage.draw()
 
         if(damage.owner == "player"){
             enemies.forEach(enemy => {

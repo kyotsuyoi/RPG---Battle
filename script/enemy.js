@@ -261,26 +261,22 @@ function enemy_action(enemy){
             
             switch (enemy.currentSprite.src){
                 case enemy.sprites.stand.up.src:                        
-                    damage = new Damage({x : enemy.position.x, y : enemy.position.y - enemy.height, owner_id : enemy.id, owner : 'cpu'}); 
-                    damage.currentSprite = damage.sprites.up
+                    damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'up'}); 
                     damages.push(damage)
                 break
 
                 case enemy.sprites.stand.down.src:
-                    damage = new Damage({x : enemy.position.x, y : enemy.position.y + enemy.height, owner_id : enemy.id, owner : 'cpu'}); 
-                    damage.currentSprite = damage.sprites.down
+                    damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'down'}); 
                     damages.push(damage)
                 break
 
                 case enemy.sprites.stand.left.src:
-                    damage = new Damage({x : enemy.position.x - enemy.width, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu'}); 
-                    damage.currentSprite = damage.sprites.left
+                    damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'left'}); 
                     damages.push(damage)
                 break
 
                 case enemy.sprites.stand.right.src:
-                    damage = new Damage({x : enemy.position.x + enemy.width, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu'}); 
-                    damage.currentSprite = damage.sprites.right
+                    damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'right'}); 
                     damages.push(damage)
                 break                    
             }
