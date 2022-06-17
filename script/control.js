@@ -37,7 +37,7 @@ function keyCodeDown(keyCode){
     //console.log('keydown:'+keyCode) 
     switch (keyCode){
         case 38:
-            if(!keys.up.pressed){
+            if(!keys.up.pressed && !keys.down.pressed){
                 keys.up.pressed = true       
                 lastKey = 'up'  
                 player.isWalking = true
@@ -46,7 +46,7 @@ function keyCodeDown(keyCode){
         break
 
         case 40:    
-            if(!keys.down.pressed){        
+            if(!keys.down.pressed && !keys.down.pressed){        
                 keys.down.pressed = true     
                 lastKey = 'down'
                 player.isWalking = true
@@ -55,7 +55,7 @@ function keyCodeDown(keyCode){
         break
 
         case 37:
-            if(!keys.left.pressed){
+            if(!keys.left.pressed && !keys.right.pressed){
                 keys.left.pressed = true      
                 lastKey = 'left'
                 player.isWalking = true
@@ -64,7 +64,7 @@ function keyCodeDown(keyCode){
         break
 
         case 39:
-            if(!keys.right.pressed){
+            if(!keys.right.pressed && !keys.left.pressed){
                 keys.right.pressed = true      
                 lastKey = 'right'
                 player.isWalking = true
@@ -170,19 +170,43 @@ function keyCodeDown(keyCode){
 function keyCodeUp(keyCode){
     switch (keyCode){
         case 38:
-            keys.up.pressed = false  
+            keys.up.pressed = false
+            if(keys.left.pressed == true){
+                lastKey = 'left'
+            }
+            if(keys.right.pressed == true){
+                lastKey = 'right'
+            }
         break
 
         case 40:            
             keys.down.pressed = false  
+            if(keys.left.pressed == true){
+                lastKey = 'left'
+            }
+            if(keys.right.pressed == true){
+                lastKey = 'right'
+            }
         break
 
         case 37:
             keys.left.pressed = false  
+            if(keys.up.pressed == true){
+                lastKey = 'up'
+            }
+            if(keys.down.pressed == true){
+                lastKey = 'down'
+            }
         break
 
         case 39:
             keys.right.pressed = false 
+            if(keys.up.pressed == true){
+                lastKey = 'up'
+            }
+            if(keys.down.pressed == true){
+                lastKey = 'down'
+            }
         break
 
         case 97:
@@ -319,10 +343,11 @@ function padLoop() {
 
     }
 
+    //y
     if (buttonPressed(gp.buttons[3])) {
-        console.log('y')
+        keyCodeDown(100)
     } else {
-
+        keyCodeUp(100)
     }
 
     //lb
@@ -339,10 +364,15 @@ function padLoop() {
         player.maxSpeed=4
     }
 
+    //lt
     if (buttonPressed(gp.buttons[6])) {
-        console.log('b6')
-    } else if (buttonPressed(gp.buttons[7])) {
-        console.log('b7')
+        keyCodeDown(103)
+    } else {
+        keyCodeUp(103)
+    }
+
+    if (buttonPressed(gp.buttons[7])) {
+        
     }
 
     if (buttonPressed(gp.buttons[8])) {

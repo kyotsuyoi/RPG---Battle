@@ -12,7 +12,6 @@ class Player{
         this.width = 42
         this.height = 42
 
-        //this.image = createImage('img/knight_female_1_1.png')
         this.frames = 4
         this.count = 0
         this.isAttack = false
@@ -128,7 +127,7 @@ class Player{
             if(this.isWalking){
                 if(keys.right.pressed && lastKey === 'right' && this.currentSprite !== this.sprites.run.right){
                     this.currentSprite = this.sprites.run.right
-                    this.frames = 1                
+                    this.frames = 1
                     this.cropWidth = this.sprites.run.cropWidth          
                     //this.width = this.sprites.run.width
             
@@ -153,7 +152,7 @@ class Player{
             } else{
                 if(!keys.right.pressed && lastKey === 'right' && this.currentSprite !== this.sprites.stand.right){
                     this.currentSprite = this.sprites.stand.right
-                    this.frames = 4               
+                    this.frames = 4
                     this.cropWidth = this.sprites.stand.cropWidth          
                     //this.width = this.sprites.stand.width
     
@@ -176,35 +175,41 @@ class Player{
                     //this.width = this.sprites.stand.width
                 }
             }  
+        }else{
+            //this.frames = 7
         }
 
         this.count++
-        if (this.count==10 || this.count==20 || this.count==30 || this.count==40 || this.count>60){
+        if (this.count==10 || this.count==20 || this.count==30 || this.count==40 || this.count==50 || this.count==60 || this.count==70 || this.count>=80){
           this.frames++
         }
 
         if(this.isAttack && this.frames > 7){            
-            this.frames = 6
+            this.frames = 7
             this.count = 0
             this.isAttack = false
 
-        }else if (this.frames > 5 && !this.isAttack &&
-          (this.currentSprite === this.sprites.stand.right || 
-            this.currentSprite === this.sprites.stand.left || 
-            this.currentSprite === this.sprites.stand.down || 
-            this.currentSprite === this.sprites.stand.up)){
+        }else if (!this.isAttack && !this.isWalking
+        //   (this.currentSprite === this.sprites.stand.right || 
+        //     this.currentSprite === this.sprites.stand.left || 
+        //     this.currentSprite === this.sprites.stand.down || 
+        //     this.currentSprite === this.sprites.stand.up)
+            ){
+                if(this.frames > 5){
+                    this.frames = 4
+                    this.count = 0
+                }
 
-            this.frames = 4
-            this.count = 0
-
-        }else if (this.frames > 3 && !this.isAttack &&
-          (this.currentSprite === this.sprites.run.right || 
-            this.currentSprite === this.sprites.run.left || 
-            this.currentSprite === this.sprites.run.down || 
-            this.currentSprite === this.sprites.run.up)){
-
-            this.frames = 0
-            this.count = 0
+        }else if (!this.isAttack && this.isWalking
+        //   (this.currentSprite === this.sprites.run.right || 
+        //     this.currentSprite === this.sprites.run.left || 
+        //     this.currentSprite === this.sprites.run.down || 
+        //     this.currentSprite === this.sprites.run.up)
+            ){
+            if(this.frames > 3){
+                this.frames = 0
+                this.count = 0
+            }
         }
 
         if(this.hp < this.max_hp){

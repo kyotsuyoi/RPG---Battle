@@ -1,5 +1,7 @@
 class Damage{
-    constructor({x, y, owner_id, owner, type, side}){
+    constructor({id, x, y, owner_id, owner, type, side}){
+        this.id = id
+
         this.position ={
             x,
             y
@@ -13,7 +15,7 @@ class Damage{
         this.speed = 0.6
         this.targetRange = 150 
 
-        this.lastDamage = null
+        this.lastDamage = new Array()
 
         this.frames = 0
         this.count = 0
@@ -157,10 +159,17 @@ function damage_action(damage){
         if(damage.owner == "cpu"){
             if (square_colision_area(damage, player)) {
 
-                if(damage == player.lastDamage){
+                // if(damage == player.lastDamage){
+                //     return
+                // }
+                // player.lastDamage = damage
+
+                var p = damage.lastDamage.filter(element => element == 'p1')
+                if(p == 'p1'){
                     return
                 }
-                player.lastDamage = damage
+                damage.lastDamage.push('p1')
+
                 var enemy = enemies.find(element => element.id == damage.owner_id)   
                 
                 var is_hit = dexterity_vs_flee(enemy.dexterity, player.agility)
