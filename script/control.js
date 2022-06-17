@@ -15,12 +15,23 @@ const keys = {
     },
     attack : {
         pressed : false
+    },
+    power_attack : {
+        pressed : false
     }
 }
 
 window.addEventListener('keydown', ({keyCode}) => {
-    //console.log('keydown:'+keyCode)
+    keyCodeDown(keyCode)    
+})
 
+window.addEventListener('keyup', ({keyCode}) => {
+    keyCodeUp(keyCode)   
+})
+
+function keyCodeDown(keyCode){
+    
+    //console.log('keydown:'+keyCode) 
     switch (keyCode){
         case 38:
             if(!keys.up.pressed){
@@ -65,7 +76,7 @@ window.addEventListener('keydown', ({keyCode}) => {
                 player.isAttack = true
                 //console.log('keydown:'+keyCode)
 
-                player.attack_wait = 30 - player.agility
+                player.attack_wait = player.attack_speed
 
                 switch (player.currentSprite.src){
                     case player.sprites.stand.up.src:                        
@@ -94,12 +105,56 @@ window.addEventListener('keydown', ({keyCode}) => {
                 }
             }
         break
+
+        case 100:
+            if(!keys.power_attack.pressed && player.power_attack_wait == 0){
+                keys.power_attack.pressed = true      
+                lastKey = 'power_attack'
+                player.isAttack = true
+
+                player.power_attack_wait = 150
+
+                if(player.sp-10 <= 0){
+                    return 
+                }
+
+                if(player.sp <= 0){
+                    player.sp = 0
+                }else{
+                    player.sp -= 10
+                }
+
+                switch (player.currentSprite.src){
+                    case player.sprites.stand.up.src:                        
+                        damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', type : 'power_blade', side : 'up'}); 
+                        damage.currentSprite = damage.sprites.up
+                        damages.push(damage)
+                    break
+
+                    case player.sprites.stand.down.src:
+                        damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', type : 'power_blade', side : 'down'}); 
+                        damage.currentSprite = damage.sprites.down
+                        damages.push(damage)
+                    break
+
+                    case player.sprites.stand.left.src:
+                        damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', type : 'power_blade', side : 'left'}); 
+                        damage.currentSprite = damage.sprites.left
+                        damages.push(damage)
+                    break
+
+                    case player.sprites.stand.right.src:
+                        damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', type : 'power_blade', side : 'right'}); 
+                        damage.currentSprite = damage.sprites.right
+                        damages.push(damage)
+                    break                    
+                }
+            }
+        break
     }
-})
+}
 
-window.addEventListener('keyup', ({keyCode}) => {
-    //console.log('keyup:'+keyCode)
-
+function keyCodeUp(keyCode){
     switch (keyCode){
         case 38:
             keys.up.pressed = false  
@@ -120,135 +175,167 @@ window.addEventListener('keyup', ({keyCode}) => {
         case 97:
             keys.attack.pressed = false  
         break
+
+        case 100:
+            keys.power_attack.pressed = false  
+        break
     }
 
     if(keys.up.pressed == false && keys.down.pressed == false && keys.left.pressed == false && keys.right.pressed == false){
         player.isWalking = false
     }
-})
+}
 
-// var gamepads = {};
+function keypad_loop(){
+    if(keys.right.pressed && (player.position.x + player.width <= background.width)){
+        player.velocity.x = player.speed
+        // if(keys.up.pressed || keys.down.pressed){
+        //     player.velocity.x = (player.velocity.x / 10) * 7.5
+        //     player.velocity.y = (player.velocity.y / 10) * 7.5
+        // }
+    } else if (keys.left.pressed && (player.position.x > 0)){
+        player.velocity.x = -player.speed
+        // if(keys.up.pressed || keys.down.pressed){
+        //     player.velocity.x = (player.velocity.x / 10) * 7.5
+        //     player.velocity.y = (player.velocity.y / 10) * 7.5
+        // }
+    }else{
+        player.velocity.x = 0
+    }
 
-// function gamepadHandler(event, connecting) {
-//   var gamepad = event.gamepad;
-//   // Note:
-//   // gamepad === navigator.getGamepads()[gamepad.index]
+    if (keys.up.pressed && (player.position.y > 0)){
+        player.velocity.y = -player.speed
+        // if(keys.right.pressed || keys.left.pressed){
+        //     player.velocity.x = (player.velocity.x / 10) * 7.5
+        //     player.velocity.y = (player.velocity.y / 10) * 7.5
+        // }
+    } else if (keys.down.pressed && (player.position.y + player.height <= background.height)){
+        player.velocity.y = player.speed  
+        // if(keys.right.pressed || keys.left.pressed){
+        //     player.velocity.x = (player.velocity.x / 10) * 7.5
+        //     player.velocity.y = (player.velocity.y / 10) * 7.5
+        // }     
+    }else{
+        player.velocity.y = 0
+    }
+}
 
-//   if (connecting) {
-//     gamepads[gamepad.index] = gamepad;
-//     console.log('gamepadconnected')
-//   } else {
-//     delete gamepads[gamepad.index];
-//   }
-// }
+var gamepads = {};
 
-// window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); }, false);
-// window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); }, false);
+function gamepadHandler(event, connecting) {
+    var gamepad = event.gamepad;
+    // Note:
+    // gamepad === navigator.getGamepads()[gamepad.index]
 
-// function buttonPressed(b) {
-//   //console.log(b)
-//   if (typeof(b) == "object") {
-//     return b.pressed;
-//   }
-//   return b == 1.0;
-// }
+    if (connecting) {
+        gamepads[gamepad.index] = gamepad;
+        console.log('gamepadconnected')
+    } else {
+        delete gamepads[gamepad.index];
+    }
+}
 
-// function padLoop() {
-//   var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-//   if (!gamepads) {
-//     return;
-//   }
+window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); }, false);
+window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); }, false);
 
-//   var gp = gamepads[0];
-//   if(gp==null)return
-  
-//   if (buttonPressed(gp.buttons[14])) {
-//     console.log('left')
-//     keys.left.pressed = true
-//     lastKey = 'left'
-//     // if(player.speed < player.maxSpeed){
-//     //   player.speed+=0.2
-//     // }
-//   } else //if (lastKey == 'left')
-//   {
-//     keys.left.pressed = false
-//     lastKey = 'left'
-//     //player.speed=0
-//   }
+function buttonPressed(b) {
+    //console.log(b)
+    if (typeof(b) == "object") {
+        return b.pressed;
+    }
+    return b == 1.0;
+}
 
-//   if (buttonPressed(gp.buttons[15])) {
-//     console.log('right')
-//     keys.right.pressed = true
-//     lastKey = 'right'
-//     // if(player.speed < player.maxSpeed){
-//     //   player.speed+=0.2
-//     // }
-//   }else 
-//   //if (lastKey == 'right')
-//   {
-//     keys.right.pressed = false
-//     lastKey = 'right'
-//     //player.speed=0
-//   }
+function padLoop() {
+    var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+    if (!gamepads) {
+        return;
+    }
 
-//   if (buttonPressed(gp.buttons[12])) {
-//     console.log('up')
-//     keys.up.pressed = true
-//   } else {
-//     keys.up.pressed = false
-//   }
-  
-//   if (buttonPressed(gp.buttons[13])) {
-//     console.log('down')
-//     keys.down.pressed = true
-//   } else {
-//     keys.down.pressed = false
-//   }
+    var gp = gamepads[0];
+    if(gp==null)return
 
-//   if (buttonPressed(gp.buttons[0])) {
-//     console.log('a')
-//   }else {
-//   } 
-  
-//   if (buttonPressed(gp.buttons[2])) {
-//     console.log('b2')
-//   }
-//   if (buttonPressed(gp.buttons[1])) {
-//     console.log('b1')
-//   } else if (buttonPressed(gp.buttons[3])) {
-//     console.log('b3')
-//   }
+    //left
+    if (buttonPressed(gp.buttons[14])) {
+        keyCodeDown(37)
+    }else{
+        keyCodeUp(37)
+    }
 
-//   if (buttonPressed(gp.buttons[4])) {
-//     console.log('lb')
-//   } else {
+    //right
+    if (buttonPressed(gp.buttons[15])) {
+        keyCodeDown(39)
+    }else{
+        keyCodeUp(39)
+    }
 
-//   }
+    //up
+    if (buttonPressed(gp.buttons[12])) {
+        keyCodeDown(38)
+    } else {
+        keyCodeUp(38)
+    }
 
-//   if (buttonPressed(gp.buttons[5])) {
-//     console.log('rb')
-//     player.maxSpeed=10
-//   }else{    
-//     player.maxSpeed=4
-//   }
+    //down
+    if (buttonPressed(gp.buttons[13])) {
+        keyCodeDown(40)
+    } else {
+        keyCodeUp(40)
+    }
 
-//   if (buttonPressed(gp.buttons[6])) {
-//     console.log('b6')
-//   } else if (buttonPressed(gp.buttons[7])) {
-//     console.log('b7')
-//   }
+    //a
+    if (buttonPressed(gp.buttons[0])) {
+        console.log('a')
+    }
 
-//   if (buttonPressed(gp.buttons[8])) {
-//     console.log('b8')
-//   } else if (buttonPressed(gp.buttons[9])) {
-//     console.log('b9')
-//   }
+    //x
+    if (buttonPressed(gp.buttons[2])) {
+        keyCodeDown(97)
+    }else{
+        keyCodeUp(97)
+    }
 
-//   if (buttonPressed(gp.buttons[10])) {
-//     console.log('b10')
-//   } else if (buttonPressed(gp.buttons[11])) {
-//     console.log('b11')
-//   }
+    if (buttonPressed(gp.buttons[1])) {
+        console.log('b1')
+    } else {
 
-  
-// }
+    }
+
+    if (buttonPressed(gp.buttons[3])) {
+        console.log('y')
+    } else {
+
+    }
+
+    //lb
+    if (buttonPressed(gp.buttons[4])) {
+        keyCodeDown(97)
+    } else {
+        keyCodeUp(97)
+    }
+
+    if (buttonPressed(gp.buttons[5])) {
+        console.log('rb')
+        player.maxSpeed=10
+    }else{    
+        player.maxSpeed=4
+    }
+
+    if (buttonPressed(gp.buttons[6])) {
+        console.log('b6')
+    } else if (buttonPressed(gp.buttons[7])) {
+        console.log('b7')
+    }
+
+    if (buttonPressed(gp.buttons[8])) {
+        console.log('b8')
+    } else if (buttonPressed(gp.buttons[9])) {
+        console.log('b9')
+    }
+
+    if (buttonPressed(gp.buttons[10])) {
+        console.log('b10')
+    } else if (buttonPressed(gp.buttons[11])) {
+        console.log('b11')
+    }  
+}
