@@ -12,7 +12,6 @@ class Player{
         this.height = 42
 
         this.frames = 4
-        this.count = 0
         this.lastTimestamp = lastTimestamp
 
         this.frameTime = 0
@@ -54,14 +53,6 @@ class Player{
 
         this.sprites = {
             stand : {
-              right : createImage('img/knight_female_right.png'),
-              left : createImage('img/knight_female_left.png'),
-              up : createImage('img/knight_female_back.png'),
-              down : createImage('img/knight_female_front.png'),
-              cropWidth : 42,
-              width : this.width
-            },
-            run : {
               right : createImage('img/knight_female_right.png'),
               left : createImage('img/knight_female_left.png'),
               up : createImage('img/knight_female_back.png'),
@@ -230,52 +221,44 @@ class Player{
         //sprite switching
         if(!this.isAttack){
             if(this.isWalking){
-                if(keys.right.pressed && lastKey === 'right' && this.currentSprite !== this.sprites.run.right){
-                    this.currentSprite = this.sprites.run.right
-                    this.frames = 1
-                    this.cropWidth = this.sprites.run.cropWidth 
+                if(keys.right.pressed && lastKey === 'right' && this.currentSprite !== this.sprites.stand.right){
+                    this.currentSprite = this.sprites.stand.right
+                    this.cropWidth = this.sprites.stand.cropWidth 
                     this.side = 'right'
             
-                } else if (keys.left.pressed && lastKey === 'left' && this.currentSprite !== this.sprites.run.left){
-                    this.currentSprite = this.sprites.run.left 
-                    this.frames = 1
-                    this.cropWidth = this.sprites.run.cropWidth          
+                } else if (keys.left.pressed && lastKey === 'left' && this.currentSprite !== this.sprites.stand.left){
+                    this.currentSprite = this.sprites.stand.left 
+                    this.cropWidth = this.sprites.stand.cropWidth          
                     this.side = 'left'
                 
-                } else if (keys.down.pressed && lastKey === 'down' && this.currentSprite !== this.sprites.run.down){
-                    this.currentSprite = this.sprites.run.down 
-                    this.frames = 1
-                    this.cropWidth = this.sprites.run.cropWidth          
+                } else if (keys.down.pressed && lastKey === 'down' && this.currentSprite !== this.sprites.stand.down){
+                    this.currentSprite = this.sprites.stand.down 
+                    this.cropWidth = this.sprites.stand.cropWidth          
                     this.side = 'down'
                 
-                } else if (keys.up.pressed && lastKey === 'up' && this.currentSprite !== this.sprites.run.up){
-                    this.currentSprite = this.sprites.run.up 
-                    this.frames = 1
-                    this.cropWidth = this.sprites.run.cropWidth          
+                } else if (keys.up.pressed && lastKey === 'up' && this.currentSprite !== this.sprites.stand.up){
+                    this.currentSprite = this.sprites.stand.up 
+                    this.cropWidth = this.sprites.stand.cropWidth          
                     this.side = 'up'
                 }
             } else{
                 if(!keys.right.pressed && lastKey === 'right' && this.currentSprite !== this.sprites.stand.right){
                     this.currentSprite = this.sprites.stand.right
-                    this.frames = 4
                     this.cropWidth = this.sprites.stand.cropWidth          
                     this.side = 'right'
     
                 } else if (!keys.left.pressed && lastKey === 'left' && this.currentSprite !== this.sprites.stand.left){
                     this.currentSprite = this.sprites.stand.left 
-                    this.frames = 4
                     this.cropWidth = this.sprites.stand.cropWidth          
                     this.side = 'left'
     
                 } else if (!keys.down.pressed && lastKey === 'down' && this.currentSprite !== this.sprites.stand.down){
                     this.currentSprite = this.sprites.stand.down 
-                    this.frames = 4
                     this.cropWidth = this.sprites.stand.cropWidth          
                     this.side = 'down'
     
                 } else if (!keys.up.pressed && lastKey === 'up' && this.currentSprite !== this.sprites.stand.up){
                     this.currentSprite = this.sprites.stand.up 
-                    this.frames = 4
                     this.cropWidth = this.sprites.stand.cropWidth          
                     this.side = 'up'
                 }
@@ -289,21 +272,14 @@ class Player{
             this.lastTimestamp = lastTimestamp
         }
 
-        // this.count++
-        // if (this.count==10 || this.count==20 || this.count==30 || this.count==40 || this.count==50 || this.count==60 || this.count==70 || this.count>=80){
-        //   this.frames++
-        // }
-
-
         //attack
         if(this.isAttack && this.frames > 7){            
             this.frames = 7
             this.isAttack = false
             this.frameTime = this.attackFrameTime
             this.lastTimestamp = lastTimestamp
-        }
-        
-        if(this.isAttack && !(this.frames >= 6 && this.frames < 8)){
+        }        
+        if(this.isAttack && !(this.frames >= 6 && this.frames <= 7)){
             this.frames = 6
             this.frameTime = this.attackFrameTime
             this.lastTimestamp = lastTimestamp
@@ -313,21 +289,19 @@ class Player{
         if (!this.isAttack && !this.isWalking){
                 if(this.frames > 5){
                     this.frames = 4
-                    this.count = 0
                     this.frameTime = this.standFrameTime
                     this.lastTimestamp = lastTimestamp
+                }
+                if(!(this.frames >= 4 && this.frames <= 5)){
+                    this.frames = 4
                     this.frameTime = this.standFrameTime
+                    this.lastTimestamp = lastTimestamp
                 }
 
-        }else 
+        }
         
         //walking
-        if (!this.isAttack && this.isWalking
-        //   (this.currentSprite === this.sprites.run.right || 
-        //     this.currentSprite === this.sprites.run.left || 
-        //     this.currentSprite === this.sprites.run.down || 
-        //     this.currentSprite === this.sprites.run.up)
-            ){
+        if (!this.isAttack && this.isWalking){
             if(this.frames > 3){
                 this.frames = 0
                 this.count = 0
@@ -336,6 +310,11 @@ class Player{
                 }else{
                     this.frameTime = this.walkingFrameTime
                 }
+                this.lastTimestamp = lastTimestamp
+            }
+            if(!(this.frames >= 0 && this.frames <= 3)){
+                this.frames = 0
+                this.frameTime = this.walkingFrameTime
                 this.lastTimestamp = lastTimestamp
             }
         }        
