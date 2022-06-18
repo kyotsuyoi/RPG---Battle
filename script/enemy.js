@@ -8,8 +8,8 @@ class Enemy{
             x : 0,
             y : 0
         }
-        this.width = 42
-        this.height = 42
+        this.width = 45
+        this.height = 45
         this.speed = 0.6
         this.targetRange = 150 
 
@@ -28,6 +28,7 @@ class Enemy{
         this.attack_wait = 0
 
         this.id = id
+        this.side = 'down'
 
         this.power = 5
         this.agility = 8
@@ -48,26 +49,14 @@ class Enemy{
         this.attack_speed = 0  
 
         this.sprites = {
-            stand : {
-              right : createImage('img/archer_male_2_2.png'),
-              left : createImage('img/archer_male_2_4.png'),
-              up : createImage('img/archer_male_2_3.png'),
-              down : createImage('img/archer_male_2_1.png'),
-              cropWidth : 42,
-              width : this.width
-            },
-            run : {
-              right : createImage('img/archer_male_2_2.png'),
-              left : createImage('img/archer_male_2_4.png'),
-              up : createImage('img/archer_male_2_3.png'),
-              down : createImage('img/archer_male_2_1.png'),
-              cropWidth : 42,
-              width : this.width
-            }
+            sprite : createImage('img/thief_male.png'),
+            cropWidth : 46,
+            width : this.width            
         }
 
-        this.currentSprite = this.sprites.stand.down
-        this.currentCropWidth = 42
+        this.currentSprite = this.sprites.sprite
+        this.currentCropWidth = 46
+        this.currentCropHeight = 0
     }
 
     draw(){
@@ -77,9 +66,9 @@ class Enemy{
         context.drawImage(          
             this.currentSprite, 
             this.currentCropWidth * this.frames,
-            0,
+            this.currentCropHeight,
             this.currentCropWidth, //largura
-            42, //altura
+            45, //altura
             this.position.x, 
             this.position.y,
             this.width,
@@ -105,6 +94,20 @@ class Enemy{
     }
 
     update(){
+        this.count++
+        if (this.count==10 || this.count==20 || this.count==30 || this.count==40){
+            this.frames++
+        }
+
+        if(!this.in_patrol && !this.in_battle){
+            this.frames = 0
+            this.count = 0
+        }
+
+        if(this.frames > 3){            
+            this.frames = 0
+            this.count = 0
+        }
         
         if(this.hp < this.max_hp){
             this.hp += 0.01
@@ -155,31 +158,35 @@ function enemy_action(enemy){
                     }
                 }
 
-                //patrulhar esquerda/direita
+                //patrol left/right
                 if(enemy.patrol_x != Math.round(enemy.position.x) 
                     ){
                     if(enemy.patrol_x >= enemy.position.x){
                         enemy.position.x += enemy.speed
-                        enemy.currentSprite = enemy.sprites.run.right                                           
+                        enemy.side = 'right'                                          
                         //console.log('right:'+enemy.position.x)
+                        enemy.currentCropHeight = 46*1
                     }else{
-                        enemy.position.x -= enemy.speed
-                        enemy.currentSprite = enemy.sprites.run.left 
+                        enemy.position.x -= enemy.speed                        
+                        enemy.side = 'left'  
                         //console.log('left:'+enemy.position.x) 
+                        enemy.currentCropHeight = 46*2
                     }  
                 }
         
-                //patrulhar baixo/cima
+                //patrol down/up
                 if(enemy.patrol_y != Math.round(enemy.position.y) 
                     ){
                     if(enemy.patrol_y >= enemy.position.y){
-                        enemy.position.y += enemy.speed
-                        enemy.currentSprite = enemy.sprites.stand.down 
-                        //console.log('down:'+enemy.position.y)
+                        enemy.position.y += enemy.speed                       
+                        enemy.side = 'down'  
+                        //console.log('down:'+enemy.position.y)                        
+                        enemy.currentCropHeight = 46*0
                     }else{
-                        enemy.position.y -= enemy.speed
-                        enemy.currentSprite = enemy.sprites.stand.up 
-                        //console.log('up:'+enemy.position.y)
+                        enemy.position.y -= enemy.speed                       
+                        enemy.side = 'up'  
+                        //console.log('up:'+enemy.position.y)                        
+                        enemy.currentCropHeight = 46*3
                     } 
                 }                
 
@@ -211,42 +218,46 @@ function enemy_action(enemy){
             enemy.in_battle = false 
         }
 
-        //seguir direita
+        //follow right
         if(player.position.x > enemy.position.x + enemy.width 
             //&& player.position.x - (enemy.position.x + enemy.width) < 100
             && distance_x < enemy.targetRange
             && distance_y < enemy.targetRange
             ){
             enemy.position.x += enemy.speed
-            enemy.currentSprite = enemy.sprites.stand.right    
+            enemy.side = 'right'               
+            enemy.currentCropHeight = 46*1  
 
-        //seguir esquerda
+        //follow left
         }else if(enemy.position.x > player.position.x + player.width
             //&& (enemy.position.x) - player.position.x - player.width < 100
             && distance_x < enemy.targetRange
             && distance_y < enemy.targetRange
             ){
             enemy.position.x -= enemy.speed
-            enemy.currentSprite = enemy.sprites.stand.left
+            enemy.side = 'left'  
+            enemy.currentCropHeight = 46*2
         }
 
-        //seguir baixo
+        //follow down
         if(player.position.y > enemy.position.y + enemy.height 
             //&& player.position.y - (enemy.position.x + enemy.height) < 100
             && distance_y < enemy.targetRange
             && distance_x < enemy.targetRange
             ){
             enemy.position.y+= enemy.speed
-            enemy.currentSprite = enemy.sprites.stand.down
+            enemy.side = 'down'                       
+            enemy.currentCropHeight = 46*0
 
-        //seguir cima
+        //follow up
         }else if(enemy.position.y > player.position.y + player.height
             //&& (enemy.position.y) - player.position.y - player.height < 100
             && distance_y < enemy.targetRange
             && distance_x < enemy.targetRange 
             ){
             enemy.position.y-= enemy.speed
-            enemy.currentSprite = enemy.sprites.stand.up
+            enemy.side = 'up'                       
+            enemy.currentCropHeight = 46*3
         }
 
         if (player.position.x < enemy.position.x + enemy.width &&
@@ -259,25 +270,31 @@ function enemy_action(enemy){
 
             enemy.attack_wait = 60
             
-            switch (enemy.currentSprite.src){
-                case enemy.sprites.stand.up.src:                        
+            switch (enemy.side){
+                case 'up':                        
                     damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'up'}); 
-                    damages.push(damage)
+                    damages.push(damage)                   
+                    enemy.currentCropHeight = 46*3
                 break
 
-                case enemy.sprites.stand.down.src:
+                case enemy.side = 'down':
                     damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'down'}); 
-                    damages.push(damage)
+                    damages.push(damage)                   
+                    enemy.currentCropHeight = 46*0
                 break
 
-                case enemy.sprites.stand.left.src:
+                case enemy.side = 'left':
                     damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'left'}); 
                     damages.push(damage)
+                            
+                    enemy.currentCropHeight = 46*2
                 break
 
-                case enemy.sprites.stand.right.src:
+                case enemy.side = 'right':
                     damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'right'}); 
                     damages.push(damage)
+                            
+                    enemy.currentCropHeight = 46*1  
                 break                    
             }
         }

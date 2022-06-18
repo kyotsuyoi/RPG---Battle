@@ -202,8 +202,8 @@ function damage_action(damage){
 
                     console.log('enemy_damage:'+result)
                     
-                    switch (enemy.currentSprite.src){
-                        case enemy.sprites.stand.up.src: 
+                    switch (damage.side){
+                        case 'up': 
                             if(player.position.y <= 0){
                                 player.position.y = 0
                             }else{
@@ -211,7 +211,7 @@ function damage_action(damage){
                             }                      
                         break
 
-                        case enemy.sprites.stand.down.src:
+                        case 'down':
                             if(player.position.y + player.height >= background.height){
                                 player.position.y = background.height - player.height
                             }else{
@@ -219,7 +219,7 @@ function damage_action(damage){
                             }
                         break
 
-                        case enemy.sprites.stand.left.src:
+                        case 'left':
                             if(player.position.x <= 0){
                                 player.position.x = 0
                             }else{
@@ -227,7 +227,7 @@ function damage_action(damage){
                             }
                         break
 
-                        case enemy.sprites.stand.right.src:
+                        case 'right':
                             if(player.position.x + player.width >= background.width){
                                 player.position.x = background.width - player.width
                             }else{

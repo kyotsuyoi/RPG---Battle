@@ -41,6 +41,7 @@ function keyCodeDown(keyCode){
                 keys.up.pressed = true       
                 lastKey = 'up'  
                 player.isWalking = true
+                player.side = 'up'
                 //console.log('keydown:'+keyCode)     
             }     
         break
@@ -50,6 +51,7 @@ function keyCodeDown(keyCode){
                 keys.down.pressed = true     
                 lastKey = 'down'
                 player.isWalking = true
+                player.side = 'down'
                 //console.log('keydown:'+keyCode)
             }
         break
@@ -59,6 +61,7 @@ function keyCodeDown(keyCode){
                 keys.left.pressed = true      
                 lastKey = 'left'
                 player.isWalking = true
+                player.side = 'left'
                 //console.log('keydown:'+keyCode)
             }
         break
@@ -68,6 +71,7 @@ function keyCodeDown(keyCode){
                 keys.right.pressed = true      
                 lastKey = 'right'
                 player.isWalking = true
+                player.side = 'right'
                 //console.log('keydown:'+keyCode)
             }
         break

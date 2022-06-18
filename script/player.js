@@ -38,6 +38,8 @@ class Player{
         this.attack_wait = 0
         this.power_attack_wait = 0
 
+        this.side = 'down'
+
         this.sprites = {
             stand : {
               right : createImage('img/knight_female_right.png'),
@@ -54,17 +56,41 @@ class Player{
               down : createImage('img/knight_female_front.png'),
               cropWidth : 42,
               width : this.width
+            },
+            shield : {
+              sprite : createImage('img/shield.png'),
+              cropWidth : 45,
+              width : 45
             }
         }
 
         this.currentSprite = this.sprites.stand.down
         this.currentCropWidth = 42
+
+        this.currentShieldSprite = this.sprites.shield.sprite
+        this.currentShieldCropWidth = 45
     }
 
     draw(){
         // context.fillStyle = 'blue'
         // context.fillRect(this.position.x, this.position.y, this.width, this.height)
 
+        //draw shield first (up only)
+        if(this.side == 'up' && this.defending){
+            context.drawImage(          
+                this.currentShieldSprite, 
+                this.currentShieldCropWidth * 3,
+                0,
+                45, //largura
+                45, //altura
+                this.position.x + 10, 
+                this.position.y + 8,
+                this.width,
+                this.height
+            )
+        }
+
+        //draw character
         context.drawImage(          
             this.currentSprite, 
             this.currentCropWidth * this.frames,
@@ -101,21 +127,61 @@ class Player{
         context.fillRect(this.position.x, this.position.y + this.height+4, bar_value, 3)
 
         if(this.defending){
-            var radius = 10
-
-            context.beginPath()
-            context.arc(player.position.x + player.width/2, player.position.y + (player.height/4)*3, radius, 0, 2 * Math.PI, false)
-            context.fillStyle = '#777877'
-            context.fill()
-
-            context.lineWidth = 2
-            context.strokeStyle = 'black'
-            context.stroke()             
             
-            context.beginPath()
-            context.arc(player.position.x + player.width/2, player.position.y + player.height/2, 2, 0, 2 * Math.PI, false)
-            context.fillStyle = 'black'
-            context.fill()
+            var side_num = 0
+            var pos_x = -2
+            var pos_y = 10
+
+            switch(this.side){
+                case 'down':
+                    side_num = 0
+                    pos_x = -2
+                    pos_y = 10
+                break
+
+                case 'left':
+                    side_num = 1
+                    pos_x = -8
+                    pos_y = 10
+                break
+
+                case 'right':
+                    side_num = 2
+                    pos_x = +8
+                    pos_y = 10
+                break
+            }
+
+            //draw shield (down/left/rigth)
+            if(this.side != 'up'){
+                context.drawImage(          
+                    this.currentShieldSprite, 
+                    this.currentShieldCropWidth * side_num,
+                    0,
+                    45, //largura
+                    45, //altura
+                    this.position.x + pos_x, 
+                    this.position.y + pos_y,
+                    this.width,
+                    this.height
+                )
+            }
+
+            // var radius = 10
+
+            // context.beginPath()
+            // context.arc(player.position.x + player.width/2, player.position.y + (player.height/4)*3, radius, 0, 2 * Math.PI, false)
+            // context.fillStyle = '#777877'
+            // context.fill()
+
+            // context.lineWidth = 2
+            // context.strokeStyle = 'black'
+            // context.stroke()             
+            
+            // context.beginPath()
+            // context.arc(player.position.x + player.width/2, player.position.y + player.height/2, 2, 0, 2 * Math.PI, false)
+            // context.fillStyle = 'black'
+            // context.fill()
 
             this.speed = speed_value(this.agility)/2
         }else{
@@ -130,51 +196,51 @@ class Player{
                 if(keys.right.pressed && lastKey === 'right' && this.currentSprite !== this.sprites.run.right){
                     this.currentSprite = this.sprites.run.right
                     this.frames = 1
-                    this.cropWidth = this.sprites.run.cropWidth          
-                    //this.width = this.sprites.run.width
+                    this.cropWidth = this.sprites.run.cropWidth 
+                    this.side = 'right'
             
                 } else if (keys.left.pressed && lastKey === 'left' && this.currentSprite !== this.sprites.run.left){
                     this.currentSprite = this.sprites.run.left 
                     this.frames = 1
                     this.cropWidth = this.sprites.run.cropWidth          
-                    //this.width = this.sprites.run.width
+                    this.side = 'left'
                 
                 } else if (keys.down.pressed && lastKey === 'down' && this.currentSprite !== this.sprites.run.down){
                     this.currentSprite = this.sprites.run.down 
                     this.frames = 1
                     this.cropWidth = this.sprites.run.cropWidth          
-                    //this.width = this.sprites.run.width
+                    this.side = 'down'
                 
                 } else if (keys.up.pressed && lastKey === 'up' && this.currentSprite !== this.sprites.run.up){
                     this.currentSprite = this.sprites.run.up 
                     this.frames = 1
                     this.cropWidth = this.sprites.run.cropWidth          
-                    //this.width = this.sprites.run.width
+                    this.side = 'up'
                 }
             } else{
                 if(!keys.right.pressed && lastKey === 'right' && this.currentSprite !== this.sprites.stand.right){
                     this.currentSprite = this.sprites.stand.right
                     this.frames = 4
                     this.cropWidth = this.sprites.stand.cropWidth          
-                    //this.width = this.sprites.stand.width
+                    this.side = 'right'
     
                 } else if (!keys.left.pressed && lastKey === 'left' && this.currentSprite !== this.sprites.stand.left){
                     this.currentSprite = this.sprites.stand.left 
                     this.frames = 4
                     this.cropWidth = this.sprites.stand.cropWidth          
-                    //this.width = this.sprites.stand.width
+                    this.side = 'left'
     
                 } else if (!keys.down.pressed && lastKey === 'down' && this.currentSprite !== this.sprites.stand.down){
                     this.currentSprite = this.sprites.stand.down 
                     this.frames = 4
                     this.cropWidth = this.sprites.stand.cropWidth          
-                    //this.width = this.sprites.stand.width
+                    this.side = 'down'
     
                 } else if (!keys.up.pressed && lastKey === 'up' && this.currentSprite !== this.sprites.stand.up){
                     this.currentSprite = this.sprites.stand.up 
                     this.frames = 4
                     this.cropWidth = this.sprites.stand.cropWidth          
-                    //this.width = this.sprites.stand.width
+                    this.side = 'up'
                 }
             }  
         }else{
