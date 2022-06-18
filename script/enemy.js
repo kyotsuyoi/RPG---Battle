@@ -1,5 +1,5 @@
 class Enemy{
-    constructor({id, type, x, y, patrol, follow}){
+    constructor({id, type, x, y, patrol, follow, lastTimestamp}){
         this.position ={
             x,
             y
@@ -13,8 +13,12 @@ class Enemy{
         this.speed = 0.6
         this.targetRange = 150 
 
+        this.frameTime = 100
         this.frames = 0
         this.count = 0
+
+        this.recoveryTime = 100     
+        this.lastRecoveryTime = lastTimestamp
 
         this.patrol_time_wait = 1000
         this.in_patrol_time = 0
@@ -117,22 +121,30 @@ class Enemy{
     }
 
     update(){
-        this.count++
-        if (this.count==10 || this.count==20 || this.count==30 || this.count==40){
-            this.frames++
+
+        if(lastTimestamp - this.frameTime > this.lastTimestamp){
+            this.frames++            
+            this.lastTimestamp = lastTimestamp
         }
+
+        // this.count++
+        // if (this.count==10 || this.count==20 || this.count==30 || this.count==40){
+        //     this.frames++
+        // }
 
         if(!this.in_patrol && !this.in_battle){
             this.frames = 0
-            this.count = 0
+            this.count = 0            
+            this.lastTimestamp = lastTimestamp
         }
 
         if(this.frames > 3){            
             this.frames = 0
             this.count = 0
+            this.lastTimestamp = lastTimestamp
         }
         
-        if(this.hp < this.max_hp){
+        if(this.hp < this.max_hp && this.hp > 0){
             this.hp += this.hp_recovery
         }
 

@@ -128,6 +128,7 @@ function keyCodeDown(keyCode){
             }
         break
 
+        //power_attack
         case 100:
             if(!keys.power_attack.pressed && player.power_attack_wait == 0){
                 keys.power_attack.pressed = true      
@@ -188,6 +189,7 @@ function keyCodeDown(keyCode){
             }
         break
 
+        //defend
         case 103:
             if(!keys.defense.pressed && player.stamina>=5){
                 //console.log('keydown:'+ keyCode)
@@ -196,10 +198,12 @@ function keyCodeDown(keyCode){
             }
         break
 
+        //run
         case 98:
             if(!keys.run.pressed && player.stamina>=5){
                 keys.run.pressed = true  
                 player.isRunning = true
+                player.staminaCoolDown = 50
             }
         break
     }

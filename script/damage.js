@@ -189,19 +189,38 @@ function damage_action(damage){
                     
                 if(is_hit){    
 
-                    if(player.defending && player.stamina >= 5){                        
-                        player.stamina -= 5
-                    }else{
-                        if(player.stamina <= 4){
+                    var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.defense)
+                    if(player.defending){ 
+
+                        res_stm = player.stamina - result
+                        if(res_stm < 0){
+                            player.stamina = 0 
                             player.defending = false
-                        }
+                            result += Math.round(res_stm)
+                            player.hp -= result   
+                            if(player.hp <= 0){
+                                player.hp = 0.0
+                            }                
+                            display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
+                            displays.push(display)
+
+                        }else{
+                            player.stamina = res_stm
+                        }  
+                        
+                        player.staminaCoolDown = 50
+
+                    }else{
                         var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.defense)
-                        player.hp -= result                     
+                        player.hp -= result  
+                        if(player.hp < 0){
+                            player.hp = 0
+                        }
                         display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
                         displays.push(display)
                     }
 
-                    console.log('enemy_damage:'+result)
+                    //console.log('enemy_damage:'+result)
                     
                     switch (damage.side){
                         case 'up': 

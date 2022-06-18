@@ -20,10 +20,15 @@ class Player{
         this.standFrameTime = 500
         this.attackFrameTime = 150
 
+        this.recoveryTime = 100     
+        this.lastRecoveryTime = lastTimestamp
+
         this.isAttack = false
         this.isWalking = false
         this.defending = false
         this.isRunning = false
+
+        this.staminaCoolDown = 0
 
         this.power = 14
         this.agility = 6
@@ -106,8 +111,8 @@ class Player{
             this.height
         )
 
-        // var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height+8, color : 'red', text : this.hp, type : 'hp'})
-        // displays.push(display)
+        var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height+8, color : 'red', text : this.stamina, type : 'hp'})
+        displays.push(display)
 
         //HP bar
         if(this.hp < this.max_hp){
@@ -218,6 +223,7 @@ class Player{
     }
 
     update(){
+
         //sprite switching
         if(!this.isAttack){
             if(this.isWalking){
@@ -263,8 +269,6 @@ class Player{
                     this.side = 'up'
                 }
             }  
-        }else{
-            //this.frames = 7
         }
 
         if(lastTimestamp - this.frameTime > this.lastTimestamp){
@@ -287,20 +291,19 @@ class Player{
 
         //stand
         if (!this.isAttack && !this.isWalking){
-                if(this.frames > 5){
-                    this.frames = 4
-                    this.frameTime = this.standFrameTime
-                    this.lastTimestamp = lastTimestamp
-                }
-                if(!(this.frames >= 4 && this.frames <= 5)){
-                    this.frames = 4
-                    this.frameTime = this.standFrameTime
-                    this.lastTimestamp = lastTimestamp
-                }
-
+            if(this.frames > 5){
+                this.frames = 4
+                this.frameTime = this.standFrameTime
+                this.lastTimestamp = lastTimestamp
+            }
+            if(!(this.frames >= 4 && this.frames <= 5)){
+                this.frames = 4
+                this.frameTime = this.standFrameTime
+                this.lastTimestamp = lastTimestamp
+            }
         }
         
-        //walking
+        //walk
         if (!this.isAttack && this.isWalking){
             if(this.frames > 3){
                 this.frames = 0
@@ -317,18 +320,25 @@ class Player{
                 this.frameTime = this.walkingFrameTime
                 this.lastTimestamp = lastTimestamp
             }
-        }        
+        }    
+        
+        if(lastTimestamp - this.recoveryTime > this.lastRecoveryTime){
+            if(this.hp < this.max_hp && this.hp > 0){
+                this.hp += this.hp_recovery
+            }
+    
+            if(this.sp < this.max_sp){
+                this.sp += 0.01
+            }
+    
+            if(this.stamina < this.max_stamina && this.staminaCoolDown <= 0){
+                this.stamina += 1
+            }
+            else{
+                this.staminaCoolDown -= 1
+            }
 
-        if(this.hp < this.max_hp){
-            this.hp += this.hp_recovery
-        }
-
-        if(this.sp < this.max_sp){
-            this.sp += 0.01
-        }
-
-        if(this.stamina < this.max_stamina){
-            this.stamina += 0.04
+            this.lastRecoveryTime = lastTimestamp
         }
 
         this.draw()
