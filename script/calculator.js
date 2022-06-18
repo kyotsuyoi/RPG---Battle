@@ -27,12 +27,12 @@ function speed_value(agility){
     return 0.5 + agility / 10
 }
 
-function attack_vs_defense(attack, defense){
-    var round = Math.round(Math.random() * ((attack/2) - 1) + 1);
+function attack_vs_defense(attack, dexterity, defense){
+    var round = Math.round(Math.random() * (attack/(2-(dexterity/100)) - 1 + (dexterity/100)) + 1 + (dexterity/100));
 
     var result = attack + round - defense;  
     if(defense > attack){
-        round = Math.round(Math.random() * ((attack/2) - 1) + 1);
+        round = Math.round(Math.random() * (attack/(4-(dexterity/100)) - 1 + (dexterity/100)) + 1 + (dexterity/100));
         result = round; 
     }
 
@@ -60,5 +60,9 @@ function knock_back(damage_power, power_a, power_b){
         return 0
     }
     return result
+}
+
+function hp_recovery(vitality){
+    return 0.01 + (vitality/1000)
 }
 

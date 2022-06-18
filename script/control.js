@@ -148,24 +148,36 @@ function keyCodeDown(keyCode){
                         damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', type : 'power_blade', side : 'up'}); 
                         //damage.currentSprite = damage.sprites.up
                         damages.push(damage)
+                        
+                        weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword', side : 'up'})
+                        weapons.push(weapon)
                     break
 
                     case player.sprites.stand.down.src:
                         damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', type : 'power_blade', side : 'down'}); 
                         //damage.currentSprite = damage.sprites.down
                         damages.push(damage)
+                        
+                        weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword', side : 'down'})
+                        weapons.push(weapon)
                     break
 
                     case player.sprites.stand.left.src:
                         damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', type : 'power_blade', side : 'left'}); 
                         //damage.currentSprite = damage.sprites.left
                         damages.push(damage)
+                        
+                        weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword', side : 'left'})
+                        weapons.push(weapon)
                     break
 
                     case player.sprites.stand.right.src:
                         damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', type : 'power_blade', side : 'right'}); 
                         //damage.currentSprite = damage.sprites.right
                         damages.push(damage)
+                        
+                        weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword', side : 'right'})
+                        weapons.push(weapon)
                     break                    
                 }
 

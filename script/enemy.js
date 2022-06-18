@@ -1,5 +1,5 @@
 class Enemy{
-    constructor({id, x, y}){
+    constructor({id, type, x, y, patrol, follow}){
         this.position ={
             x,
             y
@@ -22,6 +22,9 @@ class Enemy{
         this.patrol_y = 0
         this.in_battle = false
         this.in_patrol = false
+        this.patrol = patrol //enable or disable patrol
+        this.follow = follow //enable or disable follow
+        this.type = type
         
         this.in_patrol_time = 0
 
@@ -30,13 +33,38 @@ class Enemy{
         this.id = id
         this.side = 'down'
 
-        this.power = 5
-        this.agility = 8
-        this.dexterity = 6
+        this.power = 10
+        this.agility = 5
+        this.dexterity = 8
         this.vitality = 10
+     
+        this.sprites = {
+            sprite : createImage('img/thief_male.png')          
+        }
+
+        switch(type){
+            case 'thief':
+                this.sprites.sprite = createImage('img/thief_male.png') 
+            break
+
+            case 'thief_master':
+                this.sprites.sprite = createImage('img/thief_master_male.png') 
+                this.power = 15
+                this.agility = 12
+                this.dexterity = 18
+                this.vitality = 22
+            break
+        }
 
         this.max_hp = hp_value(this.vitality, this.power)
         this.max_sp = sp_value()
+
+        switch(type){            
+            case 'thief_master':
+                this.max_hp *=2
+                this.max_sp *=2
+            break
+        }
 
         this.hp = this.max_hp
         this.sp = this.max_sp
@@ -45,14 +73,9 @@ class Enemy{
         this.defense = defense_value(this.vitality, this.dexterity)
         this.flee = flee_value(this.agility, this.dexterity)
         
-        this.speed = 0.8 
-        this.attack_speed = 0  
-
-        this.sprites = {
-            sprite : createImage('img/thief_male.png'),
-            cropWidth : 46,
-            width : this.width            
-        }
+        this.speed = speed_value(this.agility)       
+        this.attack_speed = attack_speed_value(this.agility) 
+        this.hp_recovery = hp_recovery(this.vitality)
 
         this.currentSprite = this.sprites.sprite
         this.currentCropWidth = 46
@@ -76,7 +99,7 @@ class Enemy{
         )
         
         if(this.in_battle){
-            // var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height+8, color : 'red', text : this.hp, type : 'hp'})
+            // var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height+8, color : 'black', text : Math.round(this.hp), type : 'hp'})
             // displays.push(display)
 
             //HP bar
@@ -110,7 +133,7 @@ class Enemy{
         }
         
         if(this.hp < this.max_hp){
-            this.hp += 0.01
+            this.hp += this.hp_recovery
         }
 
         // if(this.sp < this.max_sp){
@@ -138,7 +161,7 @@ function enemy_action(enemy){
         }
 
         if(!enemy.in_battle){
-            if(enemy.patrol_time_wait <= 0){
+            if(enemy.patrol_time_wait <= 0 && enemy.patrol){
 
                 if(!enemy.in_patrol){
                     enemy.in_patrol = true   
@@ -224,7 +247,9 @@ function enemy_action(enemy){
             && distance_x < enemy.targetRange
             && distance_y < enemy.targetRange
             ){
-            enemy.position.x += enemy.speed
+            if(enemy.follow){
+                enemy.position.x += enemy.speed
+            }
             enemy.side = 'right'               
             enemy.currentCropHeight = 46*1  
 
@@ -234,7 +259,9 @@ function enemy_action(enemy){
             && distance_x < enemy.targetRange
             && distance_y < enemy.targetRange
             ){
-            enemy.position.x -= enemy.speed
+            if(enemy.follow){
+                enemy.position.x -= enemy.speed
+            }            
             enemy.side = 'left'  
             enemy.currentCropHeight = 46*2
         }
@@ -245,7 +272,9 @@ function enemy_action(enemy){
             && distance_y < enemy.targetRange
             && distance_x < enemy.targetRange
             ){
-            enemy.position.y+= enemy.speed
+            if(enemy.follow){
+                enemy.position.y+= enemy.speed
+            }
             enemy.side = 'down'                       
             enemy.currentCropHeight = 46*0
 
@@ -255,7 +284,9 @@ function enemy_action(enemy){
             && distance_y < enemy.targetRange
             && distance_x < enemy.targetRange 
             ){
-            enemy.position.y-= enemy.speed
+            if(enemy.follow){
+                enemy.position.y-= enemy.speed
+            }
             enemy.side = 'up'                       
             enemy.currentCropHeight = 46*3
         }
@@ -301,44 +332,4 @@ function enemy_action(enemy){
             }
         }
 
-        // //cima para baixo
-        // if(player.position.y + player.height <= enemy.position.y + enemy.height
-        //     && player.position.y + player.height >= enemy.position.y
-
-        //     && player.position.x + player.width >= enemy.position.x
-        //     && player.position.x <= enemy.position.x + enemy.width
-        //     && keys.down.pressed){
-                
-        //     player.velocity.y = 0
-        // }
-        // //baixo para cima
-        // if(player.position.y <= enemy.position.y + enemy.height
-        //     && player.position.y >= enemy.position.y
-            
-        //     && player.position.x + player.width >= enemy.position.x
-        //     && player.position.x <= enemy.position.x + enemy.width
-        //     && keys.up.pressed){
-        //     player.velocity.y = 0
-        // }
-
-        // //esquerda para direita
-        // if(player.position.x + player.width <= enemy.position.x + enemy.width && 
-        //     player.position.x + player.width >= enemy.position.x
-
-        //     && player.position.y + player.height >= enemy.position.y
-        //     && player.position.y <= enemy.position.y + enemy.height
-        //     && keys.right.pressed){
-        //     player.velocity.x = 0
-        // }
-
-        // //direita para esquerda
-        // if(player.position.x <= enemy.position.x + enemy.width
-        //     && player.position.x >= enemy.position.x
-            
-        //     && player.position.y + player.height >= enemy.position.y
-        //     && player.position.y <= enemy.position.y + enemy.height
-        //     && keys.left.pressed
-        //     ){
-        //     player.velocity.x = 0
-        // }
 }

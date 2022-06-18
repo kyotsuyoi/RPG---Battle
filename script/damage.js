@@ -15,7 +15,7 @@ class Damage{
         this.speed = 0.6
         this.targetRange = 150 
 
-        this.lastDamage = new Array()
+        this.lastDamage = new Array() //saves id of target that has already taken damage
 
         this.frames = 0
         this.count = 0
@@ -81,7 +81,11 @@ class Damage{
     }
 
     draw(){
-        // context.fillStyle = 'red'
+        // if(this.type == 'power_blade'){
+        //     context.fillStyle = 'red'
+        // }else{
+        //     context.fillStyle = 'green'
+        // }
         // context.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         context.drawImage(          
@@ -129,15 +133,17 @@ function damage_action(damage){
         if(damage.owner == "player"){
             enemies.forEach(enemy => {
                 if (square_colision_area(damage, enemy)) {
-
-                    if(damage == enemy.lastDamage){
+                    
+                    //this is to not double damage
+                    var p = damage.lastDamage.filter(element => element == enemy.id)
+                    if(p == enemy.id){
                         return
                     }
-                    enemy.lastDamage = damage
+                    damage.lastDamage.push(enemy.id)
                     
                     var is_hit = dexterity_vs_flee(player.dexterity, enemy.agility)
                     
-                    if(is_hit){                        
+                    if(true){                        
                         var result = attack_vs_defense(player.attack + damage.bonus_attack, player.dexterity + damage.bonus_dexterity, enemy.defense)
                         enemy.hp -= result                     
                         display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'red', text : result, type : 'damage'})
@@ -170,11 +176,6 @@ function damage_action(damage){
         
         if(damage.owner == "cpu"){
             if (square_colision_area(damage, player)) {
-
-                // if(damage == player.lastDamage){
-                //     return
-                // }
-                // player.lastDamage = damage
 
                 var p = damage.lastDamage.filter(element => element == 'p1')
                 if(p == 'p1'){

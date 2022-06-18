@@ -33,7 +33,8 @@ class Player{
         this.flee = flee_value(this.agility, this.dexterity)
         
         this.speed = speed_value(this.agility)       
-        this.attack_speed = attack_speed_value(this.agility)        
+        this.attack_speed = attack_speed_value(this.agility)     
+        this.hp_recovery = hp_recovery(this.vitality)   
 
         this.attack_wait = 0
         this.power_attack_wait = 0
@@ -281,7 +282,7 @@ class Player{
         }
 
         if(this.hp < this.max_hp){
-            this.hp += 0.01
+            this.hp += this.hp_recovery
         }
 
         if(this.sp < this.max_sp){
