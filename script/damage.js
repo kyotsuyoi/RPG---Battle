@@ -208,7 +208,7 @@ function damage_action(damage){
                             displays.push(display)
 
                         }else{
-                            player.stamina = res_stm
+                            player.stamina = player.stamina - result/2
                         }  
                         
                         player.staminaCoolDown = 50

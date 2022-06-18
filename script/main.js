@@ -283,8 +283,8 @@ function start() {
 function animate(timestamp){
 
     if(player.hp <= 0){        
-        // alert('MORREU')
-        // return
+        alert('MORREU')
+        return
     }
 
     if(enemies.length <= 0){        
