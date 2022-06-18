@@ -6,9 +6,13 @@ background.height = 800
 
 let scrollOffset = 0
 
+const perfectFrameTime = 1000 / 60;
+let deltaTime = 0;
+let lastTimestamp = 0;
+
 var damages = new Array()
 var displays = new Array()
-const player = new Player()
+const player = new Player(lastTimestamp)
 var grounds = new Array()
 var weapons = new Array()
 
@@ -266,7 +270,11 @@ function square_colision_area(a, b){
     return false
 }
 
-function animate(){
+function start() {
+    requestAnimationFrame(animate);
+}
+
+function animate(timestamp){
 
     if(player.hp <= 0){        
         alert('MORREU')
@@ -277,8 +285,13 @@ function animate(){
         alert('VENCEU')
         return
     }
+    
+    requestAnimationFrame(animate);
+    deltaTime = (timestamp - lastTimestamp) / perfectFrameTime;
+    lastTimestamp = timestamp;
+    //console.log(Math.round(lastTimestamp))
 
-    requestAnimationFrame(animate)
+    //requestAnimationFrame(animate)
     context.clearRect(0, 0, background.width, background.height)  
     context.closePath() 
 
@@ -352,6 +365,8 @@ function animate(){
 
 player.draw()
 
-animate()
+start()
+
+//animate()
 
 

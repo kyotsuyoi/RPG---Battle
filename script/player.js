@@ -1,5 +1,5 @@
 class Player{
-    constructor(){
+    constructor(lastTimestamp){
         this.position ={
             x : 400,
             y : 700
@@ -13,6 +13,14 @@ class Player{
 
         this.frames = 4
         this.count = 0
+        this.lastTimestamp = lastTimestamp
+
+        this.frameTime = 0
+        this.walkingFrameTime = 100
+        this.runningFrameTime = this.walkingFrameTime/2
+        this.standFrameTime = 500
+        this.attackFrameTime = 150
+
         this.isAttack = false
         this.isWalking = false
         this.defending = false
@@ -276,28 +284,45 @@ class Player{
             //this.frames = 7
         }
 
-        this.count++
-        if (this.count==10 || this.count==20 || this.count==30 || this.count==40 || this.count==50 || this.count==60 || this.count==70 || this.count>=80){
-          this.frames++
+        if(lastTimestamp - this.frameTime > this.lastTimestamp){
+            this.frames++            
+            this.lastTimestamp = lastTimestamp
         }
 
+        // this.count++
+        // if (this.count==10 || this.count==20 || this.count==30 || this.count==40 || this.count==50 || this.count==60 || this.count==70 || this.count>=80){
+        //   this.frames++
+        // }
+
+
+        //attack
         if(this.isAttack && this.frames > 7){            
             this.frames = 7
-            this.count = 0
             this.isAttack = false
+            this.frameTime = this.attackFrameTime
+            this.lastTimestamp = lastTimestamp
+        }
+        
+        if(this.isAttack && !(this.frames >= 6 && this.frames < 8)){
+            this.frames = 6
+            this.frameTime = this.attackFrameTime
+            this.lastTimestamp = lastTimestamp
+        }
 
-        }else if (!this.isAttack && !this.isWalking
-        //   (this.currentSprite === this.sprites.stand.right || 
-        //     this.currentSprite === this.sprites.stand.left || 
-        //     this.currentSprite === this.sprites.stand.down || 
-        //     this.currentSprite === this.sprites.stand.up)
-            ){
+        //stand
+        if (!this.isAttack && !this.isWalking){
                 if(this.frames > 5){
                     this.frames = 4
                     this.count = 0
+                    this.frameTime = this.standFrameTime
+                    this.lastTimestamp = lastTimestamp
+                    this.frameTime = this.standFrameTime
                 }
 
-        }else if (!this.isAttack && this.isWalking
+        }else 
+        
+        //walking
+        if (!this.isAttack && this.isWalking
         //   (this.currentSprite === this.sprites.run.right || 
         //     this.currentSprite === this.sprites.run.left || 
         //     this.currentSprite === this.sprites.run.down || 
@@ -306,8 +331,14 @@ class Player{
             if(this.frames > 3){
                 this.frames = 0
                 this.count = 0
+                if(this.isRunning){
+                    this.frameTime = this.runningFrameTime
+                }else{
+                    this.frameTime = this.walkingFrameTime
+                }
+                this.lastTimestamp = lastTimestamp
             }
-        }
+        }        
 
         if(this.hp < this.max_hp){
             this.hp += this.hp_recovery
