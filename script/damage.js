@@ -143,7 +143,7 @@ function damage_action(damage){
                     
                     var is_hit = dexterity_vs_flee(player.dexterity, enemy.agility)
                     
-                    if(true){                        
+                    if(is_hit){                        
                         var result = attack_vs_defense(player.attack + damage.bonus_attack, player.dexterity + damage.bonus_dexterity, enemy.defense)
                         enemy.hp -= result                     
                         display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'red', text : result, type : 'damage'})
@@ -189,10 +189,10 @@ function damage_action(damage){
                     
                 if(is_hit){    
 
-                    if(player.defending && player.sp >= 5){                        
-                        player.sp -= 5
+                    if(player.defending && player.stamina >= 5){                        
+                        player.stamina -= 5
                     }else{
-                        if(player.sp <= 4){
+                        if(player.stamina <= 4){
                             player.defending = false
                         }
                         var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.defense)

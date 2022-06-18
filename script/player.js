@@ -16,6 +16,7 @@ class Player{
         this.isAttack = false
         this.isWalking = false
         this.defending = false
+        this.isRunning = false
 
         this.power = 14
         this.agility = 6
@@ -24,9 +25,11 @@ class Player{
 
         this.max_hp = hp_value(this.vitality, this.power)
         this.max_sp = sp_value()
+        this.max_stamina = 100
 
         this.hp = this.max_hp
         this.sp = this.max_sp
+        this.stamina = this.max_stamina
         
         this.attack = attack_value(this.power, this.dexterity)
         this.defense = defense_value(this.vitality, this.dexterity)
@@ -108,24 +111,42 @@ class Player{
         // displays.push(display)
 
         //HP bar
-        context.fillStyle = 'black'
-        context.fillRect(this.position.x, this.position.y + this.height+1, 40, 4)
-        var hp_percent = Math.round(this.hp * 100) / this.max_hp
-        var bar_value = (40 * hp_percent) / 100
-        if(hp_percent<=25){
-            context.fillStyle = 'red'
-        }else{
-            context.fillStyle = 'green'
+        if(this.hp < this.max_hp){
+            context.fillStyle = 'black'
+            context.fillRect(this.position.x, this.position.y + this.height+1, 40, 4)
+            var hp_percent = Math.round(this.hp * 100) / this.max_hp
+            var bar_value = (40 * hp_percent) / 100
+            if(hp_percent<=25){
+                context.fillStyle = 'red'
+            }else{
+                context.fillStyle = 'green'
+            }
+            context.fillRect(this.position.x, this.position.y + this.height+1, bar_value, 3)
         }
-        context.fillRect(this.position.x, this.position.y + this.height+1, bar_value, 3)
 
         //SP bar
-        context.fillStyle = 'black'
-        context.fillRect(this.position.x, this.position.y + this.height+4, 40, 4)
-        var sp_percent = Math.round(this.sp * 100) / this.max_sp
-        var bar_value = (40 * sp_percent) / 100
-        context.fillStyle = 'blue'        
-        context.fillRect(this.position.x, this.position.y + this.height+4, bar_value, 3)
+        if(this.sp < this.max_sp){
+            context.fillStyle = 'black'
+            context.fillRect(this.position.x, this.position.y + this.height+4, 40, 4)
+            var sp_percent = Math.round(this.sp * 100) / this.max_sp
+            var bar_value = (40 * sp_percent) / 100
+            context.fillStyle = 'blue'        
+            context.fillRect(this.position.x, this.position.y + this.height+4, bar_value, 3)
+        }
+
+        //Stamina bar
+        if(this.stamina < this.max_stamina){
+            context.fillStyle = 'black'
+            context.fillRect(this.position.x, this.position.y + this.height+8, 40, 4)
+            var stamina_percent = Math.round(this.stamina * 100) / this.max_stamina
+            var bar_value = (40 * stamina_percent) / 100
+            if(stamina_percent<=25){
+                context.fillStyle = 'orange'
+            }else{
+                context.fillStyle = 'yellow'
+            }       
+            context.fillRect(this.position.x, this.position.y + this.height+8, bar_value, 3)
+        }
 
         if(this.defending){
             
@@ -187,7 +208,14 @@ class Player{
             this.speed = speed_value(this.agility)/2
         }else{
             this.speed = speed_value(this.agility)
-        }        
+        }    
+        
+        if(this.isRunning && !this.defending && this.stamina > 0){
+            this.speed = speed_value(this.agility)*2
+            this.stamina -= 0.5
+        }else{
+            this.speed = speed_value(this.agility)
+        }
     }
 
     update(){
@@ -287,6 +315,10 @@ class Player{
 
         if(this.sp < this.max_sp){
             this.sp += 0.01
+        }
+
+        if(this.stamina < this.max_stamina){
+            this.stamina += 0.04
         }
 
         this.draw()

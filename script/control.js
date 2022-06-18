@@ -21,6 +21,9 @@ const keys = {
     },
     defense : {
         pressed : false
+    },
+    run : {
+        pressed : false
     }
 }
 
@@ -181,15 +184,22 @@ function keyCodeDown(keyCode){
                     break                    
                 }
 
-                console.log('keydown:'+ keyCode)
+                //console.log('keydown:'+ keyCode)
             }
         break
 
         case 103:
-            if(!keys.defense.pressed && player.sp>=5){
-                console.log('keydown:'+ keyCode)
+            if(!keys.defense.pressed && player.stamina>=5){
+                //console.log('keydown:'+ keyCode)
                 keys.defense.pressed = true  
                 player.defending = true
+            }
+        break
+
+        case 98:
+            if(!keys.run.pressed && player.stamina>=5){
+                keys.run.pressed = true  
+                player.isRunning = true
             }
         break
     }
@@ -248,6 +258,11 @@ function keyCodeUp(keyCode){
         case 103:
             keys.defense.pressed = false  
             player.defending = false
+        break
+
+        case 98:
+            keys.run.pressed = false   
+            player.isRunning = false
         break
     }
 
@@ -355,7 +370,9 @@ function padLoop() {
 
     //a
     if (buttonPressed(gp.buttons[0])) {
-        console.log('a')
+        keyCodeDown(98)
+    }else{
+        keyCodeUp(98)
     }
 
     //x
