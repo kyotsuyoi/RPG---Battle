@@ -260,10 +260,12 @@ function enemy_action(enemy){
             enemy.currentCropHeight = 46*3
         }
 
-        if (player.position.x < enemy.position.x + enemy.width &&
-            player.position.x + player.width > enemy.position.x &&
-            player.position.y < enemy.position.y + enemy.height &&
-            player.position.y + player.height > enemy.position.y &&
+        var attack_range = 42
+
+        if (player.position.x < enemy.position.x + enemy.width + attack_range &&
+            player.position.x + player.width+  attack_range > enemy.position.x &&
+            player.position.y < enemy.position.y + enemy.height + attack_range &&
+            player.position.y + player.height + attack_range > enemy.position.y &&
             enemy.attack_wait <= 0) {
 
             //console.log("enemy attack")
