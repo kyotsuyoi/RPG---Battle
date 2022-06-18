@@ -11,7 +11,7 @@ function flee_value(agility, dexterity){
 }
 
 function hp_value(vitality, power){
-    return  100 + (vitality/2) + (power/6)
+    return  100 + (vitality*2) + (power/6)
 }
 
 function sp_value(){
@@ -20,7 +20,7 @@ function sp_value(){
 
 //reverse
 function attack_speed_value(agility){
-    return 30 - agility
+    return 50 - agility/2
 }
 
 function speed_value(agility){

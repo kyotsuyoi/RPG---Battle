@@ -31,9 +31,9 @@ class Player{
         this.staminaCoolDown = 0
 
         this.power = 14
-        this.agility = 6
+        this.agility = 8
         this.dexterity = 15
-        this.vitality = 12
+        this.vitality = 15
 
         this.max_hp = hp_value(this.vitality, this.power)
         this.max_sp = sp_value()
@@ -111,8 +111,8 @@ class Player{
             this.height
         )
 
-        var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height+8, color : 'red', text : this.stamina, type : 'hp'})
-        displays.push(display)
+        // var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height+8, color : 'red', text : this.hp, type : 'hp'})
+        // displays.push(display)
 
         //HP bar
         if(this.hp < this.max_hp){
@@ -328,7 +328,7 @@ class Player{
             }
     
             if(this.sp < this.max_sp){
-                this.sp += 0.01
+                this.sp += 0.05
             }
     
             if(this.stamina < this.max_stamina && this.staminaCoolDown <= 0){

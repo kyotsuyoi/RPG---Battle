@@ -37,10 +37,10 @@ class Enemy{
         this.id = id
         this.side = 'down'
 
-        this.power = 10
+        this.power = 12
         this.agility = 5
-        this.dexterity = 8
-        this.vitality = 10
+        this.dexterity = 10
+        this.vitality = 12
      
         this.sprites = {
             sprite : createImage('img/thief_male.png')          
@@ -56,7 +56,7 @@ class Enemy{
                 this.power = 15
                 this.agility = 12
                 this.dexterity = 18
-                this.vitality = 22
+                this.vitality = 20
             break
         }
 
@@ -313,7 +313,7 @@ function enemy_action(enemy){
 
             //console.log("enemy attack")
 
-            enemy.attack_wait = 60
+            enemy.attack_wait = enemy.attack_speed
             
             switch (enemy.side){
                 case 'up':                        

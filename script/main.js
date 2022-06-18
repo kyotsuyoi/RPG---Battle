@@ -16,6 +16,12 @@ const player = new Player(lastTimestamp)
 var grounds = new Array()
 var weapons = new Array()
 
+const huds = [
+    new Hud({
+        id : 'p1'
+    })
+]
+
 var enemies = [
     new Enemy({
         id : '01', type : 'thief',
@@ -277,8 +283,8 @@ function start() {
 function animate(timestamp){
 
     if(player.hp <= 0){        
-        alert('MORREU')
-        return
+        // alert('MORREU')
+        // return
     }
 
     if(enemies.length <= 0){        
@@ -360,7 +366,11 @@ function animate(timestamp){
         if(display.time <= 0){
             displays = displays.filter(display => display.time > 0)
         }
-    })    
+    }) 
+    
+    huds.forEach(hud =>{
+        hud.draw()
+    })
 }
 
 player.draw()

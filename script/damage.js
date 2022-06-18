@@ -184,8 +184,11 @@ function damage_action(damage){
                 damage.lastDamage.push('p1')
 
                 var enemy = enemies.find(element => element.id == damage.owner_id)   
-                
-                var is_hit = dexterity_vs_flee(enemy.dexterity, player.agility)
+                var is_hit = false
+
+                if(enemy != undefined){
+                    is_hit = dexterity_vs_flee(enemy.dexterity, player.agility)
+                } 
                     
                 if(is_hit){    
 

@@ -80,7 +80,7 @@ function keyCodeDown(keyCode){
         break
 
         case 97:
-            if(!keys.attack.pressed && player.attack_wait == 0){
+            if(!keys.attack.pressed && player.attack_wait <= 0){
                 keys.attack.pressed = true      
                 lastKey = 'attack'
                 player.isAttack = true
