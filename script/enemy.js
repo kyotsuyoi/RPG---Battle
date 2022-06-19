@@ -28,9 +28,7 @@ class Enemy{
         this.in_patrol = false
         this.patrol = patrol //enable or disable patrol
         this.follow = follow //enable or disable follow
-        this.type = type
-        
-        this.in_patrol_time = 0
+        this.type = type        
 
         this.attackCoolDown = 0
 
@@ -137,17 +135,14 @@ class Enemy{
             this.frames = 0
             this.count = 0
             this.lastTimestamp = lastTimestamp
-        }
-        
-        if(this.hp < this.max_hp && this.hp > 0){
-            this.hp += this.hp_recovery
-        }
-
-        // if(this.sp < this.max_sp){
-        //     this.sp += 0.01
-        // }
+        }   
         
         if(lastTimestamp - this.recoveryTime > this.lastRecoveryTime){
+            
+            if(this.hp < this.max_hp && this.hp > 0){
+                this.hp += this.hp_recovery
+            }
+
             if(this.attackCoolDown > 0){
                 this.attackCoolDown -= 1
             }
@@ -169,7 +164,7 @@ function enemy_action(enemy){
     distance_y_2 = Math.abs(player2.position.y - enemy.position.y)
 
     enemy.in_patrol_time+=1
-    if(enemy.in_patrol_time>1000){
+    if(enemy.in_patrol_time>500){
         enemy.in_patrol_time = 0
         enemy.in_patrol = false
     }
@@ -226,7 +221,11 @@ function enemy_action(enemy){
             
             enemy.in_battle = true
         }
-    }      
+    }   
+    
+    if(!p1_battle && !p2_battle){
+        enemy.in_battle = false
+    }
     
     patrol(enemy)
 
@@ -235,7 +234,7 @@ function enemy_action(enemy){
 function patrol(enemy){
     
     if(!enemy.in_battle){
-        if(enemy.patrol_time_wait <= 0 && enemy.patrol){
+        if(enemy.patrol_time_wait <= 0 /*&& enemy.patrol*/){
 
             if(!enemy.in_patrol){
                 enemy.in_patrol = true   

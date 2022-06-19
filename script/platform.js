@@ -105,32 +105,31 @@ function platform_colision(object, platform){
     if(touch && object.side == 'right'){
         object.position.x-= object.speed  
     }
-
     
     if(up && !up_pass && ((left && !left_pass) || (right && !right_pass))){
         if(vy < vx){
-            console.log(platform.spriteType + ':up')
+            //console.log(platform.spriteType + ':up')
             object.position.y+= object.speed        
         }
     }
 
     if(down && !down_pass  && ((left && !left_pass) || (right && !right_pass))){
         if(vy < vx){
-            console.log(platform.spriteType + ':down')
+            //console.log(platform.spriteType + ':down')
             object.position.y-= object.speed        
         }
     }
 
     if(left && !left_pass && ((up && !up_pass) || (down && !down_pass))){  
         if(vx < vy){
-            console.log(platform.spriteType + ':left')
+            //console.log(platform.spriteType + ':left')
             object.position.x+= object.speed         
         }
     }
 
     if(right && !right_pass && ((up && !up_pass) || (down && !down_pass))){
         if(vx < vy){
-            console.log(platform.spriteType + ':right')
+            //console.log(platform.spriteType + ':right')
             object.position.x-= object.speed            
         }
     }
