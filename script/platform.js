@@ -8,6 +8,7 @@ class Platform {
         this.height = 42        
 
         this.sprite = createImage('img/wall01.png')
+        this.spriteType = spriteType
 
         switch(spriteType){
             case 'wood_axe':
@@ -41,7 +42,7 @@ class Platform {
     }
 
     draw(){
-        // context.fillStyle = 'blue'
+        // context.fillStyle = 'yellow'
         // context.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         context.drawImage(          
@@ -91,35 +92,47 @@ function platform_colision(object, platform){
     var width_dif_size = (object.width - platform.width) * -1
     var vx = object.width - width_dif_size - width_dif_pos
 
-    if(left && !left_pass && ((up && !up_pass) || (down && !down_pass))){  
-        if(vx < vy){
-            //console.log('left')
-                object.position.x+= object.speed
-            
-        }
+    var touch = up && down && left && right
+    if(touch && object.side == 'up'){
+        object.position.y+= object.speed 
+    }
+    if(touch && object.side == 'down'){
+        object.position.y-= object.speed 
+    }
+    if(touch && object.side == 'left'){
+        object.position.x+= object.speed  
+    }
+    if(touch && object.side == 'right'){
+        object.position.x-= object.speed  
     }
 
-    if(right && !right_pass && ((up && !up_pass) || (down && !down_pass))){
-        if(vx < vy){
-            //console.log('right')
-                object.position.x-= object.speed
-            
-        }
-    }
-
+    
     if(up && !up_pass && ((left && !left_pass) || (right && !right_pass))){
         if(vy < vx){
-            //console.log('up')
-                object.position.y+= object.speed
-            
+            console.log(platform.spriteType + ':up')
+            object.position.y+= object.speed        
         }
     }
 
     if(down && !down_pass  && ((left && !left_pass) || (right && !right_pass))){
         if(vy < vx){
-            //console.log('down')
-                object.position.y-= object.speed
-            
+            console.log(platform.spriteType + ':down')
+            object.position.y-= object.speed        
         }
     }
+
+    if(left && !left_pass && ((up && !up_pass) || (down && !down_pass))){  
+        if(vx < vy){
+            console.log(platform.spriteType + ':left')
+            object.position.x+= object.speed         
+        }
+    }
+
+    if(right && !right_pass && ((up && !up_pass) || (down && !down_pass))){
+        if(vx < vy){
+            console.log(platform.spriteType + ':right')
+            object.position.x-= object.speed            
+        }
+    }
+
 }

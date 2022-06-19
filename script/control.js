@@ -138,7 +138,7 @@ function keyCodeDown(keyCode){
                 lastKey = 'power_attack'
                 player.isAttack = true
 
-                player.powerAttackCoolDown = 150                
+                player.powerAttackCoolDown = 30                
 
                 if(player.sp <= 0){
                     player.sp = 0
@@ -241,7 +241,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'power_attack'
                 player2.isAttack = true
 
-                player2.powerAttackCoolDown = 150                
+                player2.powerAttackCoolDown = 30                
 
                 if(player2.sp <= 0){
                     player2.sp = 0

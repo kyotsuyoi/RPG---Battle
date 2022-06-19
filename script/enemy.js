@@ -127,11 +127,6 @@ class Enemy{
             this.lastTimestamp = lastTimestamp
         }
 
-        // this.count++
-        // if (this.count==10 || this.count==20 || this.count==30 || this.count==40){
-        //     this.frames++
-        // }
-
         if(!this.in_patrol && !this.in_battle){
             this.frames = 0
             this.count = 0            

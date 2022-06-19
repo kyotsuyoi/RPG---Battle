@@ -1,5 +1,6 @@
 class Hud {
     constructor({id}){
+        this.id = id
         this.position = {
             x : 0,
             y : 0
@@ -7,8 +8,18 @@ class Hud {
         this.width = 150
         this.height = 48
 
-        this.position.x = 0 + 2
-        this.position.y = 800 - this.height - 2
+        this.position.x = 0
+        this.position.y = 0
+        if(id == 'p1'){
+            this.position.x = 0 + 2
+            this.position.y = 800 - this.height - 2
+        }
+
+        if(id == 'p2'){
+            this.position.x = 800 - this.width - 2
+            this.position.y = 800 - this.height - 2
+        }
+
         
         this.sprite = createImage('img/hud_large.png')
 
@@ -30,10 +41,35 @@ class Hud {
             this.position.y,
             this.width,
             this.height
-        )        
+        )    
+        
+        var hp = 0
+        var max_hp = 0
+        var sp = 0
+        var max_sp = 0
+        var stamina = 0
+        var max_stamina = 0
+
+        if(this.id == 'p1'){
+            var hp = player.hp
+            var max_hp = player.max_hp
+            var sp = player.sp
+            var max_sp = player.max_sp
+            var stamina = player.stamina
+            var max_stamina = player.max_stamina
+        }
+
+        if(this.id == 'p2'){
+            var hp = player2.hp
+            var max_hp = player2.max_hp
+            var sp = player2.sp
+            var max_sp = player2.max_sp
+            var stamina = player2.stamina
+            var max_stamina = player2.max_stamina
+        }
 
         //HP bar
-        var hp_percent = Math.round(player.hp * 100) / player.max_hp
+        var hp_percent = Math.round(hp * 100) / max_hp
         var bar_value = (76 * hp_percent) / 100
         if(hp_percent<=25){
             context.fillStyle = 'red'
@@ -45,10 +81,10 @@ class Hud {
         //HP text
         context.font = "8px Arial Black";
         context.fillStyle = 'black';
-        context.fillText(Math.round(player.hp) + '/' + Math.round(player.max_hp),this.position.x + 70, this.position.y + 12);
+        context.fillText(Math.round(hp) + '/' + Math.round(max_hp),this.position.x + 70, this.position.y + 12);
 
         //SP bar
-        var sp_percent = Math.round(player.sp * 100) / player.max_sp
+        var sp_percent = Math.round(sp * 100) / max_sp
         var bar_value = (76 * sp_percent) / 100
         context.fillStyle = '#2865c7'        
         context.fillRect(this.position.x + 55, this.position.y + 21, bar_value, 6)  
@@ -56,9 +92,9 @@ class Hud {
         //SP text
         context.font = "8px Arial Black";
         context.fillStyle = 'black';
-        context.fillText(Math.round(player.sp) + '/' + Math.round(player.max_sp),this.position.x + 70, this.position.y + 27);
+        context.fillText(Math.round(sp) + '/' + Math.round(max_sp),this.position.x + 70, this.position.y + 27);
         
-        var stamina_percent = Math.round(player.stamina * 100) / player.max_stamina
+        var stamina_percent = Math.round(stamina * 100) / max_stamina
         var bar_value = (76 * stamina_percent) / 100
         if(stamina_percent<=25){
             context.fillStyle = 'orange'
@@ -70,7 +106,7 @@ class Hud {
         //Stamina text
         context.font = "8px Arial Black";
         context.fillStyle = 'black';
-        context.fillText(Math.round(player.stamina) + '/' + Math.round(player.max_stamina),this.position.x + 70, this.position.y + 42);
+        context.fillText(Math.round(stamina) + '/' + Math.round(max_stamina),this.position.x + 70, this.position.y + 42);
         
     }
 }

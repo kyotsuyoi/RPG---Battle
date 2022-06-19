@@ -25,7 +25,7 @@ class Damage{
         this.owner_id = owner_id
 
         this.attack_wait = 10
-        this.power = 10
+        this.power = 10 //knock back only
         this.bonus_attack = 0
         this.bonus_dexterity = 0
 
@@ -40,7 +40,7 @@ class Damage{
         if(this.type == 'power_blade'){
             this.attack_wait = 30
             this.power = 40
-            this.bonus_attack = 15
+            this.bonus_attack = 30
             this.bonus_dexterity = 5
             this.width = 100
             this.height = 100
@@ -144,10 +144,10 @@ function damage_action(damage){
                     var is_hit = false
                     switch(damage.owner){
                         case 'player':
-                            is_hit = dexterity_vs_flee(player.dexterity, enemy.agility)
+                            is_hit = dexterity_vs_flee(player.dexterity + damage.bonus_dexterity, enemy.agility)
                         break
                         case 'player2':
-                            is_hit = dexterity_vs_flee(player.dexterity, enemy.agility)
+                            is_hit = dexterity_vs_flee(player.dexterity + damage.bonus_dexterity, enemy.agility)
                         break
                     }                    
                     

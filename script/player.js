@@ -31,10 +31,19 @@ class Player{
 
         this.staminaCoolDown = 0
 
-        this.power = 14
-        this.agility = 8
-        this.dexterity = 15
-        this.vitality = 15
+        if(id == 'p1'){
+            this.power = 14
+            this.agility = 8
+            this.dexterity = 15
+            this.vitality = 15
+        }
+
+        if(id == 'p2'){
+            this.power = 40
+            this.agility = 15
+            this.dexterity = 20
+            this.vitality = 20
+        }
 
         this.max_hp = hp_value(this.vitality, this.power)
         this.max_sp = sp_value()
@@ -60,36 +69,44 @@ class Player{
         if(id=='p1'){
             this.sprites = {
                 character : {
-                sprite : createImage('img/knight_female.png'),
-                cropWidth : 42,
-                width : this.width
+                    sprite : createImage('img/knight_female.png'),
+                    cropWidth : 42,
+                    width : this.width
                 },
                 shield : {
-                sprite : createImage('img/shield.png'),
-                cropWidth : 45,
-                width : 45
+                    sprite : createImage('img/shield.png'),
+                    cropWidth : 45,
+                    width : 45
                 }
             }
+            
+            this.currentCropWidth = 42
+            this.currentCropHeight = 0
         }
 
-        if(id=='p2'){
+        if(id=='p2'){            
+            this.width = 32
+            this.height = 45
+            
+            this.currentCropWidth = 34
+            this.currentCropHeight = 0
+
             this.sprites = {
                 character : {
-                sprite : createImage('img/knight_female.png'),
-                cropWidth : 42,
-                width : this.width
+                    sprite : createImage('img/knight_male.png'),
+                    cropWidth : 0,
+                    width : this.width
                 },
                 shield : {
-                sprite : createImage('img/shield.png'),
-                cropWidth : 45,
-                width : 45
+                    sprite : createImage('img/shield.png'),
+                    cropWidth : 45,
+                    width : 45
                 }
             }
+            
         }
 
         this.currentSprite = this.sprites.character.sprite
-        this.currentCropWidth = 42
-        this.currentCropHeight = 0
 
         this.currentShieldSprite = this.sprites.shield.sprite
         this.currentShieldCropWidth = 45
@@ -101,15 +118,24 @@ class Player{
 
         //draw shield first (up only)
         if(this.side == 'up' && this.defending){
+
+            var posx = 0
+            if(this.id == 'p1'){
+                posx = 10
+            }
+            if(this.id == 'p2'){
+                posx = -12
+            }
+
             context.drawImage(          
                 this.currentShieldSprite, 
                 this.currentShieldCropWidth * 3,
                 0,
                 45, //largura
                 45, //altura
-                this.position.x + 10, 
+                this.position.x + posx, 
                 this.position.y + 8,
-                this.width,
+                this.sprites.shield.width,
                 this.height
             )
         }
@@ -174,24 +200,48 @@ class Player{
             var pos_x = -2
             var pos_y = 10
 
-            switch(this.side){
-                case 'down':
-                    side_num = 0
-                    pos_x = -2
-                    pos_y = 10
-                break
+            if(this.id == 'p1'){
+                switch(this.side){
+                    case 'down':
+                        side_num = 0
+                        pos_x = -2
+                        pos_y = 10
+                    break
 
-                case 'left':
-                    side_num = 1
-                    pos_x = -8
-                    pos_y = 10
-                break
+                    case 'left':
+                        side_num = 1
+                        pos_x = -8
+                        pos_y = 10
+                    break
 
-                case 'right':
-                    side_num = 2
-                    pos_x = +8
-                    pos_y = 10
-                break
+                    case 'right':
+                        side_num = 2
+                        pos_x = +8
+                        pos_y = 10
+                    break
+                }
+            }
+
+            if(this.id == 'p2'){
+                switch(this.side){
+                    case 'down':
+                        side_num = 0
+                        pos_x = -2
+                        pos_y = 10
+                    break
+
+                    case 'left':
+                        side_num = 1
+                        pos_x = -14
+                        pos_y = 10
+                    break
+
+                    case 'right':
+                        side_num = 2
+                        pos_x = 2
+                        pos_y = 10
+                    break
+                }
             }
 
             //draw shield (down/left/rigth)
@@ -204,7 +254,7 @@ class Player{
                     45, //altura
                     this.position.x + pos_x, 
                     this.position.y + pos_y,
-                    this.width,
+                    this.sprites.shield.width,
                     this.height
                 )
             }
