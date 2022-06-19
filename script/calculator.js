@@ -20,7 +20,7 @@ function sp_value(){
 
 //reverse
 function attack_speed_value(agility){
-    return 50 - agility/2
+    return 10 - agility/2
 }
 
 function speed_value(agility){

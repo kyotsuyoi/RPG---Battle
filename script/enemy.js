@@ -32,7 +32,7 @@ class Enemy{
         
         this.in_patrol_time = 0
 
-        this.attack_wait = 0
+        this.attackCoolDown = 0
 
         this.id = id
         this.side = 'down'
@@ -151,6 +151,14 @@ class Enemy{
         // if(this.sp < this.max_sp){
         //     this.sp += 0.01
         // }
+        
+        if(lastTimestamp - this.recoveryTime > this.lastRecoveryTime){
+            if(this.attackCoolDown > 0){
+                this.attackCoolDown -= 1
+            }
+
+            this.lastRecoveryTime = lastTimestamp
+        }
 
         this.draw()
         this.position.x += this.velocity.x
@@ -159,189 +167,239 @@ class Enemy{
 }
 
 function enemy_action(enemy){
-        distance_x = Math.abs(player.position.x - enemy.position.x)
-        distance_y = Math.abs(player.position.y - enemy.position.y)
+    distance_x = Math.abs(player.position.x - enemy.position.x)
+    distance_y = Math.abs(player.position.y - enemy.position.y)
 
-        if(enemy.attack_wait > 0){
-            enemy.attack_wait -= 1
-        }
+    distance_x_2 = Math.abs(player2.position.x - enemy.position.x)
+    distance_y_2 = Math.abs(player2.position.y - enemy.position.y)
 
-        enemy.in_patrol_time+=1
-        if(enemy.in_patrol_time>1000){
-            enemy.in_patrol_time = 0
-            enemy.in_patrol = false
-        }
+    enemy.in_patrol_time+=1
+    if(enemy.in_patrol_time>1000){
+        enemy.in_patrol_time = 0
+        enemy.in_patrol = false
+    }
 
-        if(!enemy.in_battle){
-            if(enemy.patrol_time_wait <= 0 && enemy.patrol){
+    var p1_battle = false
+    var p2_battle = false
 
-                if(!enemy.in_patrol){
-                    enemy.in_patrol = true   
-                    enemy.patrol_x = Math.round(enemy.position.x + random_patrol() )
-                    enemy.patrol_y = Math.round(enemy.position.y + random_patrol() )   
-                    if(enemy.patrol_x > background.width - enemy.width){
-                        enemy.patrol_x = background.width - enemy.width
-                    }
-                    if(enemy.patrol_x < 0){
-                        enemy.patrol_x = 0
-                    }
-                    if(enemy.patrol_y > background.height - enemy.height){
-                        enemy.patrol_y = background.width - enemy.height
-                    }
-                    if(enemy.patrol_y < 0){
-                        enemy.patrol_y = 0
-                    }
-                }
+    if(
+        ((player.position.x > enemy.position.x) 
+        ||(enemy.position.x > player.position.x) 
+        ||(player.position.y > enemy.position.y) 
+        || (enemy.position.y > player.position.y))
+        && distance_x < enemy.targetRange
+        && distance_y < enemy.targetRange
+    ){
+        p1_battle = true 
+    }else{
+        p1_battle = false 
+    }
 
-                //patrol left/right
-                if(enemy.patrol_x != Math.round(enemy.position.x) 
-                    ){
-                    if(enemy.patrol_x >= enemy.position.x){
-                        enemy.position.x += enemy.speed
-                        enemy.side = 'right'                                          
-                        //console.log('right:'+enemy.position.x)
-                        enemy.currentCropHeight = 46*1
-                    }else{
-                        enemy.position.x -= enemy.speed                        
-                        enemy.side = 'left'  
-                        //console.log('left:'+enemy.position.x) 
-                        enemy.currentCropHeight = 46*2
-                    }  
-                }
-        
-                //patrol down/up
-                if(enemy.patrol_y != Math.round(enemy.position.y) 
-                    ){
-                    if(enemy.patrol_y >= enemy.position.y){
-                        enemy.position.y += enemy.speed                       
-                        enemy.side = 'down'  
-                        //console.log('down:'+enemy.position.y)                        
-                        enemy.currentCropHeight = 46*0
-                    }else{
-                        enemy.position.y -= enemy.speed                       
-                        enemy.side = 'up'  
-                        //console.log('up:'+enemy.position.y)                        
-                        enemy.currentCropHeight = 46*3
-                    } 
-                }                
+    if(
+        ((player2.position.x > enemy.position.x) 
+        ||(enemy.position.x > player2.position.x) 
+        ||(player2.position.y > enemy.position.y) 
+        || (enemy.position.y > player2.position.y))
+        && distance_x_2 < enemy.targetRange
+        && distance_y_2 < enemy.targetRange
+    ){
+        p2_battle = true 
+    }else{
+        p2_battle = false 
+    }
 
-                if(enemy.patrol_x == Math.round(enemy.position.x) && enemy.patrol_y == Math.round(enemy.position.y)){                                                   
-                    enemy.patrol_time_wait = 1000                    
-                    enemy.in_patrol = false  
-                }
-
-            }else{
-                enemy.patrol_time_wait = enemy.patrol_time_wait-4
-            }
+    if(p1_battle && p2_battle){
+        if(distance_x + distance_y < distance_x_2 + distance_y_2 && enemy.in_battle){  
+            hunt(enemy, player, distance_x, distance_y)            
+            attack(enemy, player)
         }else{
-            enemy.patrol_time_wait = 1000  
-            enemy.patrol_x = 0
-            enemy.patrol_y = 0              
-            enemy.in_patrol = false 
+            hunt(enemy, player2, distance_x_2, distance_y_2)
+            attack(enemy, player2)
         }
-
-        if(
-            ((player.position.x > enemy.position.x) 
-            ||(enemy.position.x > player.position.x) 
-            ||(player.position.y > enemy.position.y) 
-            || (enemy.position.y > player.position.y))
-            && distance_x < enemy.targetRange
-            && distance_y < enemy.targetRange
-        ){
-            enemy.in_battle = true 
-        }else{
-            enemy.in_battle = false 
-        }
-
-        //follow right
-        if(player.position.x > enemy.position.x + enemy.width 
-            //&& player.position.x - (enemy.position.x + enemy.width) < 100
-            && distance_x < enemy.targetRange
-            && distance_y < enemy.targetRange
-            ){
-            if(enemy.follow){
-                enemy.position.x += enemy.speed
-            }
-            enemy.side = 'right'               
-            enemy.currentCropHeight = 46*1  
-
-        //follow left
-        }else if(enemy.position.x > player.position.x + player.width
-            //&& (enemy.position.x) - player.position.x - player.width < 100
-            && distance_x < enemy.targetRange
-            && distance_y < enemy.targetRange
-            ){
-            if(enemy.follow){
-                enemy.position.x -= enemy.speed
-            }            
-            enemy.side = 'left'  
-            enemy.currentCropHeight = 46*2
-        }
-
-        //follow down
-        if(player.position.y > enemy.position.y + enemy.height 
-            //&& player.position.y - (enemy.position.x + enemy.height) < 100
-            && distance_y < enemy.targetRange
-            && distance_x < enemy.targetRange
-            ){
-            if(enemy.follow){
-                enemy.position.y+= enemy.speed
-            }
-            enemy.side = 'down'                       
-            enemy.currentCropHeight = 46*0
-
-        //follow up
-        }else if(enemy.position.y > player.position.y + player.height
-            //&& (enemy.position.y) - player.position.y - player.height < 100
-            && distance_y < enemy.targetRange
-            && distance_x < enemy.targetRange 
-            ){
-            if(enemy.follow){
-                enemy.position.y-= enemy.speed
-            }
-            enemy.side = 'up'                       
-            enemy.currentCropHeight = 46*3
-        }
-
-        var attack_range = 42
-
-        if (player.position.x < enemy.position.x + enemy.width + attack_range &&
-            player.position.x + player.width+  attack_range > enemy.position.x &&
-            player.position.y < enemy.position.y + enemy.height + attack_range &&
-            player.position.y + player.height + attack_range > enemy.position.y &&
-            enemy.attack_wait <= 0) {
-
-            //console.log("enemy attack")
-
-            enemy.attack_wait = enemy.attack_speed
+        enemy.in_battle = true
+    }else{
+        if(p1_battle && !p2_battle){
+            hunt(enemy, player, distance_x, distance_y)
+            attack(enemy, player)
             
-            switch (enemy.side){
-                case 'up':                        
-                    damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'up'}); 
-                    damages.push(damage)                   
-                    enemy.currentCropHeight = 46*3
-                break
-
-                case enemy.side = 'down':
-                    damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'down'}); 
-                    damages.push(damage)                   
-                    enemy.currentCropHeight = 46*0
-                break
-
-                case enemy.side = 'left':
-                    damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'left'}); 
-                    damages.push(damage)
-                            
-                    enemy.currentCropHeight = 46*2
-                break
-
-                case enemy.side = 'right':
-                    damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'right'}); 
-                    damages.push(damage)
-                            
-                    enemy.currentCropHeight = 46*1  
-                break                    
-            }
+            enemy.in_battle = true
         }
+    
+        if(!p1_battle && p2_battle){
+            hunt(enemy, player2, distance_x_2, distance_y_2)
+            attack(enemy, player2)
+            
+            enemy.in_battle = true
+        }
+    }      
+    
+    patrol(enemy)
 
+}
+
+function patrol(enemy){
+    
+    if(!enemy.in_battle){
+        if(enemy.patrol_time_wait <= 0 && enemy.patrol){
+
+            if(!enemy.in_patrol){
+                enemy.in_patrol = true   
+                enemy.patrol_x = Math.round(enemy.position.x + random_patrol() )
+                enemy.patrol_y = Math.round(enemy.position.y + random_patrol() )   
+                if(enemy.patrol_x > background.width - enemy.width){
+                    enemy.patrol_x = background.width - enemy.width
+                }
+                if(enemy.patrol_x < 0){
+                    enemy.patrol_x = 0
+                }
+                if(enemy.patrol_y > background.height - enemy.height){
+                    enemy.patrol_y = background.width - enemy.height
+                }
+                if(enemy.patrol_y < 0){
+                    enemy.patrol_y = 0
+                }
+                console.log('patrol')
+            }
+
+            //patrol left/right
+            if(enemy.patrol_x != Math.round(enemy.position.x) 
+                ){
+                if(enemy.patrol_x >= enemy.position.x){
+                    enemy.position.x += enemy.speed
+                    enemy.side = 'right'                                          
+                    //console.log('right:'+enemy.position.x)
+                    enemy.currentCropHeight = 46*1
+                }else{
+                    enemy.position.x -= enemy.speed                        
+                    enemy.side = 'left'  
+                    //console.log('left:'+enemy.position.x) 
+                    enemy.currentCropHeight = 46*2
+                }  
+            }
+    
+            //patrol down/up
+            if(enemy.patrol_y != Math.round(enemy.position.y) 
+                ){
+                if(enemy.patrol_y >= enemy.position.y){
+                    enemy.position.y += enemy.speed                       
+                    enemy.side = 'down'  
+                    //console.log('down:'+enemy.position.y)                        
+                    enemy.currentCropHeight = 46*0
+                }else{
+                    enemy.position.y -= enemy.speed                       
+                    enemy.side = 'up'  
+                    //console.log('up:'+enemy.position.y)                        
+                    enemy.currentCropHeight = 46*3
+                } 
+            }                
+
+            if(enemy.patrol_x == Math.round(enemy.position.x) && enemy.patrol_y == Math.round(enemy.position.y)){                                                   
+                enemy.patrol_time_wait = 1000                    
+                enemy.in_patrol = false  
+            }
+
+        }else{
+            enemy.patrol_time_wait = enemy.patrol_time_wait-4
+        }
+    }else{
+        enemy.patrol_time_wait = 1000  
+        enemy.patrol_x = 0
+        enemy.patrol_y = 0              
+        enemy.in_patrol = false 
+    }
+}
+
+function hunt(enemy, player, distance_x, distance_y){
+    //follow right
+    if(player.position.x > enemy.position.x + enemy.width 
+        //&& player.position.x - (enemy.position.x + enemy.width) < 100
+        && distance_x < enemy.targetRange
+        && distance_y < enemy.targetRange
+        ){
+        if(enemy.follow){
+            enemy.position.x += enemy.speed
+        }
+        enemy.side = 'right'               
+        enemy.currentCropHeight = 46*1  
+
+    //follow left
+    }else if(enemy.position.x > player.position.x + player.width
+        //&& (enemy.position.x) - player.position.x - player.width < 100
+        && distance_x < enemy.targetRange
+        && distance_y < enemy.targetRange
+        ){
+        if(enemy.follow){
+            enemy.position.x -= enemy.speed
+        }            
+        enemy.side = 'left'  
+        enemy.currentCropHeight = 46*2
+    }
+
+    //follow down
+    if(player.position.y > enemy.position.y + enemy.height 
+        //&& player.position.y - (enemy.position.x + enemy.height) < 100
+        && distance_y < enemy.targetRange
+        && distance_x < enemy.targetRange
+        ){
+        if(enemy.follow){
+            enemy.position.y+= enemy.speed
+        }
+        enemy.side = 'down'                       
+        enemy.currentCropHeight = 46*0
+
+    //follow up
+    }else if(enemy.position.y > player.position.y + player.height
+        //&& (enemy.position.y) - player.position.y - player.height < 100
+        && distance_y < enemy.targetRange
+        && distance_x < enemy.targetRange 
+        ){
+        if(enemy.follow){
+            enemy.position.y-= enemy.speed
+        }
+        enemy.side = 'up'                       
+        enemy.currentCropHeight = 46*3
+    }
+}
+
+function attack(enemy, player){
+    var attack_range = 42
+
+    if (player.position.x < enemy.position.x + enemy.width + attack_range &&
+        player.position.x + player.width+  attack_range > enemy.position.x &&
+        player.position.y < enemy.position.y + enemy.height + attack_range &&
+        player.position.y + player.height + attack_range > enemy.position.y &&
+        enemy.attackCoolDown <= 0) {
+
+        //console.log("enemy attack")
+
+        enemy.attackCoolDown = enemy.attack_speed
+        
+        switch (enemy.side){
+            case 'up':                        
+                damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'up'}); 
+                damages.push(damage)                   
+                enemy.currentCropHeight = 46*3
+            break
+
+            case enemy.side = 'down':
+                damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'down'}); 
+                damages.push(damage)                   
+                enemy.currentCropHeight = 46*0
+            break
+
+            case enemy.side = 'left':
+                damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'left'}); 
+                damages.push(damage)
+                        
+                enemy.currentCropHeight = 46*2
+            break
+
+            case enemy.side = 'right':
+                damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'right'}); 
+                damages.push(damage)
+                        
+                enemy.currentCropHeight = 46*1  
+            break                    
+        }
+    }
 }
