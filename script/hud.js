@@ -13,13 +13,14 @@ class Hud {
         if(id == 'p1'){
             this.position.x = 0 + 2
             this.position.y = 800 - this.height - 2
+            this.face = createImage('img/knight_female_face.png')
         }
 
         if(id == 'p2'){
             this.position.x = 800 - this.width - 2
             this.position.y = 800 - this.height - 2
+            this.face = createImage('img/knight_male_face.png')
         }
-
         
         this.sprite = createImage('img/hud_large.png')
 
@@ -41,7 +42,19 @@ class Hud {
             this.position.y,
             this.width,
             this.height
-        )    
+        )   
+        
+        context.drawImage(          
+            this.face, 
+            0,
+            0,
+            150, //largura
+            48, //altura
+            this.position.x +14, 
+            this.position.y +15,
+            this.width,
+            this.height
+        )  
         
         var hp = 0
         var max_hp = 0

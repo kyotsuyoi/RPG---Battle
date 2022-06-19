@@ -37,10 +37,10 @@ class Enemy{
         this.id = id
         this.side = 'down'
 
-        this.power = 12
-        this.agility = 5
+        this.power = 11
+        this.agility = 6
         this.dexterity = 10
-        this.vitality = 12
+        this.vitality = 11
      
         this.sprites = {
             sprite : createImage('img/thief_male.png')          
@@ -61,7 +61,7 @@ class Enemy{
         }
 
         this.max_hp = hp_value(this.vitality, this.power)
-        this.max_sp = sp_value()
+        this.max_sp = sp_value(0,0)
 
         switch(type){            
             case 'thief_master':

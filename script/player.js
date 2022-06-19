@@ -32,21 +32,23 @@ class Player{
         this.staminaCoolDown = 0
 
         if(id == 'p1'){
-            this.power = 14
+            this.power = 12
             this.agility = 8
-            this.dexterity = 15
-            this.vitality = 15
+            this.dexterity = 12
+            this.vitality = 12
+            this.inteligence = 14
         }
 
         if(id == 'p2'){
-            this.power = 40
-            this.agility = 15
-            this.dexterity = 20
-            this.vitality = 20
+            this.power = 16
+            this.agility = 6
+            this.dexterity = 12
+            this.vitality = 14
+            this.inteligence = 7
         }
 
         this.max_hp = hp_value(this.vitality, this.power)
-        this.max_sp = sp_value()
+        this.max_sp = sp_value(this.inteligence, this.dexterity)
         this.max_stamina = 100
 
         this.hp = this.max_hp

@@ -11,11 +11,11 @@ function flee_value(agility, dexterity){
 }
 
 function hp_value(vitality, power){
-    return  100 + (vitality*2) + (power/6)
+    return  100 + (vitality*10) + (power*5)
 }
 
-function sp_value(){
-    return  40
+function sp_value(inteligence, dexterity){
+    return  40 + (inteligence*6) + (dexterity*3)
 }
 
 //reverse
