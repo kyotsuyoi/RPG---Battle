@@ -58,7 +58,7 @@ class Enemy{
             break
         }
 
-        this.max_hp = hp_value(this.vitality, this.power)+5000
+        this.max_hp = hp_value(this.vitality, this.power)
         this.max_sp = sp_value(0,0)
 
         switch(type){            
