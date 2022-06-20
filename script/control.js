@@ -279,7 +279,7 @@ function keyCodeDown(keyCode){
                 if(player2.sp <= 0){
                     player2.sp = 0
                 }else{
-                    player2.sp -= 10
+                    player2.sp -= 40
                 }
 
                 damage = new Damage({x : player2.position.x, y : player2.position.y, owner_id : 'p2', owner : 'player2', type : 'power_blade', side : player2.side}); 

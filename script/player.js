@@ -61,7 +61,8 @@ class Player{
         
         this.speed = speed_value(this.agility)       
         this.attack_speed = attack_speed_value(this.agility)     
-        this.hp_recovery = hp_recovery(this.vitality)   
+        this.hp_recovery = hp_recovery(this.vitality)       
+        this.sp_recovery = sp_recovery(this.inteligence, this.dexterity)  
 
         this.attackCoolDown = 0
         this.powerBladeCoolDown = 0
@@ -395,7 +396,7 @@ class Player{
             }
     
             if(this.sp < this.max_sp){
-                this.sp += 0.05
+                this.sp += this.sp_recovery
             }
     
             if(this.stamina < this.max_stamina && this.staminaCoolDown <= 0){
