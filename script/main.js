@@ -27,129 +27,141 @@ const huds = [
 ]
 
 var enemies = [
-    new Enemy({
-        id : '01', type : 'thief',
-        x : 50, y : 50, patrol : true, follow : true, lastTimestamp : lastTimestamp
-    })
-    ,
-    new Enemy({
-        id : '02', type : 'thief',
-        x : 70, y : 50, patrol : true, follow : true, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '03', type : 'thief',
-        x : 70, y : 70, patrol : true, follow : true, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '04', type : 'thief',
-        x : 60, y : 60, patrol : true, follow : true, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '05', type : 'thief',
-        x : 50, y : 70, patrol : true, follow : true, lastTimestamp : lastTimestamp
-    })
+    // //G1 left
+    // new Enemy({
+    //     id : '01', type : 'thief',
+    //     x : 50, y : 50, patrol : true, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // })
+    // ,
+    // new Enemy({
+    //     id : '02', type : 'thief',
+    //     x : 70, y : 50, patrol : true, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '03', type : 'thief',
+    //     x : 70, y : 70, patrol : true, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '04', type : 'thief',
+    //     x : 60, y : 60, patrol : true, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '05', type : 'thief',
+    //     x : 50, y : 70, patrol : true, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // })
 
-    ,
+    // ,
 
-    new Enemy({
-        id : '06', type : 'thief',
-        x : 650 + 25, y : 50, patrol : true, follow : true, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '07', type : 'thief',
-        x : 670 + 25, y : 50, patrol : true, follow : true, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '08', type : 'thief',
-        x : 670 + 25, y : 70, patrol : true, follow : true, lastTimestamp : lastTimestamp
-    })    ,
-    new Enemy({
-        id : '09', type : 'thief',
-        x : 660 + 25, y : 60, patrol : true, follow : true, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '10', type : 'thief',
-        x : 650 + 25, y : 70, patrol : true, follow : true, lastTimestamp : lastTimestamp
-    })
+    // //G3 right
+    // new Enemy({
+    //     id : '06', type : 'thief',
+    //     x : 650 + 25, y : 50, patrol : true, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '07', type : 'thief',
+    //     x : 670 + 25, y : 50, patrol : true, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '08', type : 'thief',
+    //     x : 670 + 25, y : 70, patrol : true, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // })    ,
+    // new Enemy({
+    //     id : '09', type : 'thief',
+    //     x : 660 + 25, y : 60, patrol : true, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '10', type : 'thief',
+    //     x : 650 + 25, y : 70, patrol : true, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // })
     
-    ,
+    // ,
 
-    new Enemy({
-        id : '11', type : 'thief',
-        x : 650 -280, y : 50, patrol : false, follow : true, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '12', type : 'thief',
-        x : 670 -280, y : 50, patrol : false, follow : true, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '13', type : 'thief',
-        x : 670 -280, y : 70, patrol : false, follow : true, lastTimestamp : lastTimestamp
-    })    ,
-    new Enemy({
-        id : '14', type : 'thief',
-        x : 660 -280, y : 60, patrol : false, follow : true, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '15', type : 'thief',
-        x : 650 -280, y : 70, patrol : false, follow : true, lastTimestamp : lastTimestamp
-    })
+    // //G2 center
+    // new Enemy({
+    //     id : '11', type : 'thief',
+    //     x : 650 -280, y : 50, patrol : false, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '12', type : 'thief',
+    //     x : 670 -280, y : 50, patrol : false, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '13', type : 'thief',
+    //     x : 670 -280, y : 70, patrol : false, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // })    ,
+    // new Enemy({
+    //     id : '14', type : 'thief',
+    //     x : 660 -280, y : 60, patrol : false, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '15', type : 'thief',
+    //     x : 650 -280, y : 70, patrol : false, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // })
     
-    ,
+    // ,
+
+    // //G4 right
+    // new Enemy({
+    //     id : '16', type : 'thief',
+    //     x : 650 - 215, y : 50 + 200, patrol : false, follow : false, knock_back : false, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '17', type : 'thief',
+    //     x : 670 - 215, y : 50 + 200, patrol : false, follow : false, knock_back : false, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '18', type : 'thief',
+    //     x : 670 - 215, y : 70 + 200, patrol : false, follow : false, knock_back : false, lastTimestamp : lastTimestamp
+    // })    ,
+    // new Enemy({
+    //     id : '19', type : 'thief',
+    //     x : 660 - 215, y : 60 + 200, patrol : false, follow : false, knock_back : false, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '20', type : 'thief',
+    //     x : 650 - 215, y : 70 + 200, patrol : false, follow : false, knock_back : false, lastTimestamp : lastTimestamp
+    // })
+
+    // ,
+
+    // //G5 left
+    // new Enemy({
+    //     id : '21', type : 'thief',
+    //     x : 650 - 350, y : 50 + 200, patrol : false, follow : false, knock_back : false, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '22', type : 'thief',
+    //     x : 670 - 350, y : 50 + 200, patrol : false, follow : false, knock_back : false, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '23', type : 'thief',
+    //     x : 670 - 350, y : 70 + 200, patrol : false, follow : false, knock_back : false, lastTimestamp : lastTimestamp
+    // })    ,
+    // new Enemy({
+    //     id : '24', type : 'thief',
+    //     x : 660 - 350, y : 60 + 200, patrol : false, follow : false, knock_back : false, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '25', type : 'thief',
+    //     x : 650 - 350, y : 70 + 200, patrol : false, follow : false, knock_back : false, lastTimestamp : lastTimestamp
+    // })
+
+    // ,
+
+    // new Enemy({
+    //     id : '26', type : 'thief_master',
+    //     x : 0, y : 0, patrol : false, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // }),
+    // new Enemy({
+    //     id : '27', type : 'thief_master',
+    //     x : 800 - 45, y : 0, patrol : false, follow : true, knock_back : true, lastTimestamp : lastTimestamp
+    // })
+
+    // ,
 
     new Enemy({
-        id : '16', type : 'thief',
-        x : 650 - 215, y : 50 + 200, patrol : false, follow : false, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '17', type : 'thief',
-        x : 670 - 215, y : 50 + 200, patrol : false, follow : false, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '18', type : 'thief',
-        x : 670 - 215, y : 70 + 200, patrol : false, follow : false, lastTimestamp : lastTimestamp
-    })    ,
-    new Enemy({
-        id : '19', type : 'thief',
-        x : 660 - 215, y : 60 + 200, patrol : false, follow : false, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '20', type : 'thief',
-        x : 650 - 215, y : 70 + 200, patrol : false, follow : false, lastTimestamp : lastTimestamp
-    })
-
-    ,
-
-    new Enemy({
-        id : '21', type : 'thief',
-        x : 650 - 350, y : 50 + 200, patrol : false, follow : false, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '22', type : 'thief',
-        x : 670 - 350, y : 50 + 200, patrol : false, follow : false, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '23', type : 'thief',
-        x : 670 - 350, y : 70 + 200, patrol : false, follow : false, lastTimestamp : lastTimestamp
-    })    ,
-    new Enemy({
-        id : '24', type : 'thief',
-        x : 660 - 350, y : 60 + 200, patrol : false, follow : false, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '25', type : 'thief',
-        x : 650 - 350, y : 70 + 200, patrol : false, follow : false, lastTimestamp : lastTimestamp
-    })
-
-    ,
-
-    new Enemy({
-        id : '26', type : 'thief_master',
-        x : 0, y : 0, patrol : false, follow : true, lastTimestamp : lastTimestamp
-    }),
-    new Enemy({
-        id : '27', type : 'thief_master',
-        x : 800 - 45, y : 0, patrol : false, follow : true, lastTimestamp : lastTimestamp
+        id : '28', type : 'thief',
+        x : 400-22, y : 300, patrol : true, follow : true, knock_back : true, lastTimestamp : lastTimestamp
     })
 ]
 
@@ -287,10 +299,10 @@ function start() {
 
 function animate(timestamp){
 
-    if(player.hp <= 0 || player2.hp <= 0){        
-        alert('MORREU')
-        return
-    }
+    // if(player.hp <= 0 || player2.hp <= 0){        
+    //     alert('MORREU')
+    //     return
+    // }
 
     if(enemies.length <= 0){        
         alert('VENCEU')
@@ -318,7 +330,7 @@ function animate(timestamp){
         })
     })    
 
-    enemies.sort((a,b) => a.position.y - b.position.y);
+    enemies.sort((a,b) => a.position.y - b.position.y)
 
     enemies.forEach(enemy => {
         enemy.update()
@@ -379,6 +391,14 @@ function animate(timestamp){
     context.font = "12px Arial";
     context.fillStyle = 'black';
     context.fillText('dam_c:'+dam_c,2,20);
+
+    // var en = enemies.filter(enemy => enemy.id == '28')
+    // var dam_c = damages.length
+    // context.font = "12px Arial";
+    // context.fillStyle = 'black';
+    // context.fillText('enemy-patrol:'+ en[0].in_patrol,2,20+20);
+    // context.fillText('enemy-in_patrol_time:'+ en[0].in_patrol_time,2,20+40);
+    // context.fillText('enemy-patrol_time_wait:'+ en[0].patrol_time_wait,2,20+60);
 }
 
 start()

@@ -167,88 +167,7 @@ function damage_action(damage){
         //damage.draw()
 
         if(damage.owner == "player" || damage.owner == "player2"){
-            enemies.forEach(enemy => {
-                if (square_colision_area(damage, enemy)) {
-                    
-                    //this is to not double damage
-                    var p = damage.lastDamage.filter(element => element == enemy.id)
-                    if(p == enemy.id){
-                        return
-                    }
-                    damage.lastDamage.push(enemy.id)
-                    
-                    var is_hit = false
-                    switch(damage.owner){
-                        case 'player':
-                            is_hit = dexterity_vs_flee(player.dexterity + damage.bonus_dexterity, enemy.agility)
-                        break
-                        case 'player2':
-                            is_hit = dexterity_vs_flee(player.dexterity + damage.bonus_dexterity, enemy.agility)
-                        break
-                    }                    
-                    
-                    if(is_hit){                        
-                        var result = 0
-                        switch(damage.owner){
-                            case 'player':
-                                result = attack_vs_defense(player.attack + damage.bonus_attack, player.dexterity + damage.bonus_dexterity, enemy.defense)
-                            break
-                            case 'player2':
-                                result = attack_vs_defense(player2.attack + damage.bonus_attack, player2.dexterity + damage.bonus_dexterity, enemy.defense)
-                            break
-                        }  
-
-                        enemy.hp -= result                     
-                        display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'red', text : result, type : 'damage'})
-                        displays.push(display)
-
-                        switch(damage.owner){
-                            case 'player':
-                                switch (player.side){
-                                    case 'up':                        
-                                        enemy.position.y -= knock_back(damage.power, player.power, enemy.power)
-                                    break
-                
-                                    case 'down':
-                                        enemy.position.y += knock_back(damage.power, player.power, enemy.power)
-                                    break
-                
-                                    case 'left':
-                                        enemy.position.x -= knock_back(damage.power, player.power, enemy.power)
-                                    break
-                
-                                    case 'right':
-                                        enemy.position.x += knock_back(damage.power, player.power, enemy.power)
-                                    break 
-                                }
-                            break  
-
-                            case 'player2':
-                                switch (player2.side){
-                                    case 'up':                        
-                                        enemy.position.y -= knock_back(damage.power, player2.power, enemy.power)
-                                    break
-                
-                                    case 'down':
-                                        enemy.position.y += knock_back(damage.power, player2.power, enemy.power)
-                                    break
-                
-                                    case 'left':
-                                        enemy.position.x -= knock_back(damage.power, player2.power, enemy.power)
-                                    break
-                
-                                    case 'right':
-                                        enemy.position.x += knock_back(damage.power, player2.power, enemy.power)
-                                    break 
-                                }
-                            break                             
-                        }
-                    }else{
-                        display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'yellow', text : 'MISS', type : 'damage'})
-                        displays.push(display)
-                    }    
-                }
-            })   
+            playerDamage(damage)
         }  
         
         if(damage.owner == "cpu"){
@@ -309,39 +228,39 @@ function enemyDamage(player){
 
             //console.log('enemy_damage:'+result)
             
-            switch (damage.side){
-                case 'up': 
-                    if(player.position.y <= 0){
-                        player.position.y = 0
-                    }else{
-                        player.position.y -= knock_back(damage.power, enemy.power, player.power)
-                    }                      
-                break
+            // switch (damage.side){
+            //     case 'up': 
+            //         if(player.position.y <= 0){
+            //             player.position.y = 0
+            //         }else{
+            //             player.position.y -= knock_back(damage.power, enemy.power, player.power)
+            //         }                      
+            //     break
 
-                case 'down':
-                    if(player.position.y + player.height >= background.height){
-                        player.position.y = background.height - player.height
-                    }else{
-                        player.position.y += knock_back(damage.power, enemy.power, player.power)
-                    }
-                break
+            //     case 'down':
+            //         if(player.position.y + player.height >= background.height){
+            //             player.position.y = background.height - player.height
+            //         }else{
+            //             player.position.y += knock_back(damage.power, enemy.power, player.power)
+            //         }
+            //     break
 
-                case 'left':
-                    if(player.position.x <= 0){
-                        player.position.x = 0
-                    }else{
-                        player.position.x -= knock_back(damage.power, enemy.power, player.power)
-                    }
-                break
+            //     case 'left':
+            //         if(player.position.x <= 0){
+            //             player.position.x = 0
+            //         }else{
+            //             player.position.x -= knock_back(damage.power, enemy.power, player.power)
+            //         }
+            //     break
 
-                case 'right':
-                    if(player.position.x + player.width >= background.width){
-                        player.position.x = background.width - player.width
-                    }else{
-                        player.position.x += knock_back(damage.power, enemy.power, player.power)
-                    }
-                break                    
-            }
+            //     case 'right':
+            //         if(player.position.x + player.width >= background.width){
+            //             player.position.x = background.width - player.width
+            //         }else{
+            //             player.position.x += knock_back(damage.power, enemy.power, player.power)
+            //         }
+            //     break                    
+            // }
 
         }else{
             display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'yellow', text : 'MISS', type : 'damage'})
@@ -352,4 +271,93 @@ function enemyDamage(player){
             return
         }
     }
+}
+
+function playerDamage(damage){
+    enemies.forEach(enemy => {
+        if (square_colision_area(damage, enemy)) {
+            
+            //this is to not double damage
+            var p = damage.lastDamage.filter(element => element == enemy.id)
+            if(p == enemy.id){
+                return
+            }
+            damage.lastDamage.push(enemy.id)
+            
+            var is_hit = false
+            switch(damage.owner){
+                case 'player':
+                    is_hit = dexterity_vs_flee(player.dexterity + damage.bonus_dexterity, enemy.agility)
+                break
+                case 'player2':
+                    is_hit = dexterity_vs_flee(player.dexterity + damage.bonus_dexterity, enemy.agility)
+                break
+            }                    
+            
+            if(is_hit){                        
+                var result = 0
+                switch(damage.owner){
+                    case 'player':
+                        result = attack_vs_defense(player.attack + damage.bonus_attack, player.dexterity + damage.bonus_dexterity, enemy.defense)
+                    break
+                    case 'player2':
+                        result = attack_vs_defense(player2.attack + damage.bonus_attack, player2.dexterity + damage.bonus_dexterity, enemy.defense)
+                    break
+                }  
+
+                enemy.hp -= result                     
+                display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'red', text : result, type : 'damage'})
+                displays.push(display)
+
+                if(!enemy.knock_back){
+                    return
+                }
+
+                switch(damage.owner){
+                    case 'player':
+                        switch (player.side){
+                            case 'up':                        
+                                enemy.position.y -= knock_back(damage.power, player.power, enemy.power)
+                            break
+        
+                            case 'down':
+                                enemy.position.y += knock_back(damage.power, player.power, enemy.power)
+                            break
+        
+                            case 'left':
+                                enemy.position.x -= knock_back(damage.power, player.power, enemy.power)
+                            break
+        
+                            case 'right':
+                                enemy.position.x += knock_back(damage.power, player.power, enemy.power)
+                            break 
+                        }
+                    break  
+
+                    case 'player2':
+                        switch (player2.side){
+                            case 'up':                        
+                                enemy.position.y -= knock_back(damage.power, player2.power, enemy.power)
+                            break
+        
+                            case 'down':
+                                enemy.position.y += knock_back(damage.power, player2.power, enemy.power)
+                            break
+        
+                            case 'left':
+                                enemy.position.x -= knock_back(damage.power, player2.power, enemy.power)
+                            break
+        
+                            case 'right':
+                                enemy.position.x += knock_back(damage.power, player2.power, enemy.power)
+                            break 
+                        }
+                    break                             
+                }
+            }else{
+                display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'yellow', text : 'MISS', type : 'damage'})
+                displays.push(display)
+            }    
+        }
+    }) 
 }

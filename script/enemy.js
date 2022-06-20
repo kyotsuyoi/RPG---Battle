@@ -1,5 +1,5 @@
 class Enemy{
-    constructor({id, type, x, y, patrol, follow, lastTimestamp}){
+    constructor({id, type, x, y, patrol, follow, knock_back, lastTimestamp}){
         this.position ={
             x,
             y
@@ -28,6 +28,7 @@ class Enemy{
         this.in_patrol = false
         this.patrol = patrol //enable or disable patrol
         this.follow = follow //enable or disable follow
+        this.knock_back = knock_back //enable or disable knock_back
         this.type = type        
 
         this.attackCoolDown = 0
@@ -85,8 +86,8 @@ class Enemy{
     }
 
     draw(){
-        // context.fillStyle = 'green'
-        // context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        context.fillStyle = 'green'
+        context.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         context.drawImage(          
             this.currentSprite, 
@@ -163,12 +164,6 @@ function enemy_action(enemy){
     distance_x_2 = Math.abs(player2.position.x - enemy.position.x)
     distance_y_2 = Math.abs(player2.position.y - enemy.position.y)
 
-    enemy.in_patrol_time+=1
-    if(enemy.in_patrol_time>500){
-        enemy.in_patrol_time = 0
-        enemy.in_patrol = false
-    }
-
     var p1_battle = false
     var p2_battle = false
 
@@ -207,99 +202,105 @@ function enemy_action(enemy){
             attack(enemy, player2)
         }
         enemy.in_battle = true
-    }else{
-        if(p1_battle && !p2_battle){
+
+    }else if(p1_battle && !p2_battle){
             hunt(enemy, player, distance_x, distance_y)
-            attack(enemy, player)
-            
+            attack(enemy, player)            
             enemy.in_battle = true
-        }
-    
-        if(!p1_battle && p2_battle){
+
+    }else if(!p1_battle && p2_battle){
             hunt(enemy, player2, distance_x_2, distance_y_2)
-            attack(enemy, player2)
-            
+            attack(enemy, player2)            
             enemy.in_battle = true
-        }
-    }   
-    
-    if(!p1_battle && !p2_battle){
-        enemy.in_battle = false
-    }
+
+    }else{
+            enemy.in_battle = false
+    }     
     
     patrol(enemy)
-
 }
 
 function patrol(enemy){
-    
-    if(!enemy.in_battle){
-        if(enemy.patrol_time_wait <= 0 && enemy.patrol){
-
-            if(!enemy.in_patrol){
-                enemy.in_patrol = true   
-                enemy.patrol_x = Math.round(enemy.position.x + random_patrol() )
-                enemy.patrol_y = Math.round(enemy.position.y + random_patrol() )   
-                if(enemy.patrol_x > background.width - enemy.width){
-                    enemy.patrol_x = background.width - enemy.width
-                }
-                if(enemy.patrol_x < 0){
-                    enemy.patrol_x = 0
-                }
-                if(enemy.patrol_y > background.height - enemy.height){
-                    enemy.patrol_y = background.width - enemy.height
-                }
-                if(enemy.patrol_y < 0){
-                    enemy.patrol_y = 0
-                }
-                console.log('patrol')
-            }
-
-            //patrol left/right
-            if(enemy.patrol_x != Math.round(enemy.position.x) 
-                ){
-                if(enemy.patrol_x >= enemy.position.x){
-                    enemy.position.x += enemy.speed
-                    enemy.side = 'right'                                          
-                    //console.log('right:'+enemy.position.x)
-                    enemy.currentCropHeight = 46*1
-                }else{
-                    enemy.position.x -= enemy.speed                        
-                    enemy.side = 'left'  
-                    //console.log('left:'+enemy.position.x) 
-                    enemy.currentCropHeight = 46*2
-                }  
-            }
-    
-            //patrol down/up
-            if(enemy.patrol_y != Math.round(enemy.position.y) 
-                ){
-                if(enemy.patrol_y >= enemy.position.y){
-                    enemy.position.y += enemy.speed                       
-                    enemy.side = 'down'  
-                    //console.log('down:'+enemy.position.y)                        
-                    enemy.currentCropHeight = 46*0
-                }else{
-                    enemy.position.y -= enemy.speed                       
-                    enemy.side = 'up'  
-                    //console.log('up:'+enemy.position.y)                        
-                    enemy.currentCropHeight = 46*3
-                } 
-            }                
-
-            if(enemy.patrol_x == Math.round(enemy.position.x) && enemy.patrol_y == Math.round(enemy.position.y)){                                                   
-                enemy.patrol_time_wait = 1000                    
-                enemy.in_patrol = false  
-            }
-
-        }else{
-            enemy.patrol_time_wait = enemy.patrol_time_wait-4
-        }
-    }else{
-        enemy.patrol_time_wait = 1000  
-        enemy.patrol_x = 0
-        enemy.patrol_y = 0              
+    if(enemy.in_battle){
+        enemy.patrol_time_wait = 1000              
         enemy.in_patrol = false 
+    }  
+    
+    if(!enemy.in_patrol && enemy.patrol_time_wait > 0){
+        enemy.patrol_time_wait = enemy.patrol_time_wait-5
+        return
+    }    
+
+    if(!enemy.in_patrol){
+        enemy.in_patrol = true    
+        enemy.patrol_x = enemy.position.x + random_patrol()
+        enemy.patrol_y = enemy.position.y + random_patrol()   
+        if(enemy.patrol_x > background.width - enemy.width){
+            enemy.patrol_x = background.width - enemy.width
+        }
+        if(enemy.patrol_x < 0){
+            enemy.patrol_x = 0
+        }
+        if(enemy.patrol_y > background.height - enemy.height){
+            enemy.patrol_y = background.width - enemy.height
+        }
+        if(enemy.patrol_y < 0){
+            enemy.patrol_y = 0
+        }
+        console.log('patrol')
+    }else{
+        if((Math.round(enemy.patrol_x) == Math.round(enemy.position.x))
+            && (Math.round(enemy.patrol_y) == Math.round(enemy.position.y))
+            ){                                                   
+            enemy.patrol_time_wait = 1000                    
+            enemy.in_patrol = false               
+            enemy.in_patrol_time = 0 
+            return          
+        }
+
+        if(enemy.in_patrol_time>=500){
+            enemy.in_patrol_time = 0
+            enemy.in_patrol = false
+        }
+        enemy.in_patrol_time+=1
+
+        //patrol left/right
+        if(Math.round(enemy.patrol_x) != Math.round(enemy.position.x)){
+            if(enemy.patrol_x >= enemy.position.x){
+                if(enemy.position.x + enemy.speed > enemy.patrol_x){
+                    enemy.position.x = enemy.patrol_x
+                }else{
+                    enemy.position.x += enemy.speed
+                }
+                enemy.side = 'right'                                          
+                //console.log('right:'+enemy.position.x)
+                enemy.currentCropHeight = 46*1
+            }else{
+                enemy.position.x -= enemy.speed                        
+                enemy.side = 'left'  
+                //console.log('left:'+enemy.position.x) 
+                enemy.currentCropHeight = 46*2
+            }  
+        }
+
+        //patrol down/up
+        if(Math.round(enemy.patrol_y) != Math.round(enemy.position.y)){
+            if(enemy.patrol_y >= enemy.position.y){
+                if(enemy.position.y + enemy.speed > enemy.patrol_y){
+                    enemy.position.y = enemy.patrol_y
+                }else{
+                    enemy.position.y += enemy.speed 
+                }                      
+                enemy.side = 'down'  
+                //console.log('down:'+enemy.position.y)                        
+                enemy.currentCropHeight = 46*0
+            }else{
+                enemy.position.y -= enemy.speed                       
+                enemy.side = 'up'  
+                //console.log('up:'+enemy.position.y)                        
+                enemy.currentCropHeight = 46*3
+            } 
+        }
     }
 }
 
@@ -352,6 +353,59 @@ function hunt(enemy, player, distance_x, distance_y){
         }
         enemy.side = 'up'                       
         enemy.currentCropHeight = 46*3
+    }
+
+    if(enemy.in_battle){
+
+        var en_r = enemy.position.x + enemy.width/2
+        var p_r = player.position.x + player.width/2
+
+        var en_l = -(enemy.position.x + enemy.width/2)
+        var p_l = -(player.position.x + player.width/2)
+
+        var en_u = enemy.position.y + enemy.height/2
+        var p_u = player.position.y + player.height/2
+
+        var right = Math.round(en_r - p_r)
+        var left = Math.round(en_l - p_l)
+        var up = Math.round(en_u - p_u)
+        
+        context.font = "12px Arial";
+        context.fillStyle = 'black';
+        context.fillText('right:'+ right,2,20+20);
+        context.fillText('left:'+ left,2,20+40);
+        context.fillText('up:'+ up,2,20+60);
+
+        var distance = [
+            { side: 'right', value: right },
+            { side: 'left', value: left }
+            ,
+            { side: 'up', value: enemy.position.y - player.position.y },
+            { side: 'down', value: enemy.position.y - player.position.y }
+        ]
+        //distance.sort((a,b) => a.value + b.value)
+
+        distance.sort(function (a,b){
+            if (a.value > b.value) {
+                return 1;
+              }
+              if (a.value < b.value) {
+                return -1;
+              }
+              return 0;
+        })
+
+        var near_side = distance[0].side
+
+        if(near_side == 'left' && (enemy.side == 'down' || enemy.side == 'up') && enemy.position.x + enemy.width /2 > player.position.x + player.width /2){
+            enemy.position.x -= enemy.speed
+        }else 
+        if(near_side == 'right' && (enemy.side == 'down' || enemy.side == 'up') && enemy.position.x < player.position.x){
+            enemy.position.x += enemy.speed
+        }else
+        if(near_side == 'up' && (enemy.side == 'left' || enemy.side == 'right') && enemy.position.y + enemy.height /2 > player.position.y + player.height /2){
+            enemy.position.x -= enemy.speed
+        }
     }
 }
 

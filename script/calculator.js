@@ -66,6 +66,6 @@ function hp_recovery(vitality){
     return 0.06 + (vitality/1000)
 }
 function sp_recovery(inteligence, dexterity){
-    return 0.02 + (inteligence/800) + (dexterity/1500)
+    return 0.02 + (inteligence/500) + (dexterity/1000)
 }
 

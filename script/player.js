@@ -119,8 +119,8 @@ class Player{
     }
 
     draw(){
-        // context.fillStyle = 'blue'
-        // context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        context.fillStyle = 'blue'
+        context.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         //draw shield first (up only)
         if(this.side == 'up' && this.defending){
