@@ -357,31 +357,36 @@ function hunt(enemy, player, distance_x, distance_y){
 
     if(enemy.in_battle){
 
-        var en_r = enemy.position.x + enemy.width/2
-        var p_r = player.position.x + player.width/2
+        var en_r = (enemy.position.x + enemy.width/2)
+        var p_r = (player.position.x + player.width/2)
 
         var en_l = -(enemy.position.x + enemy.width/2)
         var p_l = -(player.position.x + player.width/2)
 
-        var en_u = enemy.position.y + enemy.height/2
-        var p_u = player.position.y + player.height/2
+        var en_u = -(enemy.position.y + enemy.height/2)
+        var p_u = -(player.position.y + player.height/2)
+
+        var en_d = (enemy.position.y + enemy.height/2)
+        var p_d = (player.position.y + player.height/2)
 
         var right = Math.round(en_r - p_r)
         var left = Math.round(en_l - p_l)
         var up = Math.round(en_u - p_u)
+        var down = Math.round(en_d - p_d)
         
         context.font = "12px Arial";
         context.fillStyle = 'black';
         context.fillText('right:'+ right,2,20+20);
         context.fillText('left:'+ left,2,20+40);
         context.fillText('up:'+ up,2,20+60);
+        context.fillText('down:'+ down,2,20+80);
 
         var distance = [
             { side: 'right', value: right },
             { side: 'left', value: left }
             ,
-            { side: 'up', value: enemy.position.y - player.position.y },
-            { side: 'down', value: enemy.position.y - player.position.y }
+            { side: 'up', value: up },
+            { side: 'down', value: down }
         ]
         //distance.sort((a,b) => a.value + b.value)
 
@@ -395,6 +400,16 @@ function hunt(enemy, player, distance_x, distance_y){
               return 0;
         })
 
+        distance.sort(function (a,b){
+            if (Math.abs(a.value) > Math.abs(b.value)) {
+                return 1;
+            }
+            if (Math.abs(a.value) < Math.abs(b.value)) {
+                return -1;
+            }
+            return 0;
+        })
+
         var near_side = distance[0].side
 
         if(near_side == 'left' && (enemy.side == 'down' || enemy.side == 'up') && enemy.position.x + enemy.width /2 > player.position.x + player.width /2){
@@ -404,7 +419,10 @@ function hunt(enemy, player, distance_x, distance_y){
             enemy.position.x += enemy.speed
         }else
         if(near_side == 'up' && (enemy.side == 'left' || enemy.side == 'right') && enemy.position.y + enemy.height /2 > player.position.y + player.height /2){
-            enemy.position.x -= enemy.speed
+            enemy.position.y -= enemy.speed
+        }else
+        if(near_side == 'down' && (enemy.side == 'left' || enemy.side == 'right') && enemy.position.y < player.position.y){
+            enemy.position.y += enemy.speed
         }
     }
 }
