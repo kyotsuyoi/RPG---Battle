@@ -20,12 +20,13 @@ class Damage{
         this.frames = 0
         this.count = 0
         this.time = 10
+        this.damageCount = 1//for mult damages
 
         this.owner = owner
         this.owner_id = owner_id
 
         this.attack_wait = 10
-        this.power = 10 //knock back only
+        this.power = 8 //knock back only
         this.bonus_attack = 0
         this.bonus_dexterity = 0
 
@@ -35,17 +36,30 @@ class Damage{
             width : this.width            
         }
 
-        this.type = type
-        
-        if(this.type == 'power_blade'){
-            this.attack_wait = 30
-            this.power = 40
-            this.bonus_attack = 30
-            this.bonus_dexterity = 5
-            this.width = 100
-            this.height = 100
-            this.sprites.sprite = createImage('img/power_sword_attack.png')
-            this.time = 60
+        this.type = type   
+        switch (type){
+            case 'power_blade':
+                //this.attack_wait = 30
+                this.power = 40
+                this.bonus_attack = 30
+                this.bonus_dexterity = 5
+                this.width = 100
+                this.height = 100
+                this.sprites.sprite = createImage('img/power_sword_attack.png')
+                this.time = 60
+            break
+
+            case 'rapid_blade':
+                //this.attack_wait = 30
+                this.power = 10
+                this.bonus_attack = 2
+                this.bonus_dexterity = 3
+                this.width = 50
+                this.height = 50
+                this.sprites.sprite = createImage('img/power_sword_attack.png')
+                this.time = 6
+                this.damageCount = 3
+            break
         }
 
         this.currentSprite = this.sprites.sprite
@@ -124,8 +138,30 @@ class Damage{
 }
 
 function damage_action(damage){
-    if(damage.time == 0){
-        damages.pop(damage)
+    if(damage.time <= 0){
+        
+        if(damage.type == 'rapid_blade'){ 
+            if(damage.damageCount > 1){
+                switch(damage.owner){                
+                    case 'player':
+                        weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p', type : 'sword_2', side : player.side})
+                        weapons.push(weapon)
+                    break
+                    case 'player2':
+                        weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
+                        weapons.push(weapon)
+                    break
+                }  
+                damage.lastDamage = new Array()
+                damage.damageCount -= 1
+                damage.time = 6
+            }else{
+                damages.pop(damage)  
+            }                       
+        }else{
+            damages.pop(damage)
+        }
+
     }else{
         damage.time -= 1
         //damage.draw()

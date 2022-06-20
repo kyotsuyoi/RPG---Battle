@@ -9,8 +9,8 @@ class Player{
             x : 0,
             y : 0
         }
-        this.width = 42
-        this.height = 43
+        this.width = 0
+        this.height = 0
 
         this.frames = 4
         this.lastTimestamp = lastTimestamp
@@ -64,26 +64,30 @@ class Player{
         this.hp_recovery = hp_recovery(this.vitality)   
 
         this.attackCoolDown = 0
-        this.powerAttackCoolDown = 0
+        this.powerBladeCoolDown = 0
+        this.rapidBladeCoolDown = 0
 
         this.side = 'down'
 
         if(id=='p1'){
+            this.width = 32
+            this.height = 43
+            
+            this.currentCropWidth = 33
+            this.currentCropHeight = 0
+
             this.sprites = {
                 character : {
                     sprite : createImage('img/knight_female.png'),
-                    cropWidth : 42,
+                    cropWidth : 0,
                     width : this.width
                 },
                 shield : {
-                    sprite : createImage('img/shield.png'),
+                    sprite : createImage('img/shield_1.png'),
                     cropWidth : 45,
                     width : 45
                 }
             }
-            
-            this.currentCropWidth = 42
-            this.currentCropHeight = 0
         }
 
         if(id=='p2'){            
@@ -100,12 +104,11 @@ class Player{
                     width : this.width
                 },
                 shield : {
-                    sprite : createImage('img/shield.png'),
+                    sprite : createImage('img/shield_2.png'),
                     cropWidth : 45,
                     width : 45
                 }
-            }
-            
+            }            
         }
 
         this.currentSprite = this.sprites.character.sprite
@@ -123,7 +126,7 @@ class Player{
 
             var posx = 0
             if(this.id == 'p1'){
-                posx = 10
+                posx = -11
             }
             if(this.id == 'p2'){
                 posx = -12
@@ -158,10 +161,12 @@ class Player{
         // var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height+8, color : 'red', text : this.hp, type : 'hp'})
         // displays.push(display)
 
+        var x_abs = this.position.x - Math.abs(this.width/2 - 20)
+
         //HP bar
         if(this.hp < this.max_hp){
             context.fillStyle = 'black'
-            context.fillRect(this.position.x, this.position.y + this.height+1, 40, 4)
+            context.fillRect(x_abs, this.position.y + this.height+1, 40, 4)
             var hp_percent = Math.round(this.hp * 100) / this.max_hp
             var bar_value = (40 * hp_percent) / 100
             if(hp_percent<=25){
@@ -169,23 +174,23 @@ class Player{
             }else{
                 context.fillStyle = 'green'
             }
-            context.fillRect(this.position.x, this.position.y + this.height+1, bar_value, 3)
+            context.fillRect(x_abs, this.position.y + this.height+1, bar_value, 3)
         }
 
         //SP bar
         if(this.sp < this.max_sp){
             context.fillStyle = 'black'
-            context.fillRect(this.position.x, this.position.y + this.height+4, 40, 4)
+            context.fillRect(x_abs, this.position.y + this.height+4, 40, 4)
             var sp_percent = Math.round(this.sp * 100) / this.max_sp
             var bar_value = (40 * sp_percent) / 100
             context.fillStyle = 'blue'        
-            context.fillRect(this.position.x, this.position.y + this.height+4, bar_value, 3)
+            context.fillRect(x_abs, this.position.y + this.height+4, bar_value, 3)
         }
 
         //Stamina bar
         if(this.stamina < this.max_stamina){
             context.fillStyle = 'black'
-            context.fillRect(this.position.x, this.position.y + this.height+8, 40, 4)
+            context.fillRect(x_abs, this.position.y + this.height+8, 40, 4)
             var stamina_percent = Math.round(this.stamina * 100) / this.max_stamina
             var bar_value = (40 * stamina_percent) / 100
             if(stamina_percent<=25){
@@ -193,7 +198,7 @@ class Player{
             }else{
                 context.fillStyle = 'yellow'
             }       
-            context.fillRect(this.position.x, this.position.y + this.height+8, bar_value, 3)
+            context.fillRect(x_abs, this.position.y + this.height+8, bar_value, 3)
         }
 
         if(this.defending){
@@ -212,13 +217,13 @@ class Player{
 
                     case 'left':
                         side_num = 1
-                        pos_x = -8
+                        pos_x = -14
                         pos_y = 10
                     break
 
                     case 'right':
                         side_num = 2
-                        pos_x = +8
+                        pos_x = 2
                         pos_y = 10
                     break
                 }
@@ -277,17 +282,7 @@ class Player{
             // context.fillStyle = 'black'
             // context.fill()
 
-            this.speed = speed_value(this.agility)/2
-        }else{
-            this.speed = speed_value(this.agility)
-        }    
-        
-        if(this.isRunning && !this.defending && this.stamina > 0){
-            this.speed = speed_value(this.agility)*2
-            this.stamina -= 0.5
-        }else{
-            this.speed = speed_value(this.agility)
-        }
+        }          
     }
 
     update(){
@@ -330,6 +325,17 @@ class Player{
                 this.side = 'up'
                 this.currentCropHeight = this.height * 3
             }
+        }
+
+        this.speed = speed_value(this.agility)
+
+        if(this.isRunning && !this.defending && this.stamina > 0){
+            this.speed = speed_value(this.agility)*2
+            this.stamina -= 0.5
+        }
+        
+        if(this.defending){
+            this.speed = speed_value(this.agility)/2
         }
 
         if(lastTimestamp - this.frameTime > this.lastTimestamp){
@@ -402,8 +408,11 @@ class Player{
             if(this.attackCoolDown > 0){
                 this.attackCoolDown -= 1
             }
-            if(this.powerAttackCoolDown > 0){
-                this.powerAttackCoolDown -= 1
+            if(this.powerBladeCoolDown > 0){
+                this.powerBladeCoolDown -= 1
+            }
+            if(this.rapidBladeCoolDown > 0){
+                this.rapidBladeCoolDown -= 1
             }
 
             this.lastRecoveryTime = lastTimestamp

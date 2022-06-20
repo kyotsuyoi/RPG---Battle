@@ -18,8 +18,18 @@ class Weapon{
 
         this.owner_id = owner_id
 
+        var sprite = undefined
+        switch(type){
+            case 'sword_1':
+                sprite = createImage('img/sword_1.png')
+                break
+            case 'sword_2':
+                sprite = createImage('img/sword_2.png')
+                break
+        }
+
         this.sprites = {            
-            sprite : createImage('img/sword.png'),
+            sprite : sprite,
             cropWidth : 60,
             width : this.width            
         }
@@ -31,26 +41,26 @@ class Weapon{
         this.side = side
         switch (side){
             case 'up':
-                this.position.x = (x + 42 /2) - (this.height/2)
+                this.position.x = (x + 32 /2) - (this.height/2)
                 this.position.y = y - this.height + 15
                 this.currentCropHeight = 60*2
             break
 
             case 'down':
-                this.position.x = (x + 42 /2) - (this.height/2)
-                this.position.y = y + 42 - 15              
+                this.position.x = (x + 32 /2) - (this.height/2)
+                this.position.y = y + 32 - 15              
                 this.currentCropHeight = 60*3
             break
 
             case 'left':
                 this.position.x = x - this.width + 15
-                this.position.y = this.position.y = (y + 42 /2) - (this.height/2) 
+                this.position.y = this.position.y = (y + 32 /2) - (this.height/2) 
                 this.currentCropHeight = 0
             break
 
             case 'right':
-                this.position.x = x + 42 - 15
-                this.position.y = (y + 42 /2) - (this.height/2)                
+                this.position.x = x + 32 - 15
+                this.position.y = (y + 32 /2) - (this.height/2)                
                 this.currentCropHeight = 60
             break
         }

@@ -16,13 +16,16 @@ const keys = {
     attack : {
         pressed : false
     },
-    power_attack : {
+    power_blade : {
         pressed : false
     },
     defense : {
         pressed : false
     },
     run : {
+        pressed : false
+    },
+    rapid_blade : {
         pressed : false
     }
 }
@@ -43,13 +46,16 @@ const keys2 = {
     attack : {
         pressed : false
     },
-    power_attack : {
+    power_blade : {
         pressed : false
     },
     defense : {
         pressed : false
     },
     run : {
+        pressed : false
+    },
+    rapid_blade : {
         pressed : false
     }
 }
@@ -120,35 +126,35 @@ function keyCodeDown(keyCode){
 
                 damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', side : player.side}); 
                 damages.push(damage)   
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword', side : player.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword_1', side : player.side})
                 weapons.push(weapon)
 
             }
         break
 
-        //power_attack
+        //power_blade
         case 100:
-            if(!keys.power_attack.pressed && player.powerAttackCoolDown == 0){
+            if(!keys.power_blade.pressed && player.powerBladeCoolDown == 0){
 
-                if(player.sp - 10 < 0){
+                if(player.sp - 40 < 0){
                     return 
                 }
 
-                keys.power_attack.pressed = true      
-                lastKey = 'power_attack'
+                keys.power_blade.pressed = true      
+                lastKey = 'power_blade'
                 player.isAttack = true
 
-                player.powerAttackCoolDown = 30                
+                player.powerBladeCoolDown = 30                
 
                 if(player.sp <= 0){
                     player.sp = 0
                 }else{
-                    player.sp -= 10
+                    player.sp -= 40
                 }
                      
                 damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', type : 'power_blade', side : player.side}); 
                 damages.push(damage)                
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword', side : player.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword_1', side : player.side})
                 weapons.push(weapon)
             }
         break
@@ -167,6 +173,33 @@ function keyCodeDown(keyCode){
                 keys.run.pressed = true  
                 player.isRunning = true
                 player.staminaCoolDown = 50
+            }
+        break
+
+        //rapid_blade
+        case 101:
+            if(!keys.rapid_blade.pressed && player.rapidBladeCoolDown == 0){
+
+                if(player.sp - 20 < 0){
+                    return 
+                }
+
+                keys.power_blade.pressed = true      
+                lastKey2 = 'rapid_blade'
+                player.isAttack = true
+
+                player.rapidBladeCoolDown = 18                
+
+                if(player.sp <= 0){
+                    player.sp = 0
+                }else{
+                    player.sp -= 20
+                }
+
+                damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p2', owner : 'player', type : 'rapid_blade', side : player.side}); 
+                damages.push(damage)
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p2', type : 'sword_2', side : player.side})
+                weapons.push(weapon)
             }
         break
         //End Player 1 -----------------------------------
@@ -224,24 +257,24 @@ function keyCodeDown(keyCode){
                      
                 damage = new Damage({x : player2.position.x, y : player2.position.y, owner_id : 'p2', owner : 'player2', side : player2.side});
                 damages.push(damage)   
-                weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword', side : player2.side})
+                weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
                 weapons.push(weapon)
             }
         break
 
-        //power_attack
+        //power_blade
         case 89:
-            if(!keys2.power_attack.pressed && player2.powerAttackCoolDown == 0){
+            if(!keys2.power_blade.pressed && player2.powerBladeCoolDown == 0){
 
-                if(player2.sp - 10 < 0){
+                if(player2.sp - 40 < 0){
                     return 
                 }
 
-                keys2.power_attack.pressed = true      
-                lastKey2 = 'power_attack'
+                keys2.power_blade.pressed = true      
+                lastKey2 = 'power_blade'
                 player2.isAttack = true
 
-                player2.powerAttackCoolDown = 30                
+                player2.powerBladeCoolDown = 30                
 
                 if(player2.sp <= 0){
                     player2.sp = 0
@@ -251,7 +284,7 @@ function keyCodeDown(keyCode){
 
                 damage = new Damage({x : player2.position.x, y : player2.position.y, owner_id : 'p2', owner : 'player2', type : 'power_blade', side : player2.side}); 
                 damages.push(damage)
-                weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword', side : player2.side})
+                weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
                 weapons.push(weapon)
             }
         break
@@ -271,6 +304,33 @@ function keyCodeDown(keyCode){
                 keys2.run.pressed = true  
                 player2.isRunning = true
                 player2.staminaCoolDown = 50
+            }
+        break
+
+        //rapid_blade
+        case 74:
+            if(!keys2.rapid_blade.pressed && player2.rapidBladeCoolDown == 0){
+
+                if(player2.sp - 20 < 0){
+                    return 
+                }
+
+                keys2.power_blade.pressed = true      
+                lastKey2 = 'rapid_blade'
+                player2.isAttack = true
+
+                player2.rapidBladeCoolDown = 18                
+
+                if(player2.sp <= 0){
+                    player2.sp = 0
+                }else{
+                    player2.sp -= 20
+                }
+
+                damage = new Damage({x : player2.position.x, y : player2.position.y, owner_id : 'p2', owner : 'player2', type : 'rapid_blade', side : player2.side}); 
+                damages.push(damage)
+                weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
+                weapons.push(weapon)
             }
         break
         //End Player 2 -----------------------------------
@@ -327,7 +387,7 @@ function keyCodeUp(keyCode){
         break
 
         case 100:
-            keys.power_attack.pressed = false  
+            keys.power_blade.pressed = false  
         break
 
         case 103:
@@ -338,6 +398,10 @@ function keyCodeUp(keyCode){
         case 98:
             keys.run.pressed = false   
             player.isRunning = false
+        break
+
+        case 101:
+            keys.rapid_blade.pressed = false 
         break
         //End Player 1 -----------------------------------
 
@@ -387,7 +451,7 @@ function keyCodeUp(keyCode){
         break
 
         case 89:
-            keys2.power_attack.pressed = false  
+            keys2.power_blade.pressed = false  
         break
 
         case 85:
@@ -398,6 +462,10 @@ function keyCodeUp(keyCode){
         case 72:
             keys2.run.pressed = false   
             player2.isRunning = false
+        break
+
+        case 72:
+            keys2.rapid_blade.pressed = false 
         break
         //End Player 2 -----------------------------------
     }
@@ -523,9 +591,9 @@ function padLoop() {
     }
 
     if (buttonPressed(gp.buttons[1])) {
-        console.log('b1')
+        keyCodeDown(101)
     } else {
-
+        keyCodeUp(101)
     }
 
     //y

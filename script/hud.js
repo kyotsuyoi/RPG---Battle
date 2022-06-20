@@ -23,9 +23,13 @@ class Hud {
         }
         
         this.sprite = createImage('img/hud_large.png')
+        this.sprite_spell = createImage('img/hud_spell.png')
 
         this.currentSprite = this.sprite
         this.currentCropWidth = 0
+
+        this.currentSpriteSpell = this.sprite_spell
+        this.currentSpellCropWidth = 0
     }
 
     draw(){
@@ -55,6 +59,18 @@ class Hud {
             this.width,
             this.height
         )  
+
+        context.drawImage(          
+            this.sprite_spell, 
+            0,
+            0,
+            150, //largura
+            48, //altura
+            this.position.x +14 + 20, 
+            this.position.y - 25,
+            this.width,
+            this.height
+        ) 
         
         var hp = 0
         var max_hp = 0
@@ -69,7 +85,9 @@ class Hud {
             var sp = player.sp
             var max_sp = player.max_sp
             var stamina = player.stamina
-            var max_stamina = player.max_stamina
+            var max_stamina = player.max_stamina            
+            var powerBladeCoolDown = player.powerBladeCoolDown
+            var rapidBladeCoolDown = player.rapidBladeCoolDown
         }
 
         if(this.id == 'p2'){
@@ -79,6 +97,8 @@ class Hud {
             var max_sp = player2.max_sp
             var stamina = player2.stamina
             var max_stamina = player2.max_stamina
+            var powerBladeCoolDown = player2.powerBladeCoolDown
+            var rapidBladeCoolDown = player2.rapidBladeCoolDown
         }
 
         //HP bar
@@ -120,6 +140,18 @@ class Hud {
         context.font = "8px Arial Black";
         context.fillStyle = 'black';
         context.fillText(Math.round(stamina) + '/' + Math.round(max_stamina),this.position.x + 70, this.position.y + 42);
+
+        //Power Blade bar
+        var powerBladeCoolDown_percent = Math.round(powerBladeCoolDown * 100) / 30
+        var bar_value = (16 * powerBladeCoolDown_percent) / 100
+        context.fillStyle = '#555555dd'        
+        context.fillRect(this.position.x + 47, this.position.y - 20, bar_value, 16)  
+
+        //Rapid Blade bar
+        var rapidBladeCoolDown_percent = Math.round(rapidBladeCoolDown * 100) / 20
+        var bar_value = (16 * rapidBladeCoolDown_percent) / 100
+        context.fillStyle = '#555555dd'        
+        context.fillRect(this.position.x + 72, this.position.y - 20, bar_value, 16) 
         
     }
 }

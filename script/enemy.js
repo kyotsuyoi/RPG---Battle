@@ -58,7 +58,7 @@ class Enemy{
             break
         }
 
-        this.max_hp = hp_value(this.vitality, this.power)
+        this.max_hp = hp_value(this.vitality, this.power)+5000
         this.max_sp = sp_value(0,0)
 
         switch(type){            
@@ -234,7 +234,7 @@ function enemy_action(enemy){
 function patrol(enemy){
     
     if(!enemy.in_battle){
-        if(enemy.patrol_time_wait <= 0 /*&& enemy.patrol*/){
+        if(enemy.patrol_time_wait <= 0 && enemy.patrol){
 
             if(!enemy.in_patrol){
                 enemy.in_patrol = true   
