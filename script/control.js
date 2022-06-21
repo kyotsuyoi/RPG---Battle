@@ -57,6 +57,9 @@ const keys2 = {
     },
     rapid_blade : {
         pressed : false
+    },
+    phanton_blade : {
+        pressed : false
     }
 }
 
@@ -69,6 +72,8 @@ window.addEventListener('keyup', ({keyCode}) => {
 })
 
 function keyCodeDown(keyCode){
+    
+    backgroundMusic()
     
     //console.log('keydown:'+keyCode) 
     switch (keyCode){
@@ -264,6 +269,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'attack'
                 player2.isAttack = true
                 //console.log('keydown:'+keyCode)
+                swordSound()
 
                 player2.attackCoolDown = player2.attack_speed
                      
@@ -290,7 +296,10 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'power_blade'
                 player2.isAttack = true
 
-                player2.powerBladeCoolDown = 30                
+                player2.powerBladeCoolDown = 30    
+                
+                rapidBladeSound()
+                powerSwordSound()
 
                 if(player2.sp <= 0){
                     player2.sp = 0
@@ -315,6 +324,7 @@ function keyCodeDown(keyCode){
                 //console.log('keydown:'+ keyCode)
                 keys2.defense.pressed = true  
                 player2.defending = true
+                shieldGrabSound()
             }
         break
 
@@ -324,6 +334,7 @@ function keyCodeDown(keyCode){
                 keys2.run.pressed = true  
                 player2.isRunning = true
                 player2.staminaCoolDown = 50
+                runSound()
             }
         break
 
@@ -339,7 +350,9 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'rapid_blade'
                 player2.isAttack = true
 
-                player2.rapidBladeCoolDown = 18                
+                player2.rapidBladeCoolDown = 18     
+                
+                rapidBladeSound()
 
                 if(player2.sp <= 0){
                     player2.sp = 0
@@ -350,6 +363,37 @@ function keyCodeDown(keyCode){
                 damage = new Damage({
                     x : player2.position.x, y : player2.position.y, 
                     owner_id : 'p2', owner : 'player2', type : 'rapid_blade', side : player2.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                }); 
+                damages.push(damage)
+                weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
+                weapons.push(weapon)
+            }
+        break
+        
+        //phanton_blade
+        case 73:
+            if(!keys2.phanton_blade.pressed && player2.rapidBladeCoolDown == 0){
+
+                if(player2.sp - 20 < 0){
+                    return 
+                }
+
+                keys2.phanton_blade.pressed = true      
+                lastKey2 = 'phanton_blade'
+                player2.isAttack = true
+
+                player2.phantonBladeCoolDown = 30                
+
+                if(player2.sp <= 0){
+                    player2.sp = 0
+                }else{
+                    player2.sp -= 25
+                }
+
+                damage = new Damage({
+                    x : player2.position.x, y : player2.position.y, 
+                    owner_id : 'p2', owner : 'player2', type : 'phanton_blade', side : player2.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
                 }); 
                 damages.push(damage)
@@ -486,10 +530,15 @@ function keyCodeUp(keyCode){
         case 72:
             keys2.run.pressed = false   
             player2.isRunning = false
+            runSoundStop()
         break
 
         case 72:
             keys2.rapid_blade.pressed = false 
+        break
+
+        case 73:
+            keys2.phanton_blade.pressed = false 
         break
         //End Player 2 -----------------------------------
     }
@@ -737,6 +786,13 @@ function pad2Loop() {
         //keyCodeDown(72)
     } else {
         //keyCodeUp(72)
+    }
+
+    //rb
+    if (buttonPressed(gp.buttons[5])) {
+        keyCodeDown(73)
+    } else {
+        keyCodeUp(73)
     }
 
     //lt

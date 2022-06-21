@@ -27,7 +27,6 @@ class Damage{
         this.owner = owner
         this.owner_id = owner_id
 
-        this.attack_wait = 10
         this.power = 8 //knock back only
         this.bonus_attack = 0
         this.bonus_dexterity = 0
@@ -42,7 +41,6 @@ class Damage{
         this.type = type   
         switch (type){
             case 'power_blade':
-                //this.attack_wait = 30
                 this.power = 40
                 this.bonus_attack = 30
                 this.bonus_dexterity = 5
@@ -55,7 +53,6 @@ class Damage{
             break
 
             case 'rapid_blade':
-                //this.attack_wait = 30
                 this.power = 10
                 this.bonus_attack = 2
                 this.bonus_dexterity = 3
@@ -67,6 +64,18 @@ class Damage{
                 this.speed = 2.5
                 this.stun = 30
             break
+            
+            case 'phanton_blade':
+                this.power = 50
+                this.bonus_attack = 5
+                this.bonus_dexterity = 10
+                this.width = 100
+                this.height = 100
+                this.sprites.sprite = createImage('img/power_sword_attack.png')
+                this.time = 5
+                this.speed = 0
+                this.stun = 100
+            break
         }
 
         this.currentSprite = this.sprites.sprite
@@ -77,21 +86,21 @@ class Damage{
         switch (side){
             case 'up':
                 this.position.x = (x + character_width /2) - (this.height/2)
-                this.position.y = y //- this.height
+                this.position.y = y - this.height/2 + character_height /2//- this.width //- this.height
                 this.currentCropHeight = 42*2
                 this.velocity.y = -this.speed
             break
 
             case 'down':
                 this.position.x = (x + character_width /2) - (this.height/2)
-                this.position.y = y //+ character_height 
+                this.position.y = y - this.height/2 + character_height /2 //+ character_height 
                 this.currentCropHeight = 42*3
                 this.velocity.y = this.speed
             break
 
             case 'left':
                 this.position.x = x - this.width/2 + character_width /2//- this.width
-                this.position.y = this.position.y = (y + character_height /2) - (this.height/2) 
+                this.position.y = (y + character_height /2) - (this.height/2) 
                 this.currentCropHeight = 0
                 this.velocity.x = -this.speed
             break
@@ -228,11 +237,13 @@ function enemyDamage(damage, player){
                     player.hp -= result   
                     if(player.hp <= 0){
                         player.hp = 0.0
-                    }                
+                    }                       
+                    swordSlashSound()                         
                     display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
                     displays.push(display)
 
                 }else{
+                    shieldSound()
                     player.stamina = player.stamina - result/2
                     damages.pop(damage)
                 }  
@@ -244,7 +255,8 @@ function enemyDamage(damage, player){
                 player.hp -= result  
                 if(player.hp < 0){
                     player.hp = 0
-                }
+                }                  
+                swordSlashSound()          
                 display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
                 displays.push(display)
             }
@@ -329,7 +341,8 @@ function playerDamage(damage){
                 }  
 
                 enemy.hp -= result   
-                enemy.stunTime = damage.stun                  
+                enemy.stunTime = damage.stun    
+                swordSlashSound()              
                 display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'red', text : result, type : 'damage'})
                 displays.push(display)
 

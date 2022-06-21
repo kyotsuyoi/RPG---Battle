@@ -67,6 +67,7 @@ class Player{
         this.attackCoolDown = 0
         this.powerBladeCoolDown = 0
         this.rapidBladeCoolDown = 0
+        this.phantonBladeCoolDown = 0
 
         this.side = 'down'
 
@@ -413,6 +414,9 @@ class Player{
             }
             if(this.rapidBladeCoolDown > 0){
                 this.rapidBladeCoolDown -= 1
+            }
+            if(this.phantonBladeCoolDown > 0){
+                this.phantonBladeCoolDown -= 1
             }
 
             this.lastRecoveryTime = lastTimestamp

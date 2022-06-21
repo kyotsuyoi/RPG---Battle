@@ -455,7 +455,7 @@ function attack(enemy, player){
         //console.log("enemy attack")
 
         enemy.attackCoolDown = enemy.attack_speed
-        
+        swordSound()
         switch (enemy.side){
             case 'up':                        
                 damage = new Damage({

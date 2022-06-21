@@ -293,7 +293,7 @@ function square_colision_area(a, b){
     return false
 }
 
-function start() {
+function start() {    
     requestAnimationFrame(animate);
 }
 
