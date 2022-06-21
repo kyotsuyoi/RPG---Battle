@@ -12,8 +12,8 @@ let lastTimestamp = 0;
 
 var damages = new Array()
 var displays = new Array()
-const player = new Player('p1', lastTimestamp, 350, 700)
-const player2 = new Player('p2', lastTimestamp, 350+80, 700)
+var player = new Player('p1', lastTimestamp, 350, 700)
+var player2 = null
 var grounds = new Array()
 var weapons = new Array()
 
@@ -299,10 +299,17 @@ function start() {
 
 function animate(timestamp){
 
-    if(player.hp <= 0 || player2.hp <= 0){        
+    if(player2 != null){
+        if(player2.hp <= 0){        
+            alert('MORREU')
+            return
+        }
+    }
+
+    if(player.hp <= 0){        
         alert('MORREU')
         return
-    }
+    }    
 
     if(enemies.length <= 0){        
         alert('VENCEU')
@@ -324,7 +331,9 @@ function animate(timestamp){
     platforms.forEach(platform => {
         platform.draw()  
         platform_colision(player, platform)
-        platform_colision(player2, platform)
+        if(player2 != null){
+            platform_colision(player2, platform)
+        }
         enemies.forEach(enemy => {
             platform_colision(enemy, platform)
         })
@@ -343,7 +352,10 @@ function animate(timestamp){
     
     pad1Loop()
     pad2Loop()
-    keypad_loop()    
+    keypadLoop1()  
+    if(player2 != null){
+        keypadLoop2()  
+    }  
 
     enemies.forEach(enemy =>{        
         enemy_action(enemy)  
@@ -357,13 +369,18 @@ function animate(timestamp){
         }      
     })
 
-    if(player.position.y > player2.position.y){
-        player2.update()
-        player.update()
+    if(player2 != null){
+        if(player.position.y > player2.position.y){
+            player2.update()
+            player.update()
+        }else{
+            player.update()
+            player2.update()
+        }  
     }else{
         player.update()
-        player2.update()
-    }    
+    }
+      
 
     weapons = weapons.filter(weapon => weapon.frames <= 3)
     weapons.forEach(weapon => {

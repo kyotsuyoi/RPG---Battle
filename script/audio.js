@@ -1,12 +1,11 @@
-var MaxWebMediaPlayerCount = 0
-var background_song = new sound("src/sound/35.mp3")
+const background_song = new sound("src/sound/35.mp3")
 //var sword_sound = new sound("src/sound/sword_sound.wav")
 // var sword_slash_sound = new sound("src/sound/sword_slash_sound.mp3")
 // var power_sword_sound = new sound("src/sound/power_sword_sound.wav")
 //var shield_sound = new sound("src/sound/shield_sound.wav")
 // var rapid_blade = new sound("src/sound/rapid_blade.wav")
 // var shield_grab_sond = new sound("src/sound/shield_grab_sond.wav")
-var run_sound = new sound("src/sound/run_sound.wav")
+const run_sound = new sound("src/sound/run_sound.wav")
 
 function sound(src) {
     this.sound = document.createElement("audio")
@@ -19,7 +18,6 @@ function sound(src) {
     this.play = function(){
         this.sound.play();       
     }
-    console.log(MaxWebMediaPlayerCount)
     this.stop = function(){
         this.sound.pause()
     } 

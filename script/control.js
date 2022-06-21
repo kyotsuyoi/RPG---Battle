@@ -76,9 +76,10 @@ function keyCodeDown(keyCode){
     backgroundMusic()
     
     //console.log('keydown:'+keyCode) 
+    
+    //Start Player 1 -----------------------------------
     switch (keyCode){
         
-        //Start Player 1 -----------------------------------
         case 38:
             if(!keys.up.pressed && !keys.down.pressed){
                 keys.up.pressed = true       
@@ -225,9 +226,21 @@ function keyCodeDown(keyCode){
                 weapons.push(weapon)
             }
         break
-        //End Player 1 -----------------------------------
-            //87 83 65 68 
-        //Start Player 2 -----------------------------------
+        
+    }
+    //End Player 1 -----------------------------------
+    
+    //start
+    if(keyCode == 84 && player2 == null){
+        player2 = new Player('p2', lastTimestamp, 350+80, 700)        
+    }
+
+    if(player2 == null){
+        return
+    }
+
+    //Start Player 2 -----------------------------------
+    switch(keyCode){
         case 87:
             if(!keys2.up.pressed && !keys2.down.pressed){
                 keys2.up.pressed = true       
@@ -406,15 +419,17 @@ function keyCodeDown(keyCode){
                 weapons.push(weapon)
             }
         break
+
         //End Player 2 -----------------------------------
     }
 }
 
 function keyCodeUp(keyCode){
     //console.log('keyCode up:'+keyCode)
+    
+    //Start Player 1 -----------------------------------
     switch (keyCode){
 
-        //Start Player 1 -----------------------------------
         case 38:
             keys.up.pressed = false
             if(keys.left.pressed == true){
@@ -469,17 +484,29 @@ function keyCodeUp(keyCode){
         break
 
         case 98:
-            keys.run.pressed = false   
-            player.isRunning = false
-            runSoundStop()
+            if(keys.run.pressed){                
+                keys.run.pressed = false   
+                player.isRunning = false
+                runSoundStop()
+            }
         break
 
         case 101:
             keys.rapid_blade.pressed = false 
         break
-        //End Player 1 -----------------------------------
+    }
+        
+    if(keys.up.pressed == false && keys.down.pressed == false && keys.left.pressed == false && keys.right.pressed == false){
+        player.isWalking = false
+    }
+    //End Player 1 -----------------------------------
 
-        //Start Player 2 -----------------------------------
+    if(player2 == null){
+        return
+    }
+
+    //Start Player 2 -----------------------------------
+    switch(keyCode){
         case 87:
             keys2.up.pressed = false
             if(keys2.left.pressed == true){
@@ -534,9 +561,11 @@ function keyCodeUp(keyCode){
         break
 
         case 72:
-            keys2.run.pressed = false   
-            player2.isRunning = false
-            runSoundStop()
+            if(keys2.run.pressed){                
+                keys2.run.pressed = false   
+                player2.isRunning = false
+                runSoundStop()
+            }
         break
 
         case 72:
@@ -546,19 +575,15 @@ function keyCodeUp(keyCode){
         case 73:
             keys2.phanton_blade.pressed = false 
         break
-        //End Player 2 -----------------------------------
-    }
-
-    if(keys.up.pressed == false && keys.down.pressed == false && keys.left.pressed == false && keys.right.pressed == false){
-        player.isWalking = false
     }
 
     if(keys2.up.pressed == false && keys2.down.pressed == false && keys2.left.pressed == false && keys2.right.pressed == false){
         player2.isWalking = false
     }
+    //End Player 2 -----------------------------------
 }
 
-function keypad_loop(){
+function keypadLoop1(){
     if(keys.right.pressed && (player.position.x + player.width <= background.width)){
         player.velocity.x = player.speed
     } else if (keys.left.pressed && (player.position.x > 0)){
@@ -574,7 +599,9 @@ function keypad_loop(){
     }else{
         player.velocity.y = 0
     }
+}
 
+function keypadLoop2(){
     if(keys2.right.pressed && (player2.position.x + player2.width <= background.width)){
         player2.velocity.x = player2.speed
     } else if (keys2.left.pressed && (player2.position.x > 0)){
@@ -806,5 +833,36 @@ function pad2Loop() {
         keyCodeDown(85)
     } else {
         keyCodeUp(85)
+    }
+
+    //
+    if (buttonPressed(gp.buttons[7])) {
+        console.log(7)
+        //keyCodeDown(85)
+    } else {
+        //keyCodeUp(85)
+    }
+
+    //
+    if (buttonPressed(gp.buttons[8])) {
+        console.log(8)
+        //keyCodeDown(85)
+    } else {
+        //keyCodeUp(85)
+    }
+
+    //list (start)
+    if (buttonPressed(gp.buttons[9])) {
+        keyCodeDown(84)
+    } else {
+        keyCodeUp(84)
+    }
+
+    //
+    if (buttonPressed(gp.buttons[10])) {
+        console.log(10)
+        //keyCodeDown(85)
+    } else {
+        //keyCodeUp(85)
     }
 }

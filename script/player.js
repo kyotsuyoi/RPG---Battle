@@ -1,6 +1,7 @@
 class Player{
     constructor(id, lastTimestamp, x, y){
         this.id = id
+        this.start = false
         this.position ={
             x : x,
             y : y

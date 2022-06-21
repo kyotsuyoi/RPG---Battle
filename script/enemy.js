@@ -169,8 +169,10 @@ function enemy_action(enemy){
     distance_x = Math.abs(player.position.x - enemy.position.x)
     distance_y = Math.abs(player.position.y - enemy.position.y)
 
-    distance_x_2 = Math.abs(player2.position.x - enemy.position.x)
-    distance_y_2 = Math.abs(player2.position.y - enemy.position.y)
+    if(player2 != null){
+        distance_x_2 = Math.abs(player2.position.x - enemy.position.x)
+        distance_y_2 = Math.abs(player2.position.y - enemy.position.y)
+    }
 
     var p1_battle = false
     var p2_battle = false
@@ -188,18 +190,20 @@ function enemy_action(enemy){
         p1_battle = false 
     }
 
-    if(
-        ((player2.position.x > enemy.position.x) 
-        ||(enemy.position.x > player2.position.x) 
-        ||(player2.position.y > enemy.position.y) 
-        || (enemy.position.y > player2.position.y))
-        && distance_x_2 < enemy.targetRange
-        && distance_y_2 < enemy.targetRange
-    ){
-        p2_battle = true 
-    }else{
-        p2_battle = false 
-    }
+    if(player2 != null){
+        if(
+            ((player2.position.x > enemy.position.x) 
+            ||(enemy.position.x > player2.position.x) 
+            ||(player2.position.y > enemy.position.y) 
+            || (enemy.position.y > player2.position.y))
+            && distance_x_2 < enemy.targetRange
+            && distance_y_2 < enemy.targetRange
+        ){
+            p2_battle = true 
+        }else{
+            p2_battle = false 
+        }
+    }    
 
     if(p1_battle && p2_battle){
         if(distance_x + distance_y < distance_x_2 + distance_y_2 && enemy.in_battle){  

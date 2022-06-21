@@ -36,6 +36,10 @@ class Hud {
         // context.fillStyle = 'blue'
         // context.fillRect(this.position.x, this.position.y, this.width, this.height)
 
+        if (this.id == 'p2' && player2 == null){
+            return
+        }
+
         context.drawImage(          
             this.currentSprite, 
             0,
@@ -91,7 +95,7 @@ class Hud {
             var phantonBladeCoolDown = player.phantonBladeCoolDown
         }
 
-        if(this.id == 'p2'){
+        if(this.id == 'p2' && player2 != null){
             var hp = player2.hp
             var max_hp = player2.max_hp
             var sp = player2.sp
