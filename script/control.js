@@ -128,6 +128,7 @@ function keyCodeDown(keyCode){
                 //console.log('keydown:'+keyCode)
 
                 player.attackCoolDown = player.attack_speed
+                swordSound()
 
                 damage = new Damage({
                     x : player.position.x, y : player.position.y, 
@@ -153,7 +154,9 @@ function keyCodeDown(keyCode){
                 lastKey = 'power_blade'
                 player.isAttack = true
 
-                player.powerBladeCoolDown = 30                
+                player.powerBladeCoolDown = 30  
+                rapidBladeSound()
+                powerSwordSound()             
 
                 if(player.sp <= 0){
                     player.sp = 0
@@ -177,6 +180,7 @@ function keyCodeDown(keyCode){
             if(!keys.defense.pressed && player.stamina>=5){
                 keys.defense.pressed = true  
                 player.defending = true
+                shieldGrabSound()
             }
         break
 
@@ -186,6 +190,7 @@ function keyCodeDown(keyCode){
                 keys.run.pressed = true  
                 player.isRunning = true
                 player.staminaCoolDown = 50
+                runSound()
             }
         break
 
@@ -201,7 +206,8 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'rapid_blade'
                 player.isAttack = true
 
-                player.rapidBladeCoolDown = 18                
+                player.rapidBladeCoolDown = 18   
+                rapidBladeSound()
 
                 if(player.sp <= 0){
                     player.sp = 0
@@ -296,8 +302,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'power_blade'
                 player2.isAttack = true
 
-                player2.powerBladeCoolDown = 30    
-                
+                player2.powerBladeCoolDown = 30 
                 rapidBladeSound()
                 powerSwordSound()
 
@@ -530,7 +535,6 @@ function keyCodeUp(keyCode){
         case 72:
             keys2.run.pressed = false   
             player2.isRunning = false
-            runSoundStop()
         break
 
         case 72:
