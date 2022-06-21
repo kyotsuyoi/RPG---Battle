@@ -31,65 +31,71 @@ function swordSound(  ) {
     var sword_sound = new Audio("./src/sound/sword_sound.wav");
     sword_sound.play()
     sword_sound.onended = function(){
-        this.currentSrc = null
-        this.src = ""
-        this.srcObject = null
-        this.remove()
+        sword_sound.currentSrc = null
+        sword_sound.src = ""
+        sword_sound.srcObject = null
+        sword_sound.remove()
+        sword_sound = null
     }
 }
 
 function swordSlashSound(){
-    var sword_slash_sound = new sound("./src/sound/sword_slash_sound.mp3")
+    var sword_slash_sound = new Audio("./src/sound/sword_slash_sound.mp3")
     sword_slash_sound.play()
     sword_slash_sound.onended = function(){
-        this.currentSrc = null
-        this.src = ""
-        this.srcObject = null
-        this.remove()
+        sword_slash_sound.currentSrc = null
+        sword_slash_sound.src = ""
+        sword_slash_sound.srcObject = null
+        sword_slash_sound.remove()
+        sword_slash_sound = null
     }
 }
 
 function shieldSound(){
-    var shield_sound = new sound("src/sound/shield_sound.wav")
+    var shield_sound = new Audio("src/sound/shield_sound.wav")
     shield_sound.play()
     shield_sound.onended = function(){
-        this.currentSrc = null
-        this.src = ""
-        this.srcObject = null
-        this.remove()
+        shield_sound.currentSrc = null
+        shield_sound.src = ""
+        shield_sound.srcObject = null
+        shield_sound.remove()
+        shield_sound = null
     }
 }
 
 function powerSwordSound(){
-    var power_sword_sound = new sound("src/sound/power_sword_sound.wav")
+    var power_sword_sound = new Audio("src/sound/power_sword_sound.wav")
     power_sword_sound.play()
     power_sword_sound.onended = function(){
-        this.currentSrc = null
-        this.src = ""
-        this.srcObject = null
-        this.remove()
+        power_sword_sound.currentSrc = null
+        power_sword_sound.src = ""
+        power_sword_sound.srcObject = null
+        power_sword_sound.remove()
+        power_sword_sound = null
     }
 }
 
 function rapidBladeSound(){
-    var rapid_blade = new sound("src/sound/rapid_blade.wav")
+    var rapid_blade = new Audio("src/sound/rapid_blade.wav")
     rapid_blade.play()
     rapid_blade.onended = function(){
-        this.currentSrc = null
-        this.src = ""
-        this.srcObject = null
-        this.remove()
+        rapid_blade.currentSrc = null
+        rapid_blade.src = ""
+        rapid_blade.srcObject = null
+        rapid_blade.remove()
+        rapid_blade = null
     }
 }
 
 function shieldGrabSound(){
-    var shield_grab_sound = new sound("./src/sound/shield_grab_sond.wav")
+    var shield_grab_sound = new Audio("./src/sound/shield_grab_sond.wav")
     shield_grab_sound.play()
     shield_grab_sound.onended = function(){
-        this.currentSrc = null
-        this.src = ""
-        this.srcObject = null
-        this.remove()
+        shield_grab_sound.currentSrc = null
+        shield_grab_sound.src = ""
+        shield_grab_sound.srcObject = null
+        shield_grab_sound.remove()
+        shield_grab_sound = null
     }
 }
 
@@ -97,10 +103,11 @@ function runSound(){
     //var run_sound = new sound("src/sound/run_sound.wav")
     run_sound.play()
     run_sound.onended = function(){
-        this.currentSrc = null
-        this.src = ""
-        this.srcObject = null
-        this.remove()
+        run_sound.currentSrc = null
+        run_sound.src = ""
+        run_sound.srcObject = null
+        run_sound.remove()
+        run_sound = null
     }
 }
 

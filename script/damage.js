@@ -196,6 +196,10 @@ function damage_action(damage){
 }
 
 function enemyDamage(damage, player){
+
+    if(player == null){
+        return
+    }
     
     if (square_colision_area(damage, player)) {
 
