@@ -126,7 +126,7 @@ function keyCodeDown(keyCode){
                 keys.attack.pressed = true      
                 lastKey = 'attack'
                 player.isAttack = true
-                console.log('keydown:'+keyCode)
+                //console.log('keydown:'+keyCode)
 
                 player.attackCoolDown = player.attack_speed
                 swordSound()
@@ -628,7 +628,7 @@ function gamepadHandler(event, connecting) {
 
     if (connecting) {
         gamepads[gamepad.index] = gamepad;
-        console.log('gamepadconnected')
+        console.log('gamepad_connected')
     } else {
         delete gamepads[gamepad.index];
     }
@@ -737,15 +737,15 @@ function pad1Loop() {
     }
 
     if (buttonPressed(gp.buttons[8])) {
-        console.log('b8')
+        //console.log('b8')
     } else if (buttonPressed(gp.buttons[9])) {
-        console.log('b9')
+        //console.log('b9')
     }
 
     if (buttonPressed(gp.buttons[10])) {
-        console.log('b10')
+        //console.log('b10')
     } else if (buttonPressed(gp.buttons[11])) {
-        console.log('b11')
+        //console.log('b11')
     }  
 }
 
@@ -837,7 +837,7 @@ function pad2Loop() {
 
     //
     if (buttonPressed(gp.buttons[7])) {
-        console.log(7)
+        //console.log(7)
         //keyCodeDown(85)
     } else {
         //keyCodeUp(85)
@@ -845,7 +845,7 @@ function pad2Loop() {
 
     //
     if (buttonPressed(gp.buttons[8])) {
-        console.log(8)
+        //console.log(8)
         //keyCodeDown(85)
     } else {
         //keyCodeUp(85)
@@ -860,7 +860,7 @@ function pad2Loop() {
 
     //
     if (buttonPressed(gp.buttons[10])) {
-        console.log(10)
+        //console.log(10)
         //keyCodeDown(85)
     } else {
         //keyCodeUp(85)

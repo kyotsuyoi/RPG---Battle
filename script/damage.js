@@ -115,7 +115,7 @@ class Damage{
     }
 
     draw(){
-        // if(this.type == 'power_blade'){
+        // if(this.owner_id == 'p1'){
         //     context.fillStyle = 'red'
         // }else{
         //     context.fillStyle = 'green'
@@ -314,6 +314,9 @@ function enemyDamage(damage, player){
 
 function playerDamage(damage){
     enemies.forEach(enemy => {
+        if(damage.owner == 'cpu'){
+            console.log('wrong damage detected')
+        }
         if (square_colision_area(damage, enemy)) {
             
             //this is to not double damage
