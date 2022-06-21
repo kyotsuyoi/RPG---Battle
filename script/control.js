@@ -72,7 +72,7 @@ function keyCodeDown(keyCode){
     
     //console.log('keydown:'+keyCode) 
     switch (keyCode){
-
+        
         //Start Player 1 -----------------------------------
         case 38:
             if(!keys.up.pressed && !keys.down.pressed){
@@ -124,7 +124,11 @@ function keyCodeDown(keyCode){
 
                 player.attackCoolDown = player.attack_speed
 
-                damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', side : player.side}); 
+                damage = new Damage({
+                    x : player.position.x, y : player.position.y, 
+                    owner_id : 'p1', owner : 'player', side : player.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                }); 
                 damages.push(damage)   
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword_1', side : player.side})
                 weapons.push(weapon)
@@ -152,7 +156,11 @@ function keyCodeDown(keyCode){
                     player.sp -= 40
                 }
                      
-                damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p1', owner : 'player', type : 'power_blade', side : player.side}); 
+                damage = new Damage({
+                    x : player.position.x, y : player.position.y, 
+                    owner_id : 'p1', owner : 'player', type : 'power_blade', side : player.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                }); 
                 damages.push(damage)                
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword_1', side : player.side})
                 weapons.push(weapon)
@@ -196,14 +204,18 @@ function keyCodeDown(keyCode){
                     player.sp -= 20
                 }
 
-                damage = new Damage({x : player.position.x, y : player.position.y, owner_id : 'p2', owner : 'player', type : 'rapid_blade', side : player.side}); 
+                damage = new Damage({
+                    x : player.position.x, y : player.position.y, 
+                    owner_id : 'p1', owner : 'player', type : 'rapid_blade', side : player.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                }); 
                 damages.push(damage)
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p2', type : 'sword_2', side : player.side})
                 weapons.push(weapon)
             }
         break
         //End Player 1 -----------------------------------
-
+            //87 83 65 68 
         //Start Player 2 -----------------------------------
         case 87:
             if(!keys2.up.pressed && !keys2.down.pressed){
@@ -255,7 +267,11 @@ function keyCodeDown(keyCode){
 
                 player2.attackCoolDown = player2.attack_speed
                      
-                damage = new Damage({x : player2.position.x, y : player2.position.y, owner_id : 'p2', owner : 'player2', side : player2.side});
+                damage = new Damage({
+                    x : player2.position.x, y : player2.position.y, 
+                    owner_id : 'p2', owner : 'player2', side : player2.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                });
                 damages.push(damage)   
                 weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
                 weapons.push(weapon)
@@ -282,7 +298,11 @@ function keyCodeDown(keyCode){
                     player2.sp -= 40
                 }
 
-                damage = new Damage({x : player2.position.x, y : player2.position.y, owner_id : 'p2', owner : 'player2', type : 'power_blade', side : player2.side}); 
+                damage = new Damage({
+                    x : player2.position.x, y : player2.position.y, 
+                    owner_id : 'p2', owner : 'player2', type : 'power_blade', side : player2.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                }); 
                 damages.push(damage)
                 weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
                 weapons.push(weapon)
@@ -327,7 +347,11 @@ function keyCodeDown(keyCode){
                     player2.sp -= 20
                 }
 
-                damage = new Damage({x : player2.position.x, y : player2.position.y, owner_id : 'p2', owner : 'player2', type : 'rapid_blade', side : player2.side}); 
+                damage = new Damage({
+                    x : player2.position.x, y : player2.position.y, 
+                    owner_id : 'p2', owner : 'player2', type : 'rapid_blade', side : player2.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                }); 
                 damages.push(damage)
                 weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
                 weapons.push(weapon)
@@ -528,26 +552,27 @@ function gamepadHandler(event, connecting) {
     }
 }
 
-window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); }, false);
-window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); }, false);
+window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); })
+window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); })
 
 function buttonPressed(b) {
     //console.log(b)
     if (typeof(b) == "object") {
-        return b.pressed;
+        return b.pressed
     }
-    return b == 1.0;
+    return b == 1.0
 }
 
-function padLoop() {
-    var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+function pad1Loop() {
+    var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : [])
     if (!gamepads) {
-        return;
+        return
     }
 
-    var gp = gamepads[0];
+    var gp = gamepads[0]
     if(gp==null)return
 
+    //console.log(gp)
     //left
     if (buttonPressed(gp.buttons[14])) {
         keyCodeDown(37)
@@ -590,6 +615,7 @@ function padLoop() {
         keyCodeUp(97)
     }
 
+    //b
     if (buttonPressed(gp.buttons[1])) {
         keyCodeDown(101)
     } else {
@@ -605,16 +631,16 @@ function padLoop() {
 
     //lb
     if (buttonPressed(gp.buttons[4])) {
-        keyCodeDown(97)
+        //keyCodeDown(97)
     } else {
-        keyCodeUp(97)
+        //keyCodeUp(97)
     }
 
+    //rb
     if (buttonPressed(gp.buttons[5])) {
-        console.log('rb')
-        player.maxSpeed=10
+        
     }else{    
-        player.maxSpeed=4
+        
     }
 
     //lt
@@ -639,4 +665,84 @@ function padLoop() {
     } else if (buttonPressed(gp.buttons[11])) {
         console.log('b11')
     }  
+}
+
+function pad2Loop() {
+    var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : [])
+    if (!gamepads) {
+        return
+    }
+
+    var gp = gamepads[1]
+    if(gp==null)return
+    
+    //left
+    if (buttonPressed(gp.buttons[14])) {
+        keyCodeDown(65)
+    }else{
+        keyCodeUp(65)
+    }
+
+    //right
+    if (buttonPressed(gp.buttons[15])) {
+        keyCodeDown(68)
+    }else{
+        keyCodeUp(68)
+    }
+
+    //up
+    if (buttonPressed(gp.buttons[12])) {
+        keyCodeDown(87)
+    } else {
+        keyCodeUp(87)
+    }
+
+    //down
+    if (buttonPressed(gp.buttons[13])) {
+        keyCodeDown(83)
+    } else {
+        keyCodeUp(83)
+    }
+
+    //a
+    if (buttonPressed(gp.buttons[0])) {
+        keyCodeDown(72)
+    }else{
+        keyCodeUp(72)
+    }
+
+    //x
+    if (buttonPressed(gp.buttons[2])) {
+        keyCodeDown(71)
+    }else{
+        keyCodeUp(71)
+    }
+
+    //b
+    if (buttonPressed(gp.buttons[1])) {
+        keyCodeDown(74)
+    } else {
+        keyCodeUp(74)
+    }
+
+    //y
+    if (buttonPressed(gp.buttons[3])) {
+        keyCodeDown(89)
+    } else {
+        keyCodeUp(89)
+    }
+
+    //lb
+    if (buttonPressed(gp.buttons[4])) {
+        //keyCodeDown(72)
+    } else {
+        //keyCodeUp(72)
+    }
+
+    //lt
+    if (buttonPressed(gp.buttons[6])) {
+        keyCodeDown(85)
+    } else {
+        keyCodeUp(85)
+    }
 }

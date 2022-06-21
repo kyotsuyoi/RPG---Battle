@@ -15,7 +15,6 @@ class Enemy{
 
         this.frameTime = 100
         this.frames = 0
-        this.count = 0
 
         this.recoveryTime = 100     
         this.lastRecoveryTime = lastTimestamp
@@ -29,7 +28,10 @@ class Enemy{
         this.patrol = patrol //enable or disable patrol
         this.follow = follow //enable or disable follow
         this.knock_back = knock_back //enable or disable knock_back
-        this.type = type        
+        this.type = type   
+        this.is_stun = false   
+        this.stunLastTimestamp = lastTimestamp  
+        this.stunTime = 0
 
         this.attackCoolDown = 0
 
@@ -86,8 +88,8 @@ class Enemy{
     }
 
     draw(){
-        context.fillStyle = 'green'
-        context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // context.fillStyle = 'green'
+        // context.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         context.drawImage(          
             this.currentSprite, 
@@ -127,14 +129,12 @@ class Enemy{
         }
 
         if(!this.in_patrol && !this.in_battle){
-            this.frames = 0
-            this.count = 0            
+            this.frames = 0          
             this.lastTimestamp = lastTimestamp
         }
 
         if(this.frames > 3){            
             this.frames = 0
-            this.count = 0
             this.lastTimestamp = lastTimestamp
         }   
         
@@ -158,6 +158,14 @@ class Enemy{
 }
 
 function enemy_action(enemy){
+    if(enemy.stunTime > 0){
+        if(lastTimestamp - 500 > enemy.stunLastTimestamp){   
+            enemy.stunTime -= 1
+            enemy.lastTimestamp = lastTimestamp
+        }
+        return
+    }
+
     distance_x = Math.abs(player.position.x - enemy.position.x)
     distance_y = Math.abs(player.position.y - enemy.position.y)
 
@@ -221,6 +229,9 @@ function enemy_action(enemy){
 }
 
 function patrol(enemy){
+    if(!enemy.patrol){
+        return
+    }
     if(enemy.in_battle){
         enemy.patrol_time_wait = 1000              
         enemy.in_patrol = false 
@@ -247,7 +258,7 @@ function patrol(enemy){
         if(enemy.patrol_y < 0){
             enemy.patrol_y = 0
         }
-        console.log('patrol')
+        //console.log('patrol')
     }else{
         if((Math.round(enemy.patrol_x) == Math.round(enemy.position.x))
             && (Math.round(enemy.patrol_y) == Math.round(enemy.position.y))
@@ -304,7 +315,8 @@ function patrol(enemy){
     }
 }
 
-function hunt(enemy, player, distance_x, distance_y){
+function hunt(enemy, player, distance_x, distance_y){    
+
     //follow right
     if(player.position.x > enemy.position.x + enemy.width 
         //&& player.position.x - (enemy.position.x + enemy.width) < 100
@@ -357,6 +369,10 @@ function hunt(enemy, player, distance_x, distance_y){
 
     if(enemy.in_battle){
 
+        if(!enemy.follow){
+            return
+        }
+
         var en_r = (enemy.position.x + enemy.width/2)
         var p_r = (player.position.x + player.width/2)
 
@@ -374,12 +390,12 @@ function hunt(enemy, player, distance_x, distance_y){
         var up = Math.round(en_u - p_u)
         var down = Math.round(en_d - p_d)
         
-        context.font = "12px Arial";
-        context.fillStyle = 'black';
-        context.fillText('right:'+ right,2,20+20);
-        context.fillText('left:'+ left,2,20+40);
-        context.fillText('up:'+ up,2,20+60);
-        context.fillText('down:'+ down,2,20+80);
+        // context.font = "12px Arial";
+        // context.fillStyle = 'black';
+        // context.fillText('right:'+ right,2,20+20);
+        // context.fillText('left:'+ left,2,20+40);
+        // context.fillText('up:'+ up,2,20+60);
+        // context.fillText('down:'+ down,2,20+80);
 
         var distance = [
             { side: 'right', value: right },
@@ -442,26 +458,42 @@ function attack(enemy, player){
         
         switch (enemy.side){
             case 'up':                        
-                damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'up'}); 
+                damage = new Damage({
+                    x : enemy.position.x, y : enemy.position.y, 
+                    owner_id : enemy.id, owner : 'cpu', side : 'up', 
+                    character_width : enemy.width, character_height: enemy.height, lastTimestamp : lastTimestamp
+                }); 
                 damages.push(damage)                   
                 enemy.currentCropHeight = 46*3
             break
 
             case enemy.side = 'down':
-                damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'down'}); 
+                damage = new Damage({
+                    x : enemy.position.x, y : enemy.position.y, 
+                    owner_id : enemy.id, owner : 'cpu', side : 'down', 
+                    character_width : enemy.width, character_height: enemy.height, lastTimestamp : lastTimestamp
+                }); 
                 damages.push(damage)                   
                 enemy.currentCropHeight = 46*0
             break
 
             case enemy.side = 'left':
-                damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'left'}); 
+                damage = new Damage({
+                    x : enemy.position.x, y : enemy.position.y, 
+                    owner_id : enemy.id, owner : 'cpu', side : 'left', 
+                    character_width : enemy.width, character_height: enemy.height, lastTimestamp : lastTimestamp
+                }); 
                 damages.push(damage)
                         
                 enemy.currentCropHeight = 46*2
             break
 
             case enemy.side = 'right':
-                damage = new Damage({x : enemy.position.x, y : enemy.position.y, owner_id : enemy.id, owner : 'cpu', side : 'right'}); 
+                damage = new Damage({
+                    x : enemy.position.x, y : enemy.position.y, 
+                    owner_id : enemy.id, owner : 'cpu', side : 'right', 
+                    character_width : enemy.width, character_height: enemy.height, lastTimestamp : lastTimestamp
+                }); 
                 damages.push(damage)
                         
                 enemy.currentCropHeight = 46*1  

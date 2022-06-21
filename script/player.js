@@ -119,8 +119,8 @@ class Player{
     }
 
     draw(){
-        context.fillStyle = 'blue'
-        context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // context.fillStyle = 'blue'
+        // context.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         //draw shield first (up only)
         if(this.side == 'up' && this.defending){
@@ -375,7 +375,6 @@ class Player{
         if (!this.isAttack && this.isWalking){
             if(this.frames > 3){
                 this.frames = 0
-                this.count = 0
                 if(this.isRunning){
                     this.frameTime = this.runningFrameTime
                 }else{

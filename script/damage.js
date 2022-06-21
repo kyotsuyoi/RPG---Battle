@@ -1,5 +1,5 @@
 class Damage{
-    constructor({id, x, y, owner_id, owner, type, side}){
+    constructor({id, x, y, owner_id, owner, type, side, character_width, character_height, lastTimestamp}){
         this.id = id
 
         this.position ={
@@ -12,15 +12,17 @@ class Damage{
         }
         this.width = 42
         this.height = 42
-        this.speed = 0.6
+        this.speed = 4
         this.targetRange = 150 
 
         this.lastDamage = new Array() //saves id of target that has already taken damage
 
+        this.frameTime = 30
         this.frames = 0
-        this.count = 0
         this.time = 10
         this.damageCount = 1//for mult damages
+        this.lastTimestamp = lastTimestamp
+        this.positionTimestamp = lastTimestamp
 
         this.owner = owner
         this.owner_id = owner_id
@@ -29,6 +31,7 @@ class Damage{
         this.power = 8 //knock back only
         this.bonus_attack = 0
         this.bonus_dexterity = 0
+        this.stun = 10
 
         this.sprites = {
             sprite : createImage('img/sword_attack.png'),
@@ -47,6 +50,8 @@ class Damage{
                 this.height = 100
                 this.sprites.sprite = createImage('img/power_sword_attack.png')
                 this.time = 60
+                this.speed = 1.5
+                this.stun = 50
             break
 
             case 'rapid_blade':
@@ -57,8 +62,10 @@ class Damage{
                 this.width = 50
                 this.height = 50
                 this.sprites.sprite = createImage('img/power_sword_attack.png')
-                this.time = 6
+                this.time = 10
                 this.damageCount = 3
+                this.speed = 2.5
+                this.stun = 30
             break
         }
 
@@ -69,27 +76,31 @@ class Damage{
         this.side = side
         switch (side){
             case 'up':
-                this.position.x = (x + 42 /2) - (this.height/2)
-                this.position.y = y - this.height
+                this.position.x = (x + character_width /2) - (this.height/2)
+                this.position.y = y //- this.height
                 this.currentCropHeight = 42*2
+                this.velocity.y = -this.speed
             break
 
             case 'down':
-                this.position.x = (x + 42 /2) - (this.height/2)
-                this.position.y = y + 42 
+                this.position.x = (x + character_width /2) - (this.height/2)
+                this.position.y = y //+ character_height 
                 this.currentCropHeight = 42*3
+                this.velocity.y = this.speed
             break
 
             case 'left':
-                this.position.x = x - this.width
-                this.position.y = this.position.y = (y + 42 /2) - (this.height/2) 
+                this.position.x = x - this.width/2 + character_width /2//- this.width
+                this.position.y = this.position.y = (y + character_height /2) - (this.height/2) 
                 this.currentCropHeight = 0
+                this.velocity.x = -this.speed
             break
 
             case 'right':
-                this.position.x = x + 42 
-                this.position.y = (y + 42 /2) - (this.height/2)
+                this.position.x = x - this.width/2 + character_width /2//+ character_width 
+                this.position.y = (y + character_height /2) - (this.height/2)
                 this.currentCropHeight = 42
+                this.velocity.x = this.speed
             break
         }
     }
@@ -116,24 +127,22 @@ class Damage{
     }
 
     update(){
-        this.count++
-        if(this.type == 'power_blade'){
-            if(this.count==5 || this.count==10 || this.count==20 || this.count==30){
-                this.frames++
-            }
-        }else
-        if (this.count==3 || this.count==6 || this.count==9 || this.count==12){
-            this.frames++
+        if(lastTimestamp - this.frameTime > this.lastTimestamp){
+            this.frames++            
+            this.lastTimestamp = lastTimestamp
         }
 
-        // if (this.frames > 3){  
-        //     this.frames = 0
-        //     this.count = 0
-        // }
+        if(this.frames > 3){            
+            this.frames = 0
+            this.lastTimestamp = lastTimestamp
+        } 
 
+        if(lastTimestamp - 2 > this.positionTimestamp){            
+            this.position.x += this.velocity.x
+            this.position.y += this.velocity.y
+            this.positionTimestamp = lastTimestamp
+        }
         this.draw()
-        this.position.x += this.velocity.x
-        this.position.y += this.velocity.y
     }
 }
 
@@ -166,33 +175,46 @@ function damage_action(damage){
         damage.time -= 1
         //damage.draw()
 
-        if(damage.owner == "player" || damage.owner == "player2"){
+        if(damage.owner == 'player' || damage.owner == 'player2'){
             playerDamage(damage)
         }  
         
-        if(damage.owner == "cpu"){
-            enemyDamage(player)
-            enemyDamage(player2)
+        if(damage.owner == 'cpu'){
+            enemyDamage(damage, player)
+            enemyDamage(damage, player2)
         }
     }
 }
 
-function enemyDamage(player){
+function enemyDamage(damage, player){
+    
     if (square_colision_area(damage, player)) {
 
-        var p = damage.lastDamage.filter(element => element == player.id)
-        if(p == 'p1' || p == 'p2'){
+        var id = damage.lastDamage.filter(element => element == player.id)
+        if(id == 'p1' || id == 'p2'){
             return
         }
         damage.lastDamage.push(player.id)
 
-        var enemy = enemies.find(element => element.id == damage.owner_id)   
+        var enemy = enemies.find(element => element.id == damage.owner_id)  
+        
+        //Unknown problem
+        if(enemy == undefined){
+            console.log('ERROR: undefined enemy')
+            return
+        }   
+
         var is_hit = false
 
         if(enemy != undefined){
             is_hit = dexterity_vs_flee(enemy.dexterity, player.agility)
-        } 
             
+            if(player.defending){
+                is_hit = true
+            }
+        } 
+
+
         if(is_hit){    
 
             var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.defense)
@@ -212,6 +234,7 @@ function enemyDamage(player){
 
                 }else{
                     player.stamina = player.stamina - result/2
+                    damages.pop(damage)
                 }  
                 
                 player.staminaCoolDown = 50
@@ -228,39 +251,39 @@ function enemyDamage(player){
 
             //console.log('enemy_damage:'+result)
             
-            // switch (damage.side){
-            //     case 'up': 
-            //         if(player.position.y <= 0){
-            //             player.position.y = 0
-            //         }else{
-            //             player.position.y -= knock_back(damage.power, enemy.power, player.power)
-            //         }                      
-            //     break
+            switch (damage.side){
+                case 'up': 
+                    if(player.position.y <= 0){
+                        player.position.y = 0
+                    }else{
+                        player.position.y -= knock_back(damage.power, enemy.power, player.power)
+                    }                      
+                break
 
-            //     case 'down':
-            //         if(player.position.y + player.height >= background.height){
-            //             player.position.y = background.height - player.height
-            //         }else{
-            //             player.position.y += knock_back(damage.power, enemy.power, player.power)
-            //         }
-            //     break
+                case 'down':
+                    if(player.position.y + player.height >= background.height){
+                        player.position.y = background.height - player.height
+                    }else{
+                        player.position.y += knock_back(damage.power, enemy.power, player.power)
+                    }
+                break
 
-            //     case 'left':
-            //         if(player.position.x <= 0){
-            //             player.position.x = 0
-            //         }else{
-            //             player.position.x -= knock_back(damage.power, enemy.power, player.power)
-            //         }
-            //     break
+                case 'left':
+                    if(player.position.x <= 0){
+                        player.position.x = 0
+                    }else{
+                        player.position.x -= knock_back(damage.power, enemy.power, player.power)
+                    }
+                break
 
-            //     case 'right':
-            //         if(player.position.x + player.width >= background.width){
-            //             player.position.x = background.width - player.width
-            //         }else{
-            //             player.position.x += knock_back(damage.power, enemy.power, player.power)
-            //         }
-            //     break                    
-            // }
+                case 'right':
+                    if(player.position.x + player.width >= background.width){
+                        player.position.x = background.width - player.width
+                    }else{
+                        player.position.x += knock_back(damage.power, enemy.power, player.power)
+                    }
+                break                    
+            }
 
         }else{
             display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'yellow', text : 'MISS', type : 'damage'})
@@ -305,7 +328,8 @@ function playerDamage(damage){
                     break
                 }  
 
-                enemy.hp -= result                     
+                enemy.hp -= result   
+                enemy.stunTime = damage.stun                  
                 display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'red', text : result, type : 'damage'})
                 displays.push(display)
 
