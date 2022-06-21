@@ -21,10 +21,10 @@ class Weapon{
         var sprite = undefined
         switch(type){
             case 'sword_1':
-                sprite = createImage('img/sword_1.png')
+                sprite = createImage('src/img/sword_1.png')
                 break
             case 'sword_2':
-                sprite = createImage('img/sword_2.png')
+                sprite = createImage('src/img/sword_2.png')
                 break
         }
 

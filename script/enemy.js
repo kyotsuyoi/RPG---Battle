@@ -48,7 +48,7 @@ class Enemy{
 
         switch(type){
             case 'thief':
-                this.sprites.sprite = createImage('img/thief_male.png') 
+                this.sprites.sprite = createImage('src/img/thief_male.png') 
                 this.power = 11
                 this.agility = 6
                 this.dexterity = 10
@@ -56,7 +56,7 @@ class Enemy{
             break
 
             case 'thief_master':
-                this.sprites.sprite = createImage('img/thief_master_male.png') 
+                this.sprites.sprite = createImage('src/img/thief_master_male.png') 
                 this.power = 12
                 this.agility = 8
                 this.dexterity = 18

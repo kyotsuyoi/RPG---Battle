@@ -7,7 +7,7 @@ class Roof {
         this.width = 45
         this.height = 45
         
-        this.sprite = createImage('img/path_and_object.png')
+        this.sprite = createImage('src/img/path_and_object.png')
 
         this.currentSprite = this.sprite
         this.cropWidth = cropWidth

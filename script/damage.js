@@ -34,7 +34,7 @@ class Damage{
         this.stun = 10
 
         this.sprites = {
-            sprite : createImage('img/sword_attack.png'),
+            sprite : createImage('src/img/sword_attack.png'),
             cropWidth : 42,
             width : this.width            
         }
@@ -47,7 +47,7 @@ class Damage{
                 this.bonus_dexterity = 5
                 this.width = 100
                 this.height = 100
-                this.sprites.sprite = createImage('img/power_sword_attack.png')
+                this.sprites.sprite = createImage('src/img/power_sword_attack.png')
                 this.time = 60
                 this.speed = 1.5
                 this.stun = 50
@@ -59,7 +59,7 @@ class Damage{
                 this.bonus_dexterity = 3
                 this.width = 50
                 this.height = 50
-                this.sprites.sprite = createImage('img/power_sword_attack.png')
+                this.sprites.sprite = createImage('src/img/power_sword_attack.png')
                 this.time = 10
                 this.damageCount = 3
                 this.speed = 2.5
@@ -72,7 +72,7 @@ class Damage{
                 this.bonus_dexterity = 10
                 this.width = 100
                 this.height = 100
-                this.sprites.sprite = createImage('img/power_sword_attack.png')
+                this.sprites.sprite = createImage('src/img/power_sword_attack.png')
                 this.time = 5
                 this.speed = 0
                 this.stun = 100

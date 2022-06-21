@@ -7,32 +7,32 @@ class Platform {
         this.width = 42
         this.height = 42        
 
-        this.sprite = createImage('img/wall01.png')
+        this.sprite = createImage('src/img/wall01.png')
         this.spriteType = spriteType
 
         switch(spriteType){
             case 'wood_axe':
                 this.width = 32
                 this.height = 32
-                this.sprite = createImage('img/path_and_object.png')
+                this.sprite = createImage('src/img/path_and_object.png')
             break
 
             case 'cutted_wood':
                 this.width = 32
                 this.height = 32
-                this.sprite = createImage('img/path_and_object.png')
+                this.sprite = createImage('src/img/path_and_object.png')
             break
 
             case 'grain_sack':
                 this.width = 32
                 this.height = 32
-                this.sprite = createImage('img/path_and_object.png')
+                this.sprite = createImage('src/img/path_and_object.png')
             break
             
             case 'open_grain_sack':
                 this.width = 32
                 this.height = 32
-                this.sprite = createImage('img/path_and_object.png')
+                this.sprite = createImage('src/img/path_and_object.png')
             break
         }
 

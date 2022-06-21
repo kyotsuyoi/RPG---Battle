@@ -81,12 +81,12 @@ class Player{
 
             this.sprites = {
                 character : {
-                    sprite : createImage('img/knight_female.png'),
+                    sprite : createImage('src/img/knight_female.png'),
                     cropWidth : 0,
                     width : this.width
                 },
                 shield : {
-                    sprite : createImage('img/shield_1.png'),
+                    sprite : createImage('src/img/shield_1.png'),
                     cropWidth : 45,
                     width : 45
                 }
@@ -102,12 +102,12 @@ class Player{
 
             this.sprites = {
                 character : {
-                    sprite : createImage('img/knight_male.png'),
+                    sprite : createImage('src/img/knight_male.png'),
                     cropWidth : 0,
                     width : this.width
                 },
                 shield : {
-                    sprite : createImage('img/shield_2.png'),
+                    sprite : createImage('src/img/shield_2.png'),
                     cropWidth : 45,
                     width : 45
                 }
