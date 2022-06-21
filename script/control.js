@@ -125,7 +125,7 @@ function keyCodeDown(keyCode){
                 keys.attack.pressed = true      
                 lastKey = 'attack'
                 player.isAttack = true
-                //console.log('keydown:'+keyCode)
+                console.log('keydown:'+keyCode)
 
                 player.attackCoolDown = player.attack_speed
                 swordSound()
@@ -471,6 +471,7 @@ function keyCodeUp(keyCode){
         case 98:
             keys.run.pressed = false   
             player.isRunning = false
+            runSoundStop()
         break
 
         case 101:
@@ -535,6 +536,7 @@ function keyCodeUp(keyCode){
         case 72:
             keys2.run.pressed = false   
             player2.isRunning = false
+            runSoundStop()
         break
 
         case 72:
