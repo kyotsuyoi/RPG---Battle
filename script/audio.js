@@ -64,14 +64,14 @@ function shieldSound(){
 }
 
 function powerSwordSound(){
-    var power_sword_sound = new Audio("src/sound/power_sword_sound.wav")
-    power_sword_sound.play()
-    power_sword_sound.onended = function(){
-        power_sword_sound.currentSrc = null
-        power_sword_sound.src = ""
-        power_sword_sound.srcObject = null
-        power_sword_sound.remove()
-        power_sword_sound = null
+    var power_blade_sound = new Audio("src/sound/power_blade_sound.wav")
+    power_blade_sound.play()
+    power_blade_sound.onended = function(){
+        power_blade_sound.currentSrc = null
+        power_blade_sound.src = ""
+        power_blade_sound.srcObject = null
+        power_blade_sound.remove()
+        power_blade_sound = null
     }
 }
 
@@ -88,7 +88,7 @@ function rapidBladeSound(){
 }
 
 function shieldGrabSound(){
-    var shield_grab_sound = new Audio("./src/sound/shield_grab_sond.wav")
+    var shield_grab_sound = new Audio("./src/sound/shield_grab_sound.wav")
     shield_grab_sound.play()
     shield_grab_sound.onended = function(){
         shield_grab_sound.currentSrc = null
@@ -114,4 +114,16 @@ function runSound(){
 function runSoundStop(){
     run_sound.stop();   
     //run_sound = new sound("src/sound/run_sound.wav")
+}
+
+function screamSound(){
+    var scream_sound = new Audio("./src/sound/scream_sound.wav")
+    scream_sound.play()
+    scream_sound.onended = function(){
+        scream_sound.currentSrc = null
+        scream_sound.src = ""
+        scream_sound.srcObject = null
+        scream_sound.remove()
+        scream_sound = null
+    }
 }

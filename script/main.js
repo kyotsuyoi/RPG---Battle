@@ -349,6 +349,9 @@ function animate(timestamp){
         damage_action(damage)   
         damage.update() 
     })
+
+    //to kill enemies
+    enemies = enemies.filter(enemy => enemy.hp > 0)
     
     pad1Loop()
     pad2Loop()
@@ -359,9 +362,7 @@ function animate(timestamp){
 
     enemies.forEach(enemy =>{        
         enemy_action(enemy)  
-    }) 
-
-    enemies = enemies.filter(enemy => enemy.hp > 0)
+    })    
     
     weapons.forEach(weapon => {
         if(weapon.side == 'up'){

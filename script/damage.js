@@ -349,7 +349,10 @@ function playerDamage(damage){
 
                 enemy.hp -= result   
                 enemy.stunTime = damage.stun    
-                swordSlashSound()              
+                swordSlashSound()    
+                if(enemy.hp <= 0){
+                    screamSound()
+                }          
                 display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'red', text : result, type : 'damage'})
                 displays.push(display)
 
