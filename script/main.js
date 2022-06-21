@@ -350,6 +350,9 @@ function animate(timestamp){
         damage.update() 
     })
 
+    //to remove finished damages 
+    damages = damages.filter(damage => damage.finished == false)
+
     //to kill enemies
     enemies = enemies.filter(enemy => enemy.hp > 0)
     

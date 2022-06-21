@@ -23,6 +23,7 @@ class Damage{
         this.damageCount = 1//for mult damages
         this.lastTimestamp = lastTimestamp
         this.positionTimestamp = lastTimestamp
+        this.finished = false
 
         this.owner = owner
         this.owner_id = owner_id
@@ -160,12 +161,12 @@ function damage_action(damage){
         
         if(damage.type == 'rapid_blade'){ 
             if(damage.damageCount > 1){
-                switch(damage.owner){                
-                    case 'player':
+                switch(damage.owner_id){                
+                    case 'p1':
                         weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p', type : 'sword_2', side : player.side})
                         weapons.push(weapon)
                     break
-                    case 'player2':
+                    case 'p2':
                         weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
                         weapons.push(weapon)
                     break
@@ -174,17 +175,19 @@ function damage_action(damage){
                 damage.damageCount -= 1
                 damage.time = 6
             }else{
-                damages.pop(damage)  
+                //damages.pop(damage)  
+                damage.finished = true
             }                       
         }else{
-            damages.pop(damage)
+            //damages.pop(damage)
+            damage.finished = true
         }
 
     }else{
         damage.time -= 1
         //damage.draw()
 
-        if(damage.owner == 'player' || damage.owner == 'player2'){
+        if(damage.owner_id == 'p1' || damage.owner_id == 'p2'){
             playerDamage(damage)
         }  
         
@@ -202,33 +205,27 @@ function enemyDamage(damage, player){
     }
     
     if (square_colision_area(damage, player)) {
+          
+        //If enemy is dead
+        var enemy = enemies.find(element => element.id == damage.owner_id)
+        if(enemy == undefined){
+            //console.log('undefined enemy')
+            return
+        } 
 
+        //if the player has already been hit
         var id = damage.lastDamage.filter(element => element == player.id)
         if(id == 'p1' || id == 'p2'){
             return
         }
-        damage.lastDamage.push(player.id)
+        damage.lastDamage.push(player.id)          
 
-        var enemy = enemies.find(element => element.id == damage.owner_id)  
-        
-        //Unknown problem
-        if(enemy == undefined){
-            console.log('ERROR: undefined enemy')
-            return
-        }   
+        var is_hit = dexterity_vs_flee(enemy.dexterity, player.agility)            
+        if(player.defending){
+            is_hit = true
+        }
 
-        var is_hit = false
-
-        if(enemy != undefined){
-            is_hit = dexterity_vs_flee(enemy.dexterity, player.agility)
-            
-            if(player.defending){
-                is_hit = true
-            }
-        } 
-
-
-        if(is_hit){    
+        if(is_hit){   
 
             var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.defense)
             if(player.defending){ 
@@ -249,7 +246,7 @@ function enemyDamage(damage, player){
                 }else{
                     shieldSound()
                     player.stamina = player.stamina - result/2
-                    damages.pop(damage)
+                    //damages.pop(damage)
                 }  
                 
                 player.staminaCoolDown = 50
@@ -327,22 +324,22 @@ function playerDamage(damage){
             damage.lastDamage.push(enemy.id)
             
             var is_hit = false
-            switch(damage.owner){
-                case 'player':
+            switch(damage.owner_id){
+                case 'p1':
                     is_hit = dexterity_vs_flee(player.dexterity + damage.bonus_dexterity, enemy.agility)
                 break
-                case 'player2':
+                case 'p2':
                     is_hit = dexterity_vs_flee(player.dexterity + damage.bonus_dexterity, enemy.agility)
                 break
             }                    
             
             if(is_hit){                        
                 var result = 0
-                switch(damage.owner){
-                    case 'player':
+                switch(damage.owner_id){
+                    case 'p1':
                         result = attack_vs_defense(player.attack + damage.bonus_attack, player.dexterity + damage.bonus_dexterity, enemy.defense)
                     break
-                    case 'player2':
+                    case 'p2':
                         result = attack_vs_defense(player2.attack + damage.bonus_attack, player2.dexterity + damage.bonus_dexterity, enemy.defense)
                     break
                 }  
@@ -360,8 +357,8 @@ function playerDamage(damage){
                     return
                 }
 
-                switch(damage.owner){
-                    case 'player':
+                switch(damage.owner_id){
+                    case 'p1':
                         switch (player.side){
                             case 'up':                        
                                 enemy.position.y -= knock_back(damage.power, player.power, enemy.power)
@@ -381,7 +378,7 @@ function playerDamage(damage){
                         }
                     break  
 
-                    case 'player2':
+                    case 'p2':
                         switch (player2.side){
                             case 'up':                        
                                 enemy.position.y -= knock_back(damage.power, player2.power, enemy.power)

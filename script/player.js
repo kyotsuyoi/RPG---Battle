@@ -37,7 +37,7 @@ class Player{
             this.agility = 8
             this.dexterity = 12
             this.vitality = 12
-            this.inteligence = 14
+            this.inteligence = 15
         }
 
         if(id == 'p2'){
