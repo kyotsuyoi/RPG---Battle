@@ -24,7 +24,7 @@ class Damage{
         this.lastTimestamp = lastTimestamp
         this.positionTimestamp = lastTimestamp
         this.finished = false
-        this.isKnockBack = false //enable or disable knock back
+        this.isKnockBack = true //enable or disable knock back
 
         this.owner = owner
         this.owner_id = owner_id
@@ -339,6 +339,7 @@ function enemyDamage(damage, player){
                     shieldSound()
                     player.stamina = player.stamina - stamina_vs_attack(player.defense, result)
                     //damages.pop(damage)
+                    damage.finished = true
                 }  
                 
                 player.staminaCoolDown = 50

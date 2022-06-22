@@ -241,7 +241,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'cure'
                 player.isAttack = true
 
-                player.cureCoolDown = 50   
+                player.cureCoolDown = 100   
                 cureSound()
 
                 if(player.sp <= 0){
@@ -433,7 +433,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'phanton_blade'
                 player2.isAttack = true
 
-                player2.phantonBladeCoolDown = 30    
+                player2.phantonBladeCoolDown = 120    
                 phantonBladeSound()            
 
                 if(player2.sp <= 0){

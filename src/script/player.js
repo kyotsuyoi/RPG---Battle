@@ -394,14 +394,23 @@ class Player{
         if(lastTimestamp - this.recoveryTime > this.lastRecoveryTime){
             if(this.hp < this.max_hp && this.hp > 0){
                 this.hp += this.hp_recovery
+                if(this.hp > this.max_hp){
+                    this.hp = this.max_hp
+                }
             }
     
             if(this.sp < this.max_sp){
                 this.sp += this.sp_recovery
+                if(this.sp > this.max_sp){
+                    this.sp = this.max_sp
+                }
             }
     
             if(this.stamina < this.max_stamina && this.staminaCoolDown <= 0){
                 this.stamina += 1
+                if(this.stamina > this.max_stamina){
+                    this.stamina = this.max_stamina
+                }
             }
             else{
                 this.staminaCoolDown -= 1

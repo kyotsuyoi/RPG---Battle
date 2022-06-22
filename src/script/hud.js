@@ -94,6 +94,7 @@ class Hud {
             var powerBladeCoolDown = player.powerBladeCoolDown
             var rapidBladeCoolDown = player.rapidBladeCoolDown
             var phantonBladeCoolDown = player.phantonBladeCoolDown
+            var cureCoolDown = player.cureCoolDown
         }
 
         if(this.id == 'p2' && player2 != null){
@@ -106,6 +107,7 @@ class Hud {
             var powerBladeCoolDown = player2.powerBladeCoolDown
             var rapidBladeCoolDown = player2.rapidBladeCoolDown
             var phantonBladeCoolDown = player2.phantonBladeCoolDown
+            var cureCoolDown = player2.cureCoolDown
         }
 
         //HP bar
@@ -161,9 +163,15 @@ class Hud {
         context.fillRect(this.position.x + 72, this.position.y - 20, bar_value, 16) 
 
         //Phanton Blade bar
-        var phantonBladeCoolDown_percent = Math.round(phantonBladeCoolDown * 100) / 30
+        var phantonBladeCoolDown_percent = Math.round(phantonBladeCoolDown * 100) / 120
         var bar_value = (16 * phantonBladeCoolDown_percent) / 100
-        context.fillStyle = '#000000'        
+        context.fillStyle = '#555555dd'        
+        context.fillRect(this.position.x + 97, this.position.y - 20, bar_value, 16) 
+
+        //Cure bar
+        var cureCoolDown_percent = Math.round(cureCoolDown * 100) / 100
+        var bar_value = (16 * cureCoolDown_percent) / 100
+        context.fillStyle = '#555555dd'        
         context.fillRect(this.position.x + 97, this.position.y - 20, bar_value, 16) 
         
     }
