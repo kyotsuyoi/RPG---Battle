@@ -65,7 +65,12 @@ function knock_back(damage_power, power_a, power_b){
 function hp_recovery(vitality){
     return 0.06 + (vitality/1000)
 }
+
 function sp_recovery(inteligence, dexterity){
     return 0.02 + (inteligence/500) + (dexterity/1000)
+}
+
+function stamina_vs_attack(attack_result){
+    return res = (attack_result/2)
 }
 

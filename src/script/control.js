@@ -27,6 +27,9 @@ const keys = {
     },
     rapid_blade : {
         pressed : false
+    },
+    cure : {
+        pressed : false
     }
 }
 
@@ -75,7 +78,7 @@ function keyCodeDown(keyCode){
     
     backgroundMusic()
     
-    //console.log('keydown:'+keyCode) 
+    console.log('keydown:'+keyCode) 
     
     //Start Player 1 -----------------------------------
     switch (keyCode){
@@ -226,6 +229,36 @@ function keyCodeDown(keyCode){
                 weapons.push(weapon)
             }
         break
+
+        //cure
+        case 104:
+            if(!keys.cure.pressed && player.cureCoolDown == 0){
+                if(player.sp - 40 < 0){
+                    return 
+                }
+
+                keys.cure.pressed = true      
+                lastKey2 = 'cure'
+                player.isAttack = true
+
+                player.cureCoolDown = 50   
+                cureSound()
+
+                if(player.sp <= 0){
+                    player.sp = 0
+                }else{
+                    player.sp -= 40
+                }
+                damage = new Damage({
+                    x : player.position.x, y : player.position.y, 
+                    owner_id : 'p1', owner : 'player', type : 'cure', side : player.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                }); 
+                damages.push(damage)
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p2', type : 'sword_2', side : player.side})
+                weapons.push(weapon)
+            }
+        break
         
     }
     //End Player 1 -----------------------------------
@@ -360,7 +393,7 @@ function keyCodeDown(keyCode){
         case 74:
             if(!keys2.rapid_blade.pressed && player2.rapidBladeCoolDown == 0){
 
-                if(player2.sp - 20 < 0){
+                if(player2.sp - 35 < 0){
                     return 
                 }
 
@@ -368,14 +401,13 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'rapid_blade'
                 player2.isAttack = true
 
-                player2.rapidBladeCoolDown = 18     
-                
+                player2.rapidBladeCoolDown = 18   
                 rapidBladeSound()
 
                 if(player2.sp <= 0){
                     player2.sp = 0
                 }else{
-                    player2.sp -= 20
+                    player2.sp -= 35
                 }
 
                 damage = new Damage({
@@ -391,7 +423,7 @@ function keyCodeDown(keyCode){
         
         //phanton_blade
         case 73:
-            if(!keys2.phanton_blade.pressed && player2.rapidBladeCoolDown == 0){
+            if(!keys2.phanton_blade.pressed && player2.phantonBladeCoolDown == 0){
 
                 if(player2.sp - 20 < 0){
                     return 
@@ -401,7 +433,8 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'phanton_blade'
                 player2.isAttack = true
 
-                player2.phantonBladeCoolDown = 30                
+                player2.phantonBladeCoolDown = 30    
+                phantonBladeSound()            
 
                 if(player2.sp <= 0){
                     player2.sp = 0
@@ -493,6 +526,10 @@ function keyCodeUp(keyCode){
 
         case 101:
             keys.rapid_blade.pressed = false 
+        break
+
+        case 104:
+            keys.cure.pressed = false 
         break
     }
         
@@ -720,9 +757,9 @@ function pad1Loop() {
 
     //rb
     if (buttonPressed(gp.buttons[5])) {
-        
+        keyCodeDown(104)
     }else{    
-        
+        keyCodeUp(104)
     }
 
     //lt

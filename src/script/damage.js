@@ -24,6 +24,7 @@ class Damage{
         this.lastTimestamp = lastTimestamp
         this.positionTimestamp = lastTimestamp
         this.finished = false
+        this.isKnockBack = false //enable or disable knock back
 
         this.owner = owner
         this.owner_id = owner_id
@@ -35,9 +36,12 @@ class Damage{
 
         this.sprites = {
             sprite : createImage('src/img/sword_attack.png'),
-            cropWidth : 42,
-            width : this.width            
+            width : this.width,
+            height : this.height               
         }
+        
+        this.currentCropWidth = 42
+        this.currentCropHeight = 0
 
         this.type = type   
         switch (type){
@@ -67,52 +71,79 @@ class Damage{
             break
             
             case 'phanton_blade':
-                this.power = 50
-                this.bonus_attack = 5
+                this.power = 0
+                this.bonus_attack = -10
                 this.bonus_dexterity = 10
                 this.width = 100
                 this.height = 100
-                this.sprites.sprite = createImage('src/img/power_sword_attack.png')
-                this.time = 5
+                this.sprites.sprite = createImage('src/img/phanton_blade_attack.png')
+                this.time = 80                
+                this.damageCount = 10
                 this.speed = 0
-                this.stun = 100
+                this.stun = 100                
+                this.currentCropWidth = 84
+                this.sprites.width = 84
+                this.sprites.height = 84
+                this.currentCropHeight = 0
+                this.isKnockBack = false
+            break
+
+            case 'cure':
+                this.power = 0
+                this.width = 100
+                this.height = 100
+                this.sprites.sprite = createImage('src/img/cure.png')
+                this.time = 30                
+                this.damageCount = 6
+                this.speed = 0
+                this.stun = 0                
+                this.currentCropWidth = 84
+                this.sprites.width = 84
+                this.sprites.height = 84
+                this.currentCropHeight = 0
+                this.isKnockBack = false
             break
         }
-
+        
         this.currentSprite = this.sprites.sprite
-        this.currentCropWidth = 42
-        this.currentCropHeight = 0
 
         this.side = side
-        switch (side){
-            case 'up':
-                this.position.x = (x + character_width /2) - (this.height/2)
-                this.position.y = y - this.height/2 + character_height /2//- this.width //- this.height
-                this.currentCropHeight = 42*2
-                this.velocity.y = -this.speed
-            break
+        if(type == 'phanton_blade' || type == 'cure'){
+            this.position.x = x - this.width/2 + character_width /2
+            this.position.y = (y + character_height /2) - (this.height/2) 
+            this.currentCropHeight = 0
 
-            case 'down':
-                this.position.x = (x + character_width /2) - (this.height/2)
-                this.position.y = y - this.height/2 + character_height /2 //+ character_height 
-                this.currentCropHeight = 42*3
-                this.velocity.y = this.speed
-            break
-
-            case 'left':
-                this.position.x = x - this.width/2 + character_width /2//- this.width
-                this.position.y = (y + character_height /2) - (this.height/2) 
-                this.currentCropHeight = 0
-                this.velocity.x = -this.speed
-            break
-
-            case 'right':
-                this.position.x = x - this.width/2 + character_width /2//+ character_width 
-                this.position.y = (y + character_height /2) - (this.height/2)
-                this.currentCropHeight = 42
-                this.velocity.x = this.speed
-            break
-        }
+        }else{
+            switch (side){
+                case 'up':
+                    this.position.x = (x + character_width /2) - (this.height/2)
+                    this.position.y = y - this.height/2 + character_height /2//- this.width //- this.height
+                    this.currentCropHeight = 42*2
+                    this.velocity.y = -this.speed
+                break
+    
+                case 'down':
+                    this.position.x = (x + character_width /2) - (this.height/2)
+                    this.position.y = y - this.height/2 + character_height /2 //+ character_height 
+                    this.currentCropHeight = 42*3
+                    this.velocity.y = this.speed
+                break
+    
+                case 'left':
+                    this.position.x = x - this.width/2 + character_width /2//- this.width
+                    this.position.y = (y + character_height /2) - (this.height/2) 
+                    this.currentCropHeight = 0
+                    this.velocity.x = -this.speed
+                break
+    
+                case 'right':
+                    this.position.x = x - this.width/2 + character_width /2//+ character_width 
+                    this.position.y = (y + character_height /2) - (this.height/2)
+                    this.currentCropHeight = 42
+                    this.velocity.x = this.speed
+                break
+            }
+        }       
     }
 
     draw(){
@@ -123,12 +154,31 @@ class Damage{
         // }
         // context.fillRect(this.position.x, this.position.y, this.width, this.height)
 
+        if(this.type == 'cure'){
+            // context.fillStyle = '#1b690f55'
+            // context.fillRect(this.position.x, this.position.y, this.width, this.height)
+            var radius = 50
+            context.beginPath()
+            context.arc(this.position.x + this.width/2, this.position.y + (this.height/2), radius, 0, 2 * Math.PI, false)
+            context.fillStyle = '#1b690f22'
+            context.fill()
+
+            // context.lineWidth = 2
+            // context.strokeStyle = 'black'
+            // context.stroke()             
+            
+            // context.beginPath()
+            // context.arc(player.position.x + player.width/2, player.position.y + player.height/2, 2, 0, 2 * Math.PI, false)
+            // context.fillStyle = 'black'
+            // context.fill()
+        }
+
         context.drawImage(          
             this.currentSprite, 
             this.currentCropWidth * this.frames,
             this.currentCropHeight,
-            this.currentCropWidth, //largura
-            42, //altura
+            this.sprites.width, //largura
+            this.sprites.height, //altura
             this.position.x, 
             this.position.y,
             this.width,
@@ -159,28 +209,63 @@ class Damage{
 function damage_action(damage){
     if(damage.time <= 0){
         
-        if(damage.type == 'rapid_blade'){ 
-            if(damage.damageCount > 1){
-                switch(damage.owner_id){                
-                    case 'p1':
-                        weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p', type : 'sword_2', side : player.side})
-                        weapons.push(weapon)
-                    break
-                    case 'p2':
-                        weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
-                        weapons.push(weapon)
-                    break
+        switch(damage.type){
+
+            case 'rapid_blade':
+                if(damage.damageCount > 1){
+                    switch(damage.owner_id){                
+                        case 'p1':
+                            weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p', type : 'sword_2', side : player.side})
+                            weapons.push(weapon)
+                        break
+                        case 'p2':
+                            weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
+                            weapons.push(weapon)
+                        break
+                    }  
+                    damage.lastDamage = new Array()
+                    damage.damageCount -= 1
+                    damage.time = 6
+                }else{
+                    //damages.pop(damage)  
+                    damage.finished = true
                 }  
-                damage.lastDamage = new Array()
-                damage.damageCount -= 1
-                damage.time = 6
-            }else{
-                //damages.pop(damage)  
+            break
+
+            case 'phanton_blade':
+                if(damage.damageCount > 1){
+                    switch(damage.owner_id){                
+                        case 'p1':
+                            weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p', type : 'sword_2', side : player.side})
+                            weapons.push(weapon)
+                        break
+                        case 'p2':
+                            weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
+                            weapons.push(weapon)
+                        break
+                    }  
+                    damage.lastDamage = new Array()
+                    damage.damageCount -= 1
+                    damage.time = 6
+                }else{
+                    //damages.pop(damage)  
+                    damage.finished = true
+                } 
+            break
+
+            case 'cure':
+                if(damage.damageCount > 1){ 
+                    damage.lastDamage = new Array()
+                    damage.damageCount -= 1
+                    damage.time = 20
+                }else{
+                    //damages.pop(damage)  
+                    damage.finished = true
+                } 
+            break
+
+            default:
                 damage.finished = true
-            }                       
-        }else{
-            //damages.pop(damage)
-            damage.finished = true
         }
 
     }else{
@@ -188,7 +273,14 @@ function damage_action(damage){
         //damage.draw()
 
         if(damage.owner_id == 'p1' || damage.owner_id == 'p2'){
-            playerDamage(damage)
+            if(damage.type == 'cure'){
+                playerCure(damage, player)
+                if(player2 != null){
+                    playerCure(damage, player2)
+                }                
+            }else{
+                playerDamage(damage)
+            }
         }  
         
         if(damage.owner == 'cpu'){
@@ -245,7 +337,7 @@ function enemyDamage(damage, player){
 
                 }else{
                     shieldSound()
-                    player.stamina = player.stamina - result/2
+                    player.stamina = player.stamina - stamina_vs_attack(player.defense, result)
                     //damages.pop(damage)
                 }  
                 
@@ -261,41 +353,41 @@ function enemyDamage(damage, player){
                 display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
                 displays.push(display)
             }
-
-            //console.log('enemy_damage:'+result)
             
-            switch (damage.side){
-                case 'up': 
-                    if(player.position.y <= 0){
-                        player.position.y = 0
-                    }else{
-                        player.position.y -= knock_back(damage.power, enemy.power, player.power)
-                    }                      
-                break
-
-                case 'down':
-                    if(player.position.y + player.height >= background.height){
-                        player.position.y = background.height - player.height
-                    }else{
-                        player.position.y += knock_back(damage.power, enemy.power, player.power)
-                    }
-                break
-
-                case 'left':
-                    if(player.position.x <= 0){
-                        player.position.x = 0
-                    }else{
-                        player.position.x -= knock_back(damage.power, enemy.power, player.power)
-                    }
-                break
-
-                case 'right':
-                    if(player.position.x + player.width >= background.width){
-                        player.position.x = background.width - player.width
-                    }else{
-                        player.position.x += knock_back(damage.power, enemy.power, player.power)
-                    }
-                break                    
+            if(damage.isKnockBack){
+                switch (damage.side){
+                    case 'up': 
+                        if(player.position.y <= 0){
+                            player.position.y = 0
+                        }else{
+                            player.position.y -= knock_back(damage.power, enemy.power, player.power)
+                        }                      
+                    break
+    
+                    case 'down':
+                        if(player.position.y + player.height >= background.height){
+                            player.position.y = background.height - player.height
+                        }else{
+                            player.position.y += knock_back(damage.power, enemy.power, player.power)
+                        }
+                    break
+    
+                    case 'left':
+                        if(player.position.x <= 0){
+                            player.position.x = 0
+                        }else{
+                            player.position.x -= knock_back(damage.power, enemy.power, player.power)
+                        }
+                    break
+    
+                    case 'right':
+                        if(player.position.x + player.width >= background.width){
+                            player.position.x = background.width - player.width
+                        }else{
+                            player.position.x += knock_back(damage.power, enemy.power, player.power)
+                        }
+                    break                    
+                }
             }
 
         }else{
@@ -353,7 +445,7 @@ function playerDamage(damage){
                 display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'red', text : result, type : 'damage'})
                 displays.push(display)
 
-                if(!enemy.knock_back){
+                if(!enemy.knock_back || !damage.isKnockBack){
                     return
                 }
 
@@ -404,4 +496,26 @@ function playerDamage(damage){
             }    
         }
     }) 
+}
+
+//damage is reversed to cure
+function playerCure(cure, player){
+    if(square_colision_area(cure, player)){
+
+        if(player.hp >= player.max_hp){
+            return
+        }
+        
+        var id = damage.lastDamage.filter(element => element == player.id)
+        if(id == 'p1' || id == 'p2'){
+            return
+        }
+        damage.lastDamage.push(player.id) 
+
+        var cure_value = player.max_hp/30
+        player.hp += cure_value
+        display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'green', text : Math.round(cure_value), type : 'damage'})
+        displays.push(display)
+ 
+    }
 }

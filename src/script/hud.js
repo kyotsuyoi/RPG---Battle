@@ -14,16 +14,17 @@ class Hud {
             this.position.x = 0 + 2
             this.position.y = 800 - this.height - 2
             this.face = createImage('src/img/knight_female_face.png')
+            this.sprite_spell = createImage('src/img/hud_spell.png')
         }
 
         if(id == 'p2'){
             this.position.x = 800 - this.width - 2
             this.position.y = 800 - this.height - 2
             this.face = createImage('src/img/knight_male_face.png')
+            this.sprite_spell = createImage('src/img/hud_spell2.png')
         }
         
         this.sprite = createImage('src/img/hud_large.png')
-        this.sprite_spell = createImage('src/img/hud_spell.png')
 
         this.currentSprite = this.sprite
         this.currentCropWidth = 0

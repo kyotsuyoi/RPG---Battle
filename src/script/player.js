@@ -30,8 +30,6 @@ class Player{
         this.defending = false
         this.isRunning = false
 
-        this.staminaCoolDown = 0
-
         if(id == 'p1'){
             this.power = 12
             this.agility = 8
@@ -65,10 +63,12 @@ class Player{
         this.hp_recovery = hp_recovery(this.vitality)       
         this.sp_recovery = sp_recovery(this.inteligence, this.dexterity)  
 
+        this.staminaCoolDown = 0
         this.attackCoolDown = 0
         this.powerBladeCoolDown = 0
         this.rapidBladeCoolDown = 0
         this.phantonBladeCoolDown = 0
+        this.cureCoolDown = 0
 
         this.side = 'down'
 
@@ -418,6 +418,9 @@ class Player{
             }
             if(this.phantonBladeCoolDown > 0){
                 this.phantonBladeCoolDown -= 1
+            }
+            if(this.cureCoolDown > 0){
+                this.cureCoolDown -= 1
             }
 
             this.lastRecoveryTime = lastTimestamp

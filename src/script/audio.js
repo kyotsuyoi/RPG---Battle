@@ -127,3 +127,27 @@ function screamSound(){
         scream_sound = null
     }
 }
+
+function phantonBladeSound(){
+    var phanton_blade_sound = new Audio("./src/sound/phanton_blade_sound.wav")
+    phanton_blade_sound.play()
+    phanton_blade_sound.onended = function(){
+        phanton_blade_sound.currentSrc = null
+        phanton_blade_sound.src = ""
+        phanton_blade_sound.srcObject = null
+        phanton_blade_sound.remove()
+        phanton_blade_sound = null
+    }
+}
+
+function cureSound(){
+    var cure_sound = new Audio("./src/sound/cure_sound.wav")
+    cure_sound.play()
+    cure_sound.onended = function(){
+        cure_sound.currentSrc = null
+        cure_sound.src = ""
+        cure_sound.srcObject = null
+        cure_sound.remove()
+        cure_sound = null
+    }
+}
