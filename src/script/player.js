@@ -332,11 +332,11 @@ class Player{
 
         this.speed = speed_value(this.agility)
 
+        //need adjust: stamina on timestamp
         if(this.isRunning && !this.defending && this.stamina > 0){
             this.speed = speed_value(this.agility)*2
             this.stamina -= 0.5
-        }
-        
+        }        
         if(this.defending){
             this.speed = speed_value(this.agility)/2
         }

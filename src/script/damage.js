@@ -326,8 +326,9 @@ function enemyDamage(damage, player){
                 if(res_stm < 0){
                     player.stamina = 0 
                     player.defending = false
-                    result += Math.round(res_stm)
-                    player.hp -= result   
+                    //result += Math.round(res_stm)
+                    //result += res_stm
+                    player.hp += res_stm  
                     if(player.hp <= 0){
                         player.hp = 0.0
                     }                       

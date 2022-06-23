@@ -339,6 +339,7 @@ function animate(timestamp){
         })
     })    
 
+    //to organize sprites layer (needs to calc height)
     enemies.sort((a,b) => a.position.y - b.position.y)
 
     enemies.forEach(enemy => {
@@ -383,8 +384,7 @@ function animate(timestamp){
         }  
     }else{
         player.update()
-    }
-      
+    }      
 
     weapons = weapons.filter(weapon => weapon.frames <= 3)
     weapons.forEach(weapon => {
@@ -409,10 +409,10 @@ function animate(timestamp){
         hud.draw()
     })
 
-    var dam_c = damages.length
-    context.font = "12px Arial";
-    context.fillStyle = 'black';
-    context.fillText('dam_c:'+dam_c,2,20);
+    // var dam_c = damages.length
+    // context.font = "12px Arial";
+    // context.fillStyle = 'black';
+    // context.fillText('dam_c:'+dam_c,2,20);
 
     // var en = enemies.filter(enemy => enemy.id == '28')
     // var dam_c = damages.length
