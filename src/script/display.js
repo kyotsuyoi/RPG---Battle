@@ -43,8 +43,4 @@ class Display{
             context.fillText(this.text,this.position.x,this.position.y);
         }
     }
-
-    // update(){
-    //     this.draw()
-    // }
 }
