@@ -269,17 +269,6 @@ function createImage(imageSrc){
     return image
 }
 
-function random_patrol(){    
-    val = Math.round(Math.random() * (100 - 1) + 1)
-    s = Math.random() * (3 - 1) + 1
-    
-    if(s>2){
-        return +val
-    }else{
-        return -val
-    }
-}
-
 function square_colision_area(a, b){
     if(
         a.position.x < b.position.x + b.width &&

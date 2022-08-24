@@ -508,3 +508,14 @@ function attack(enemy, player){
         }
     }
 }
+
+function random_patrol(){    
+    val = Math.round(Math.random() * (100 - 1) + 1)
+    s = Math.random() * (3 - 1) + 1
+    
+    if(s>2){
+        return +val
+    }else{
+        return -val
+    }
+}
