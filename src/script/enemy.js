@@ -50,7 +50,7 @@ class Enemy{
             case 'thief':
                 this.sprites.sprite = createImage('src/img/thief_male.png') 
                 this.power = 11
-                this.agility = 6
+                this.agility = 7
                 this.dexterity = 10
                 this.vitality = 11
             break
@@ -58,7 +58,7 @@ class Enemy{
             case 'thief_master':
                 this.sprites.sprite = createImage('src/img/thief_master_male.png') 
                 this.power = 12
-                this.agility = 8
+                this.agility = 10
                 this.dexterity = 18
                 this.vitality = 14
             break

@@ -158,7 +158,7 @@ function keyCodeDown(keyCode){
                 lastKey = 'power_blade'
                 player.isAttack = true
 
-                player.powerBladeCoolDown = 30  
+                player.powerBladeCoolDown = spell_cooldown(30, player.inteligence, player.dexterity)   
                 rapidBladeSound()
                 powerSwordSound()             
 
@@ -210,7 +210,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'rapid_blade'
                 player.isAttack = true
 
-                player.rapidBladeCoolDown = 18   
+                player.rapidBladeCoolDown = spell_cooldown(28, player.inteligence, player.dexterity)  
                 rapidBladeSound()
 
                 if(player.sp <= 0){
@@ -241,7 +241,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'cure'
                 player.isAttack = true
 
-                player.cureCoolDown = 100   
+                player.cureCoolDown = spell_cooldown(100, player.inteligence, player.dexterity)   
                 cureSound()
 
                 if(player.sp <= 0){
@@ -348,7 +348,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'power_blade'
                 player2.isAttack = true
 
-                player2.powerBladeCoolDown = 30 
+                player2.powerBladeCoolDown = spell_cooldown(30, player2.inteligence, player2.dexterity)   
                 rapidBladeSound()
                 powerSwordSound()
 
@@ -401,7 +401,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'rapid_blade'
                 player2.isAttack = true
 
-                player2.rapidBladeCoolDown = 18   
+                player2.rapidBladeCoolDown = spell_cooldown(28, player2.inteligence, player2.dexterity)     
                 rapidBladeSound()
 
                 if(player2.sp <= 0){
@@ -433,7 +433,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'phanton_blade'
                 player2.isAttack = true
 
-                player2.phantonBladeCoolDown = 120    
+                player2.phantonBladeCoolDown = spell_cooldown(120, player2.inteligence, player2.dexterity)      
                 phantonBladeSound()            
 
                 if(player2.sp <= 0){

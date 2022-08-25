@@ -20,11 +20,20 @@ function sp_value(inteligence, dexterity){
 
 //reverse
 function attack_speed_value(agility){
-    return 10 - agility/2
+    var percent = (agility*100/15)
+    var val = 60 - percent
+    if(val < 2){
+        val = 2
+    }
+    return val
 }
 
 function speed_value(agility){
-    return 0.5 + agility / 10
+    var val = 0.5 + agility / 10
+    if(val > 2){
+        val = 2
+    }
+    return val
 }
 
 function attack_vs_defense(attack, dexterity, defense){
@@ -59,6 +68,9 @@ function knock_back(damage_power, power_a, power_b){
     if(result <= 0){
         return 0
     }
+    if (result > 50){
+        result = 50
+    }
     return result
 }
 
@@ -72,5 +84,17 @@ function sp_recovery(inteligence, dexterity){
 
 function stamina_vs_attack(attack_result){
     return res = (attack_result/2)
+}
+
+function cure_spell(target_max_hp, inteligence){
+    return (target_max_hp*20/100) * (inteligence/100)
+}
+
+function spell_cooldown(cooldown_value, inteligence, dexterity){
+    var val = Math.round(cooldown_value - (inteligence*40/100) - (dexterity*30/100))
+    if(val < 1){
+        val = 1
+    }
+    return val
 }
 

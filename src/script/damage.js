@@ -273,10 +273,18 @@ function damage_action(damage){
         //damage.draw()
 
         if(damage.owner_id == 'p1' || damage.owner_id == 'p2'){
+            var inteligence = null;
+            if(damage.owner_id == 'p1'){
+                inteligence = player.inteligence
+            }
+            if(damage.owner_id == 'p2'){
+                inteligence = player2.inteligence
+            }
+
             if(damage.type == 'cure'){
-                playerCure(damage, player)
+                playerCure(damage, player, inteligence)
                 if(player2 != null){
-                    playerCure(damage, player2)
+                    playerCure(damage, player2, inteligence)
                 }                
             }else{
                 playerDamage(damage)
@@ -501,7 +509,7 @@ function playerDamage(damage){
 }
 
 //damage is reversed to cure
-function playerCure(cure, player){
+function playerCure(cure, player, inteligence){
     if(square_colision_area(cure, player)){
 
         if(player.hp >= player.max_hp){
@@ -514,8 +522,12 @@ function playerCure(cure, player){
         }
         damage.lastDamage.push(player.id) 
 
-        var cure_value = player.max_hp/30
-        player.hp += cure_value
+        var cure_value = cure_spell(player.max_hp, inteligence)
+        if(cure_value > player.max_hp){
+            player.hp = player.max_hp
+        }else{
+            player.hp += cure_value
+        }
         display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'green', text : Math.round(cure_value), type : 'damage'})
         displays.push(display)
  

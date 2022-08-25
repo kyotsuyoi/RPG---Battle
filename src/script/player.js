@@ -30,20 +30,20 @@ class Player{
         this.defending = false
         this.isRunning = false
 
-        if(id == 'p1'){
+        if(id == 'p1'){ //62
             this.power = 12
             this.agility = 8
-            this.dexterity = 12
-            this.vitality = 12
-            this.inteligence = 15
+            this.dexterity = 11
+            this.vitality = 11
+            this.inteligence = 20
         }
 
-        if(id == 'p2'){
+        if(id == 'p2'){ //62
             this.power = 16
-            this.agility = 6
+            this.agility = 7
             this.dexterity = 12
-            this.vitality = 14
-            this.inteligence = 7
+            this.vitality = 15
+            this.inteligence = 12
         }
 
         this.max_hp = hp_value(this.vitality, this.power)

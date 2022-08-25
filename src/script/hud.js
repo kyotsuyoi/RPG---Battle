@@ -83,6 +83,8 @@ class Hud {
         var max_sp = 0
         var stamina = 0
         var max_stamina = 0
+        var inteligence
+        var dexterity
 
         if(this.id == 'p1'){
             var hp = player.hp
@@ -94,7 +96,9 @@ class Hud {
             var powerBladeCoolDown = player.powerBladeCoolDown
             var rapidBladeCoolDown = player.rapidBladeCoolDown
             var phantonBladeCoolDown = player.phantonBladeCoolDown
-            var cureCoolDown = player.cureCoolDown
+            var cureCoolDown = player.cureCoolDown            
+            inteligence = player.inteligence          
+            dexterity = player.dexterity
         }
 
         if(this.id == 'p2' && player2 != null){
@@ -108,6 +112,8 @@ class Hud {
             var rapidBladeCoolDown = player2.rapidBladeCoolDown
             var phantonBladeCoolDown = player2.phantonBladeCoolDown
             var cureCoolDown = player2.cureCoolDown
+            inteligence = player2.inteligence          
+            dexterity = player2.dexterity
         }
 
         //HP bar
@@ -151,25 +157,25 @@ class Hud {
         context.fillText(Math.round(stamina) + '/' + Math.round(max_stamina),this.position.x + 70, this.position.y + 42);
 
         //Power Blade bar
-        var powerBladeCoolDown_percent = Math.round(powerBladeCoolDown * 100) / 30
+        var powerBladeCoolDown_percent = Math.round(powerBladeCoolDown * 100) / spell_cooldown(30, inteligence, dexterity)
         var bar_value = (16 * powerBladeCoolDown_percent) / 100
         context.fillStyle = '#555555dd'        
         context.fillRect(this.position.x + 47, this.position.y - 20, bar_value, 16)  
 
         //Rapid Blade bar
-        var rapidBladeCoolDown_percent = Math.round(rapidBladeCoolDown * 100) / 18
+        var rapidBladeCoolDown_percent = Math.round(rapidBladeCoolDown * 100) / spell_cooldown(28, inteligence, dexterity)
         var bar_value = (16 * rapidBladeCoolDown_percent) / 100
         context.fillStyle = '#555555dd'        
         context.fillRect(this.position.x + 72, this.position.y - 20, bar_value, 16) 
 
         //Phanton Blade bar
-        var phantonBladeCoolDown_percent = Math.round(phantonBladeCoolDown * 100) / 120
+        var phantonBladeCoolDown_percent = Math.round(phantonBladeCoolDown * 100) / spell_cooldown(120, inteligence, dexterity)
         var bar_value = (16 * phantonBladeCoolDown_percent) / 100
         context.fillStyle = '#555555dd'        
         context.fillRect(this.position.x + 97, this.position.y - 20, bar_value, 16) 
 
         //Cure bar
-        var cureCoolDown_percent = Math.round(cureCoolDown * 100) / 100
+        var cureCoolDown_percent = Math.round(cureCoolDown * 100) / spell_cooldown(100, inteligence, dexterity)
         var bar_value = (16 * cureCoolDown_percent) / 100
         context.fillStyle = '#555555dd'        
         context.fillRect(this.position.x + 97, this.position.y - 20, bar_value, 16) 
