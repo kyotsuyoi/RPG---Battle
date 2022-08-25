@@ -78,7 +78,7 @@ function keyCodeDown(keyCode){
     
     backgroundMusic()
     
-    console.log('keydown:'+keyCode) 
+    //console.log('keydown:'+keyCode) 
     
     //Start Player 1 -----------------------------------
     switch (keyCode){
@@ -131,7 +131,7 @@ function keyCodeDown(keyCode){
                 player.isAttack = true
                 //console.log('keydown:'+keyCode)
 
-                player.attackCoolDown = player.attack_speed
+                player.attackCoolDown = player.attributes_values.attack_speed
                 swordSound()
 
                 damage = new Damage({
@@ -150,7 +150,7 @@ function keyCodeDown(keyCode){
         case 100:
             if(!keys.power_blade.pressed && player.powerBladeCoolDown == 0){
 
-                if(player.sp - 40 < 0){
+                if(player.attributes_values.sp - 40 < 0){
                     return 
                 }
 
@@ -158,14 +158,14 @@ function keyCodeDown(keyCode){
                 lastKey = 'power_blade'
                 player.isAttack = true
 
-                player.powerBladeCoolDown = spell_cooldown(30, player.inteligence, player.dexterity)   
+                player.powerBladeCoolDown = spell_cooldown(30, player.attributes.inteligence, player.attributes.dexterity)   
                 rapidBladeSound()
                 powerSwordSound()             
 
-                if(player.sp <= 0){
-                    player.sp = 0
+                if(player.attributes_values.sp <= 0){
+                    player.attributes_values.sp = 0
                 }else{
-                    player.sp -= 40
+                    player.attributes_values.sp -= 40
                 }
                      
                 damage = new Damage({
@@ -181,7 +181,7 @@ function keyCodeDown(keyCode){
 
         //defend
         case 103:
-            if(!keys.defense.pressed && player.stamina>=5){
+            if(!keys.defense.pressed && player.attributes_values.stamina>=5){
                 keys.defense.pressed = true  
                 player.defending = true
                 shieldGrabSound()
@@ -190,7 +190,7 @@ function keyCodeDown(keyCode){
 
         //run
         case 98:
-            if(!keys.run.pressed && player.stamina>=5){
+            if(!keys.run.pressed && player.attributes_values.stamina>=5){
                 keys.run.pressed = true  
                 player.isRunning = true
                 player.staminaCoolDown = 50
@@ -202,7 +202,7 @@ function keyCodeDown(keyCode){
         case 101:
             if(!keys.rapid_blade.pressed && player.rapidBladeCoolDown == 0){
 
-                if(player.sp - 20 < 0){
+                if(player.attributes_values.sp - 20 < 0){
                     return 
                 }
 
@@ -210,13 +210,13 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'rapid_blade'
                 player.isAttack = true
 
-                player.rapidBladeCoolDown = spell_cooldown(28, player.inteligence, player.dexterity)  
+                player.rapidBladeCoolDown = spell_cooldown(28, player.attributes.inteligence, player.attributes.dexterity)  
                 rapidBladeSound()
 
-                if(player.sp <= 0){
-                    player.sp = 0
+                if(player.attributes_values.sp <= 0){
+                    player.attributes_values.sp = 0
                 }else{
-                    player.sp -= 20
+                    player.attributes_values.sp -= 20
                 }
 
                 damage = new Damage({
@@ -233,7 +233,7 @@ function keyCodeDown(keyCode){
         //cure
         case 104:
             if(!keys.cure.pressed && player.cureCoolDown == 0){
-                if(player.sp - 40 < 0){
+                if(player.attributes_values.sp - 40 < 0){
                     return 
                 }
 
@@ -241,13 +241,13 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'cure'
                 player.isAttack = true
 
-                player.cureCoolDown = spell_cooldown(100, player.inteligence, player.dexterity)   
+                player.cureCoolDown = spell_cooldown(100, player.attributes.inteligence, player.attributes.dexterity)   
                 cureSound()
 
-                if(player.sp <= 0){
-                    player.sp = 0
+                if(player.attributes_values.sp <= 0){
+                    player.attributes_values.sp = 0
                 }else{
-                    player.sp -= 40
+                    player.attributes_values.sp -= 40
                 }
                 damage = new Damage({
                     x : player.position.x, y : player.position.y, 
@@ -323,7 +323,7 @@ function keyCodeDown(keyCode){
                 //console.log('keydown:'+keyCode)
                 swordSound()
 
-                player2.attackCoolDown = player2.attack_speed
+                player2.attackCoolDown = player2.attributes_values.attack_speed
                      
                 damage = new Damage({
                     x : player2.position.x, y : player2.position.y, 
@@ -340,7 +340,7 @@ function keyCodeDown(keyCode){
         case 89:
             if(!keys2.power_blade.pressed && player2.powerBladeCoolDown == 0){
 
-                if(player2.sp - 40 < 0){
+                if(player2.attributes_values.sp - 40 < 0){
                     return 
                 }
 
@@ -348,14 +348,14 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'power_blade'
                 player2.isAttack = true
 
-                player2.powerBladeCoolDown = spell_cooldown(30, player2.inteligence, player2.dexterity)   
+                player2.powerBladeCoolDown = spell_cooldown(30, player2.attributes.inteligence, player.attributes.dexterity)   
                 rapidBladeSound()
                 powerSwordSound()
 
-                if(player2.sp <= 0){
-                    player2.sp = 0
+                if(player2.attributes_values.sp <= 0){
+                    player2.attributes_values.sp = 0
                 }else{
-                    player2.sp -= 40
+                    player2.attributes_values.sp -= 40
                 }
 
                 damage = new Damage({
@@ -371,7 +371,7 @@ function keyCodeDown(keyCode){
 
         //defend
         case 85:
-            if(!keys2.defense.pressed && player2.stamina>=5){
+            if(!keys2.defense.pressed && player2.attributes_values.stamina>=5){
                 //console.log('keydown:'+ keyCode)
                 keys2.defense.pressed = true  
                 player2.defending = true
@@ -381,7 +381,7 @@ function keyCodeDown(keyCode){
 
         //run
         case 72:
-            if(!keys2.run.pressed && player2.stamina>=5){
+            if(!keys2.run.pressed && player2.attributes_values.stamina>=5){
                 keys2.run.pressed = true  
                 player2.isRunning = true
                 player2.staminaCoolDown = 50
@@ -393,7 +393,7 @@ function keyCodeDown(keyCode){
         case 74:
             if(!keys2.rapid_blade.pressed && player2.rapidBladeCoolDown == 0){
 
-                if(player2.sp - 35 < 0){
+                if(player2.attributes_values.sp - 35 < 0){
                     return 
                 }
 
@@ -401,13 +401,13 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'rapid_blade'
                 player2.isAttack = true
 
-                player2.rapidBladeCoolDown = spell_cooldown(28, player2.inteligence, player2.dexterity)     
+                player2.rapidBladeCoolDown = spell_cooldown(28, player2.attributes.inteligence, player.attributes.dexterity)     
                 rapidBladeSound()
 
-                if(player2.sp <= 0){
-                    player2.sp = 0
+                if(player2.attributes_values.sp <= 0){
+                    player2.attributes_values.sp = 0
                 }else{
-                    player2.sp -= 35
+                    player2.attributes_values.sp -= 35
                 }
 
                 damage = new Damage({
@@ -425,7 +425,7 @@ function keyCodeDown(keyCode){
         case 73:
             if(!keys2.phanton_blade.pressed && player2.phantonBladeCoolDown == 0){
 
-                if(player2.sp - 20 < 0){
+                if(player2.attributes_values.sp - 20 < 0){
                     return 
                 }
 
@@ -433,13 +433,13 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'phanton_blade'
                 player2.isAttack = true
 
-                player2.phantonBladeCoolDown = spell_cooldown(120, player2.inteligence, player2.dexterity)      
+                player2.phantonBladeCoolDown = spell_cooldown(120, player2.attributes.inteligence, player.attributes.dexterity)      
                 phantonBladeSound()            
 
-                if(player2.sp <= 0){
-                    player2.sp = 0
+                if(player2.attributes_values.sp <= 0){
+                    player2.attributes_values.sp = 0
                 }else{
-                    player2.sp -= 25
+                    player2.attributes_values.sp -= 25
                 }
 
                 damage = new Damage({
@@ -622,17 +622,17 @@ function keyCodeUp(keyCode){
 
 function keypadLoop1(){
     if(keys.right.pressed && (player.position.x + player.width <= background.width)){
-        player.velocity.x = player.speed
+        player.velocity.x = player.attributes_values.speed
     } else if (keys.left.pressed && (player.position.x > 0)){
-        player.velocity.x = -player.speed
+        player.velocity.x = -player.attributes_values.speed
     }else{
         player.velocity.x = 0
     }
 
     if (keys.up.pressed && (player.position.y > 0)){
-        player.velocity.y = -player.speed
+        player.velocity.y = -player.attributes_values.speed
     } else if (keys.down.pressed && (player.position.y + player.height <= background.height)){
-        player.velocity.y = player.speed    
+        player.velocity.y = player.attributes_values.speed    
     }else{
         player.velocity.y = 0
     }
@@ -640,17 +640,17 @@ function keypadLoop1(){
 
 function keypadLoop2(){
     if(keys2.right.pressed && (player2.position.x + player2.width <= background.width)){
-        player2.velocity.x = player2.speed
+        player2.velocity.x = player2.attributes_values.speed
     } else if (keys2.left.pressed && (player2.position.x > 0)){
-        player2.velocity.x = -player2.speed
+        player2.velocity.x = -player2.attributes_values.speed
     }else{
         player2.velocity.x = 0
     }
 
     if (keys2.up.pressed && (player2.position.y > 0)){
-        player2.velocity.y = -player2.speed
+        player2.velocity.y = -player2.attributes_values.speed
     } else if (keys2.down.pressed && (player2.position.y + player2.height <= background.height)){
-        player2.velocity.y = player2.speed    
+        player2.velocity.y = player2.attributes_values.speed    
     }else{
         player2.velocity.y = 0
     }

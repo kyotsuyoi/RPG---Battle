@@ -87,33 +87,33 @@ class Hud {
         var dexterity
 
         if(this.id == 'p1'){
-            var hp = player.hp
-            var max_hp = player.max_hp
-            var sp = player.sp
-            var max_sp = player.max_sp
-            var stamina = player.stamina
-            var max_stamina = player.max_stamina            
+            var hp = player.attributes_values.hp
+            var max_hp = player.attributes_values.max_hp
+            var sp = player.attributes_values.sp
+            var max_sp = player.attributes_values.max_sp
+            var stamina = player.attributes_values.stamina
+            var max_stamina = player.attributes_values.max_stamina            
             var powerBladeCoolDown = player.powerBladeCoolDown
             var rapidBladeCoolDown = player.rapidBladeCoolDown
             var phantonBladeCoolDown = player.phantonBladeCoolDown
             var cureCoolDown = player.cureCoolDown            
-            inteligence = player.inteligence          
-            dexterity = player.dexterity
+            inteligence = player.attributes.inteligence          
+            dexterity = player.attributes.dexterity
         }
 
         if(this.id == 'p2' && player2 != null){
-            var hp = player2.hp
-            var max_hp = player2.max_hp
-            var sp = player2.sp
-            var max_sp = player2.max_sp
-            var stamina = player2.stamina
-            var max_stamina = player2.max_stamina
+            var hp = player2.attributes_values.hp
+            var max_hp = player2.attributes_values.max_hp
+            var sp = player2.attributes_values.sp
+            var max_sp = player2.attributes_values.max_sp
+            var stamina = player2.attributes_values.stamina
+            var max_stamina = player2.attributes_values.max_stamina
             var powerBladeCoolDown = player2.powerBladeCoolDown
             var rapidBladeCoolDown = player2.rapidBladeCoolDown
             var phantonBladeCoolDown = player2.phantonBladeCoolDown
             var cureCoolDown = player2.cureCoolDown
-            inteligence = player2.inteligence          
-            dexterity = player2.dexterity
+            inteligence = player2.attributes.inteligence          
+            dexterity = player2.attributes.dexterity
         }
 
         //HP bar

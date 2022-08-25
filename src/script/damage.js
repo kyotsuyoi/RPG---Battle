@@ -275,10 +275,10 @@ function damage_action(damage){
         if(damage.owner_id == 'p1' || damage.owner_id == 'p2'){
             var inteligence = null;
             if(damage.owner_id == 'p1'){
-                inteligence = player.inteligence
+                inteligence = player.attributes.inteligence
             }
             if(damage.owner_id == 'p2'){
-                inteligence = player2.inteligence
+                inteligence = player2.attributes.inteligence
             }
 
             if(damage.type == 'cure'){
@@ -320,25 +320,25 @@ function enemyDamage(damage, player){
         }
         damage.lastDamage.push(player.id)          
 
-        var is_hit = dexterity_vs_flee(enemy.dexterity, player.agility)            
+        var is_hit = dexterity_vs_flee(enemy.dexterity, player.attributes.agility)            
         if(player.defending){
             is_hit = true
         }
 
         if(is_hit){   
 
-            var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.defense)
+            var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.attributes_values.defense)
             if(player.defending){ 
 
-                res_stm = player.stamina - result
+                res_stm = player.attributes_values.stamina - result
                 if(res_stm < 0){
-                    player.stamina = 0 
+                    player.attributes_values.stamina = 0 
                     player.defending = false
                     //result += Math.round(res_stm)
                     //result += res_stm
-                    player.hp += res_stm  
-                    if(player.hp <= 0){
-                        player.hp = 0.0
+                    player.attributes_values.hp += res_stm  
+                    if(player.attributes_values.hp <= 0){
+                        player.attributes_values.hp = 0.0
                     }                       
                     swordSlashSound()                         
                     display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
@@ -346,7 +346,7 @@ function enemyDamage(damage, player){
 
                 }else{
                     shieldSound()
-                    player.stamina = player.stamina - stamina_vs_attack(player.defense, result)
+                    player.attributes_values.stamina = player.attributes_values.stamina - stamina_vs_attack(player.attributes_values.defense, result)
                     //damages.pop(damage)
                     damage.finished = true
                 }  
@@ -354,10 +354,10 @@ function enemyDamage(damage, player){
                 player.staminaCoolDown = 50
 
             }else{
-                var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.defense)
-                player.hp -= result  
-                if(player.hp < 0){
-                    player.hp = 0
+                var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.attributes_values.defense)
+                player.attributes_values.hp -= result  
+                if(player.attributes_values.hp < 0){
+                    player.attributes_values.hp = 0
                 }                  
                 swordSlashSound()          
                 display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
@@ -370,7 +370,7 @@ function enemyDamage(damage, player){
                         if(player.position.y <= 0){
                             player.position.y = 0
                         }else{
-                            player.position.y -= knock_back(damage.power, enemy.power, player.power)
+                            player.position.y -= knock_back(damage.power, enemy.power, player.attributes.power)
                         }                      
                     break
     
@@ -378,7 +378,7 @@ function enemyDamage(damage, player){
                         if(player.position.y + player.height >= background.height){
                             player.position.y = background.height - player.height
                         }else{
-                            player.position.y += knock_back(damage.power, enemy.power, player.power)
+                            player.position.y += knock_back(damage.power, enemy.power, player.attributes.power)
                         }
                     break
     
@@ -386,7 +386,7 @@ function enemyDamage(damage, player){
                         if(player.position.x <= 0){
                             player.position.x = 0
                         }else{
-                            player.position.x -= knock_back(damage.power, enemy.power, player.power)
+                            player.position.x -= knock_back(damage.power, enemy.power, player.attributes.power)
                         }
                     break
     
@@ -394,7 +394,7 @@ function enemyDamage(damage, player){
                         if(player.position.x + player.width >= background.width){
                             player.position.x = background.width - player.width
                         }else{
-                            player.position.x += knock_back(damage.power, enemy.power, player.power)
+                            player.position.x += knock_back(damage.power, enemy.power, player.attributes.power)
                         }
                     break                    
                 }
@@ -405,7 +405,7 @@ function enemyDamage(damage, player){
             displays.push(display)
         }  
 
-        if(player.hp <= 0){
+        if(player.attributes_values.hp <= 0){
             return
         }
     }
@@ -428,10 +428,10 @@ function playerDamage(damage){
             var is_hit = false
             switch(damage.owner_id){
                 case 'p1':
-                    is_hit = dexterity_vs_flee(player.dexterity + damage.bonus_dexterity, enemy.agility)
+                    is_hit = dexterity_vs_flee(player.attributes.dexterity + damage.bonus_dexterity, enemy.agility)
                 break
                 case 'p2':
-                    is_hit = dexterity_vs_flee(player.dexterity + damage.bonus_dexterity, enemy.agility)
+                    is_hit = dexterity_vs_flee(player.attributes.dexterity + damage.bonus_dexterity, enemy.agility)
                 break
             }                    
             
@@ -439,10 +439,10 @@ function playerDamage(damage){
                 var result = 0
                 switch(damage.owner_id){
                     case 'p1':
-                        result = attack_vs_defense(player.attack + damage.bonus_attack, player.dexterity + damage.bonus_dexterity, enemy.defense)
+                        result = attack_vs_defense(player.attributes_values.attack + damage.bonus_attack, player.attributes.dexterity + damage.bonus_dexterity, enemy.defense)
                     break
                     case 'p2':
-                        result = attack_vs_defense(player2.attack + damage.bonus_attack, player2.dexterity + damage.bonus_dexterity, enemy.defense)
+                        result = attack_vs_defense(player2.attributes_values.attack + damage.bonus_attack, player2.attributes.dexterity + damage.bonus_dexterity, enemy.defense)
                     break
                 }  
 
@@ -463,19 +463,19 @@ function playerDamage(damage){
                     case 'p1':
                         switch (player.side){
                             case 'up':                        
-                                enemy.position.y -= knock_back(damage.power, player.power, enemy.power)
+                                enemy.position.y -= knock_back(damage.power, player.attributes.power, enemy.power)
                             break
         
                             case 'down':
-                                enemy.position.y += knock_back(damage.power, player.power, enemy.power)
+                                enemy.position.y += knock_back(damage.power, player.attributes.power, enemy.power)
                             break
         
                             case 'left':
-                                enemy.position.x -= knock_back(damage.power, player.power, enemy.power)
+                                enemy.position.x -= knock_back(damage.power, player.attributes.power, enemy.power)
                             break
         
                             case 'right':
-                                enemy.position.x += knock_back(damage.power, player.power, enemy.power)
+                                enemy.position.x += knock_back(damage.power, player.attributes.power, enemy.power)
                             break 
                         }
                     break  
@@ -512,7 +512,7 @@ function playerDamage(damage){
 function playerCure(cure, player, inteligence){
     if(square_colision_area(cure, player)){
 
-        if(player.hp >= player.max_hp){
+        if(player.attributes_values.hp >= player.attributes_values.max_hp){
             return
         }
         
@@ -522,11 +522,11 @@ function playerCure(cure, player, inteligence){
         }
         damage.lastDamage.push(player.id) 
 
-        var cure_value = cure_spell(player.max_hp, inteligence)
-        if(cure_value > player.max_hp){
-            player.hp = player.max_hp
+        var cure_value = cure_spell(player.attributes_values.max_hp, inteligence)
+        if(cure_value > player.attributes_values.max_hp){
+            player.attributes_values.hp = player.attributes_values.max_hp
         }else{
-            player.hp += cure_value
+            player.attributes_values.hp += cure_value
         }
         display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'green', text : Math.round(cure_value), type : 'damage'})
         displays.push(display)

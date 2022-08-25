@@ -289,13 +289,13 @@ function start() {
 function animate(timestamp){
 
     if(player2 != null){
-        if(player2.hp <= 0){        
+        if(player2.attributes_values.hp <= 0){        
             alert('MORREU')
             return
         }
     }
 
-    if(player.hp <= 0){        
+    if(player.attributes_values.hp <= 0){        
         alert('MORREU')
         return
     }    

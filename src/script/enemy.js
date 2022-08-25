@@ -74,6 +74,23 @@ class Enemy{
             break
         }
 
+        this.attributes_values = {
+            max_hp : 0,
+            max_sp : 0,
+    
+            hp : 0,
+            sp : 0,
+            
+            attack : 0,
+            defense : 0,
+            flee : 0,
+            
+            speed : 0,
+            attack_speed : 0,  
+            hp_recovery : 0,    
+            sp_recovery : 0   
+        }
+
         this.hp = this.max_hp
         this.sp = this.max_sp
         
@@ -84,6 +101,8 @@ class Enemy{
         this.speed = speed_value(this.agility)       
         this.attack_speed = attack_speed_value(this.agility) 
         this.hp_recovery = hp_recovery(this.vitality)
+
+        this.attributes_values.speed = this.speed
 
         this.currentSprite = this.sprites.sprite
         this.currentCropWidth = 46

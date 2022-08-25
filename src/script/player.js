@@ -31,37 +31,59 @@ class Player{
         this.isRunning = false
 
         if(id == 'p1'){ //62
-            this.power = 12
-            this.agility = 8
-            this.dexterity = 11
-            this.vitality = 11
-            this.inteligence = 20
+            this.attributes = {
+                power : 12,
+                agility : 8,
+                dexterity : 11,
+                vitality : 11,
+                inteligence : 20
+            }
         }
 
         if(id == 'p2'){ //62
-            this.power = 16
-            this.agility = 7
-            this.dexterity = 12
-            this.vitality = 15
-            this.inteligence = 12
+            this.attributes = {
+                power : 16,
+                agility : 7,
+                dexterity : 12,
+                vitality : 15,
+                inteligence : 12
+            }
         }
 
-        this.max_hp = hp_value(this.vitality, this.power)
-        this.max_sp = sp_value(this.inteligence, this.dexterity)
-        this.max_stamina = 100
+        this.attributes_values = {
+            max_hp : 0,
+            max_sp : 0,
+            max_stamina : 100,
+    
+            hp : 0,
+            sp : 0,
+            stamina : 0,
+            
+            attack : 0,
+            defense : 0,
+            flee : 0,
+            
+            speed : 0,
+            attack_speed : -12,  
+            hp_recovery : 0,    
+            sp_recovery : 0   
+        }
 
-        this.hp = this.max_hp
-        this.sp = this.max_sp
-        this.stamina = this.max_stamina
+        this.attributes_values.max_hp = hp_value(this.attributes.vitality, this.attributes.power)
+        this.attributes_values.max_sp = sp_value(this.attributes.inteligence, this.attributes.dexterity)
+
+        this.attributes_values.hp = this.attributes_values.max_hp
+        this.attributes_values.sp = this.attributes_values.max_sp
+        this.attributes_values.stamina = this.attributes_values.max_stamina
         
-        this.attack = attack_value(this.power, this.dexterity)
-        this.defense = defense_value(this.vitality, this.dexterity)
-        this.flee = flee_value(this.agility, this.dexterity)
+        this.attributes_values.attack = attack_value(this.attributes.power, this.attributes.dexterity)
+        this.attributes_values.defense = defense_value(this.attributes.vitality, this.attributes.dexterity)
+        this.attributes_values.flee = flee_value(this.attributes.agility, this.attributes.dexterity)
         
-        this.speed = speed_value(this.agility)       
-        this.attack_speed = attack_speed_value(this.agility)     
-        this.hp_recovery = hp_recovery(this.vitality)       
-        this.sp_recovery = sp_recovery(this.inteligence, this.dexterity)  
+        this.attributes_values.speed = speed_value(this.attributes.agility) 
+        this.attributes_values.attack_speed = attack_speed_value(this.attributes.agility) + this.attributes_values.attack_speed
+        this.attributes_values.hp_recovery = hp_recovery(this.attributes.vitality)   
+        this.attributes_values.sp_recovery = sp_recovery(this.attributes.inteligence, this.attributes.dexterity)  
 
         this.staminaCoolDown = 0
         this.attackCoolDown = 0
@@ -161,16 +183,16 @@ class Player{
             this.height
         )
 
-        // var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height+8, color : 'red', text : this.hp, type : 'hp'})
+        // var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height+8, color : 'red', text : this.attributes_values.hp, type : 'hp'})
         // displays.push(display)
 
         var x_abs = this.position.x - Math.abs(this.width/2 - 20)
 
         //HP bar
-        if(this.hp < this.max_hp){
+        if(this.attributes_values.hp < this.attributes_values.max_hp){
             context.fillStyle = 'black'
             context.fillRect(x_abs, this.position.y + this.height+1, 40, 4)
-            var hp_percent = Math.round(this.hp * 100) / this.max_hp
+            var hp_percent = Math.round(this.attributes_values.hp * 100) / this.attributes_values.max_hp
             var bar_value = (40 * hp_percent) / 100
             if(hp_percent<=25){
                 context.fillStyle = 'red'
@@ -181,20 +203,20 @@ class Player{
         }
 
         //SP bar
-        if(this.sp < this.max_sp){
+        if(this.attributes_values.sp < this.attributes_values.max_sp){
             context.fillStyle = 'black'
             context.fillRect(x_abs, this.position.y + this.height+4, 40, 4)
-            var sp_percent = Math.round(this.sp * 100) / this.max_sp
+            var sp_percent = Math.round(this.attributes_values.sp * 100) / this.attributes_values.max_sp
             var bar_value = (40 * sp_percent) / 100
             context.fillStyle = 'blue'        
             context.fillRect(x_abs, this.position.y + this.height+4, bar_value, 3)
         }
 
         //Stamina bar
-        if(this.stamina < this.max_stamina){
+        if(this.attributes_values.stamina < this.attributes_values.max_stamina){
             context.fillStyle = 'black'
             context.fillRect(x_abs, this.position.y + this.height+8, 40, 4)
-            var stamina_percent = Math.round(this.stamina * 100) / this.max_stamina
+            var stamina_percent = Math.round(this.attributes_values.stamina * 100) / this.attributes_values.max_stamina
             var bar_value = (40 * stamina_percent) / 100
             if(stamina_percent<=25){
                 context.fillStyle = 'orange'
@@ -330,15 +352,15 @@ class Player{
             }
         }
 
-        this.speed = speed_value(this.agility)
+        this.attributes_values.speed = speed_value(this.attributes.agility)
 
         //need adjust: stamina on timestamp
-        if(this.isRunning && !this.defending && this.stamina > 0){
-            this.speed = speed_value(this.agility)*2
-            this.stamina -= 0.5
+        if(this.isRunning && !this.defending && this.attributes_values.stamina > 0){
+            this.attributes_values.speed = speed_value(this.attributes.agility)*2
+            this.attributes_values.stamina -= 0.5
         }        
         if(this.defending){
-            this.speed = speed_value(this.agility)/2
+            this.attributes_values.speed = speed_value(this.attributes.agility)/2
         }
 
         if(lastTimestamp - this.frameTime > this.lastTimestamp){
@@ -392,24 +414,24 @@ class Player{
         }    
         
         if(lastTimestamp - this.recoveryTime > this.lastRecoveryTime){
-            if(this.hp < this.max_hp && this.hp > 0){
-                this.hp += this.hp_recovery
-                if(this.hp > this.max_hp){
-                    this.hp = this.max_hp
+            if(this.attributes_values.hp < this.attributes_values.max_hp && this.attributes_values.hp > 0){
+                this.attributes_values.hp += this.attributes_values.hp_recovery
+                if(this.attributes_values.hp > this.attributes_values.max_hp){
+                    this.attributes_values.hp = this.attributes_values.max_hp
                 }
             }
     
-            if(this.sp < this.max_sp){
-                this.sp += this.sp_recovery
-                if(this.sp > this.max_sp){
-                    this.sp = this.max_sp
+            if(this.attributes_values.sp < this.attributes_values.max_sp){
+                this.attributes_values.sp += this.attributes_values.sp_recovery
+                if(this.attributes_values.sp > this.attributes_values.max_sp){
+                    this.attributes_values.sp = this.attributes_values.max_sp
                 }
             }
     
-            if(this.stamina < this.max_stamina && this.staminaCoolDown <= 0){
-                this.stamina += 1
-                if(this.stamina > this.max_stamina){
-                    this.stamina = this.max_stamina
+            if(this.attributes_values.stamina < this.attributes_values.max_stamina && this.staminaCoolDown <= 0){
+                this.attributes_values.stamina += 1
+                if(this.attributes_values.stamina > this.attributes_values.max_stamina){
+                    this.attributes_values.stamina = this.attributes_values.max_stamina
                 }
             }
             else{

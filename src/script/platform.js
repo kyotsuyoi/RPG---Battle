@@ -94,43 +94,43 @@ function platform_colision(object, platform){
 
     var touch = up && down && left && right
     if(touch && object.side == 'up'){
-        object.position.y+= object.speed 
+        object.position.y+= object.attributes_values.speed 
     }
     if(touch && object.side == 'down'){
-        object.position.y-= object.speed 
+        object.position.y-= object.attributes_values.speed 
     }
     if(touch && object.side == 'left'){
-        object.position.x+= object.speed  
+        object.position.x+= object.attributes_values.speed  
     }
     if(touch && object.side == 'right'){
-        object.position.x-= object.speed  
+        object.position.x-= object.attributes_values.speed  
     }
     
     if(up && !up_pass && ((left && !left_pass) || (right && !right_pass))){
         if(vy < vx){
             //console.log(platform.spriteType + ':up')
-            object.position.y+= object.speed        
+            object.position.y+= object.attributes_values.speed        
         }
     }
 
     if(down && !down_pass  && ((left && !left_pass) || (right && !right_pass))){
         if(vy < vx){
             //console.log(platform.spriteType + ':down')
-            object.position.y-= object.speed        
+            object.position.y-= object.attributes_values.speed        
         }
     }
 
     if(left && !left_pass && ((up && !up_pass) || (down && !down_pass))){  
         if(vx < vy){
             //console.log(platform.spriteType + ':left')
-            object.position.x+= object.speed         
+            object.position.x+= object.attributes_values.speed         
         }
     }
 
     if(right && !right_pass && ((up && !up_pass) || (down && !down_pass))){
         if(vx < vy){
             //console.log(platform.spriteType + ':right')
-            object.position.x-= object.speed            
+            object.position.x-= object.attributes_values.speed            
         }
     }
 

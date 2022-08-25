@@ -20,8 +20,8 @@ function sp_value(inteligence, dexterity){
 
 //reverse
 function attack_speed_value(agility){
-    var percent = (agility*100/15)
-    var val = 60 - percent
+    var ext_val = (20*agility/100)
+    var val = 20 - ext_val
     if(val < 2){
         val = 2
     }
