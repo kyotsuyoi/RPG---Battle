@@ -308,10 +308,9 @@ function animate(timestamp){
         return
     }
     
-    requestAnimationFrame(animate);
-    deltaTime = (timestamp - lastTimestamp) / perfectFrameTime;
-    lastTimestamp = timestamp;
-    //console.log(Math.round(lastTimestamp))
+    requestAnimationFrame(animate)
+    //deltaTime = (timestamp - lastTimestamp) / perfectFrameTime
+    lastTimestamp = timestamp
 
     context.clearRect(0, 0, background.width, background.height)  
     context.closePath() 

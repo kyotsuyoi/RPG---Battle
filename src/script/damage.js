@@ -12,14 +12,12 @@ class Damage{
         }
         this.width = 42
         this.height = 42
-        this.speed = 4
         this.targetRange = 150 
 
         this.lastDamage = new Array() //saves id of target that has already taken damage
 
         this.frameTime = 30
         this.frames = 0
-        this.time = 10
         this.damageCount = 1//for mult damages
         this.lastTimestamp = lastTimestamp
         this.positionTimestamp = lastTimestamp
@@ -29,27 +27,25 @@ class Damage{
         this.owner = owner
         this.owner_id = owner_id
 
-        this.power = 8 //knock back only
-        this.bonus_attack = 0
-        this.bonus_dexterity = 0
-        this.stun = 10
-
         this.sprites = {
-            sprite : createImage('src/img/sword_attack.png')             
+            sprite : createImage('')             
         }        
 
         this.type = type   
         switch (type){
             case 'power_blade':
-                this.power = 40
-                this.bonus_attack = 30
-                this.bonus_dexterity = 5
                 this.width = 100
                 this.height = 100
-                this.sprites.sprite = createImage('src/img/power_sword_attack.png')
+
+                this.power = 40
+                this.attack_percentage = 200
+                this.bonus_dexterity = 5
                 this.time = 60
+                this.count_time = 0  
                 this.speed = 1.5
-                this.stun = 50              
+                this.stun = 50  
+
+                this.sprites.sprite = createImage('src/img/power_sword_attack.png')
                 this.sprites.width = 100
                 this.sprites.height = 100
                 this.sprites.currentCropWidth = 42
@@ -59,16 +55,19 @@ class Damage{
             break
 
             case 'rapid_blade':
-                this.power = 10
-                this.bonus_attack = 2
-                this.bonus_dexterity = 3
                 this.width = 50
                 this.height = 50
-                this.sprites.sprite = createImage('src/img/power_sword_attack.png')
+
+                this.power = 10
+                this.attack_percentage = 140
+                this.bonus_dexterity = 3
                 this.time = 10
+                this.count_time = 0  
                 this.damageCount = 3
                 this.speed = 2.5
-                this.stun = 30             
+                this.stun = 30    
+
+                this.sprites.sprite = createImage('src/img/power_sword_attack.png')
                 this.sprites.width = 50
                 this.sprites.height = 50
                 this.sprites.currentCropWidth = 42
@@ -78,46 +77,64 @@ class Damage{
             break
             
             case 'phanton_blade':
-                this.power = 0
-                this.bonus_attack = -15
-                this.bonus_dexterity = 10
                 this.width = 100
                 this.height = 100
-                this.sprites.sprite = createImage('src/img/phanton_blade_attack.png')
-                this.time = 80                
-                this.damageCount = 40
+
+                this.power = 0
+                this.attack_percentage = 50
+                this.bonus_dexterity = 10
+                this.time = 80  
+                this.count_time = 0                
+                this.damageCount = 30
                 this.speed = 0
-                this.stun = 100           
+                this.stun = 100  
+
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/img/phanton_blade_attack.png')
                 this.sprites.width = 100
                 this.sprites.height = 100     
                 this.sprites.currentCropWidth = 84
                 this.sprites.currentCropHeight = 0
                 this.sprites.cropWidth = 84
                 this.sprites.cropHeight = 84
-                this.isKnockBack = false
             break
 
             case 'cure':
-                this.power = 0
                 this.width = 100
                 this.height = 100
-                this.sprites.sprite = createImage('src/img/cure.png')
-                this.time = 40                
-                this.damageCount = 6
+
+                this.power = 0 
+                this.time = 50   
+                this.count_time = 0            
+                this.damageCount = 8
                 this.speed = 0
-                this.stun = 0                
+                this.stun = 0        
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/img/cure.png')        
                 this.sprites.width = 100
                 this.sprites.height = 100     
                 this.sprites.currentCropWidth = 84
                 this.sprites.currentCropHeight = 0
                 this.sprites.cropWidth = 84
                 this.sprites.cropHeight = 84
-                this.isKnockBack = false
             break
 
-            default:
+            default:       
                 this.width = this.width
-                this.height = this.height 
+                this.height = this.height  
+
+                this.power = 8
+                this.time = 10   
+                this.count_time = 0  
+                this.attack_percentage = 100
+                this.bonus_dexterity = 0                
+                this.speed = 4
+                this.stun = 10
+
+                this.sprites.sprite = createImage('src/img/sword_attack.png')  
                 this.sprites.width = 42
                 this.sprites.height = 42
                 this.sprites.currentCropWidth = 42
@@ -125,6 +142,8 @@ class Damage{
                 this.sprites.cropWidth = 42
                 this.sprites.cropHeight = 42
         }
+
+        this.count_time = this.time 
         
         this.currentSprite = this.sprites.sprite
 
@@ -204,7 +223,7 @@ class Damage{
             this.sprites.cropWidth, //largura do corte
             this.sprites.cropHeight, //altura do corte
             this.center_x, 
-            this.center_y,
+            this.center_y - 10,
             this.sprites.width,
             this.sprites.height
         )
@@ -231,7 +250,7 @@ class Damage{
 }
 
 function damage_action(damage){
-    if(damage.time <= 0){
+    if(damage.count_time <= 0){
         
         switch(damage.type){
 
@@ -249,7 +268,7 @@ function damage_action(damage){
                     }  
                     damage.lastDamage = new Array()
                     damage.damageCount -= 1
-                    damage.time = 6
+                    damage.count_time = damage.time
                 }else{
                     //damages.pop(damage)  
                     damage.finished = true
@@ -270,7 +289,7 @@ function damage_action(damage){
                     }  
                     damage.lastDamage = new Array()
                     damage.damageCount -= 1
-                    damage.time = 6
+                    damage.count_time = 5
                 }else{
                     //damages.pop(damage)  
                     damage.finished = true
@@ -281,7 +300,7 @@ function damage_action(damage){
                 if(damage.damageCount > 1){ 
                     damage.lastDamage = new Array()
                     damage.damageCount -= 1
-                    damage.time = 20
+                    damage.count_time = damage.time
                 }else{
                     //damages.pop(damage)  
                     damage.finished = true
@@ -293,7 +312,7 @@ function damage_action(damage){
         }
 
     }else{
-        damage.time -= 1
+        damage.count_time -= 1
         //damage.draw()
 
         if(damage.owner_id == 'p1' || damage.owner_id == 'p2'){
@@ -463,10 +482,18 @@ function playerDamage(damage){
                 var result = 0
                 switch(damage.owner_id){
                     case 'p1':
-                        result = attack_vs_defense(player.attributes_values.attack + damage.bonus_attack, player.attributes.dexterity + damage.bonus_dexterity, enemy.attributes_values.defense)
+                        result = attack_vs_defense(
+                            player.attributes_values.attack * damage.attack_percentage / 100, 
+                            player.attributes.dexterity + damage.bonus_dexterity, 
+                            enemy.attributes_values.defense
+                        )
                     break
                     case 'p2':
-                        result = attack_vs_defense(player2.attributes_values.attack + damage.bonus_attack, player2.attributes.dexterity + damage.bonus_dexterity, enemy.attributes_values.defense)
+                        result = attack_vs_defense(
+                            player2.attributes_values.attack * damage.attack_percentage / 100, 
+                            player2.attributes.dexterity + damage.bonus_dexterity, 
+                            enemy.attributes_values.defense
+                        )
                     break
                 }  
 

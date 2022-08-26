@@ -77,7 +77,7 @@ class Weapon{
             this.currentCropWidth, //largura
             60, //altura
             this.position.x, 
-            this.position.y,
+            this.position.y - 10,
             this.width,
             this.height
         )
@@ -88,11 +88,6 @@ class Weapon{
         if (this.count==3 || this.count==6 || this.count==9 || this.count==12){
             this.frames++
         }
-
-        // if (this.frames > 3){  
-        //     this.frames = 0
-        //     this.count = 0
-        // }
 
         this.draw()
         this.position.x += this.velocity.x
