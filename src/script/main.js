@@ -9,6 +9,9 @@ let scrollOffset = 0
 const perfectFrameTime = 1000 / 60;
 let deltaTime = 0;
 let lastTimestamp = 0;
+let lastTimestamp2 = 0;
+let framerate = 0;
+let last_framerate = 0;
 
 var damages = new Array()
 var displays = new Array()
@@ -398,6 +401,23 @@ function animate(timestamp){
     huds.forEach(hud =>{
         hud.draw()
     })
+
+    var sec = Math.round(lastTimestamp /1000)
+
+    context.font = "12px Arial";
+    context.fillStyle = 'white';
+    context.fillText('sec:'+sec,2,20);
+
+    if(lastTimestamp - 1000 > lastTimestamp2){       
+        lastTimestamp2 = lastTimestamp    
+        last_framerate = framerate - 1
+        framerate = 0
+    }
+    framerate++
+    
+    context.fillText('framerate:'+last_framerate,2,40);
+    
+    var sec = lastTimestamp
 
 }
 
