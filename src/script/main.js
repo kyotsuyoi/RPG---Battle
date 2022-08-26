@@ -356,8 +356,7 @@ function animate(timestamp){
     var layer = new Array() 
     enemies.forEach(enemy =>{        
         enemy_action(enemy)  
-        //layer.push(enemy)
-        enemy.draw()
+        layer.push(enemy)
     })    
     
     weapons.forEach(weapon => {
@@ -374,7 +373,7 @@ function animate(timestamp){
         layer.push(player2)
     } 
     
-    //layer.sort((a,b) => a.position.y - b.position.y)
+    layer.sort((a,b) => a.position.y - b.position.y)
     layer.forEach(element => element.draw())
 
     weapons = weapons.filter(weapon => weapon.frames <= 3)
