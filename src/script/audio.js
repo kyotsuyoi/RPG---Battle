@@ -7,6 +7,8 @@ const background_song = new sound("src/sound/35.mp3")
 // var shield_grab_sond = new sound("src/sound/shield_grab_sond.wav")
 const run_sound = new sound("src/sound/run_sound.wav")
 
+let sound_count = 0
+
 function sound(src) {
     this.sound = document.createElement("audio")
     this.sound.src = src
@@ -40,15 +42,20 @@ function swordSound(  ) {
 }
 
 function swordSlashSound(){
-    var sword_slash_sound = new Audio("./src/sound/sword_slash_sound.mp3")
-    sword_slash_sound.play()
-    sword_slash_sound.onended = function(){
-        sword_slash_sound.currentSrc = null
-        sword_slash_sound.src = ""
-        sword_slash_sound.srcObject = null
-        sword_slash_sound.remove()
-        sword_slash_sound = null
-    }
+    
+    if(sound_count < 15){
+        var sword_slash_sound = new Audio("./src/sound/_hit_dagger.wav")
+        sword_slash_sound.play()
+        sound_count++
+        sword_slash_sound.onended = function(){
+            sword_slash_sound.currentSrc = null
+            sword_slash_sound.src = ""
+            sword_slash_sound.srcObject = null
+            sword_slash_sound.remove()
+            sword_slash_sound = null
+            sound_count--
+        }
+    }  
 }
 
 function shieldSound(){

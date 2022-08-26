@@ -79,13 +79,13 @@ class Damage{
             
             case 'phanton_blade':
                 this.power = 0
-                this.bonus_attack = 0
+                this.bonus_attack = -15
                 this.bonus_dexterity = 10
                 this.width = 100
                 this.height = 100
                 this.sprites.sprite = createImage('src/img/phanton_blade_attack.png')
                 this.time = 80                
-                this.damageCount = 10
+                this.damageCount = 40
                 this.speed = 0
                 this.stun = 100           
                 this.sprites.width = 100

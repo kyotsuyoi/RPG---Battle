@@ -402,11 +402,7 @@ function animate(timestamp){
         hud.draw()
     })
 
-    var sec = Math.round(lastTimestamp /1000)
-
-    context.font = "12px Arial";
-    context.fillStyle = 'white';
-    context.fillText('sec:'+sec,2,20);
+    var sec = Math.round(lastTimestamp /1000)    
 
     if(lastTimestamp - 1000 > lastTimestamp2){       
         lastTimestamp2 = lastTimestamp    
@@ -414,8 +410,12 @@ function animate(timestamp){
         framerate = 0
     }
     framerate++
-    
+
+    context.font = "12px Arial";
+    context.fillStyle = 'white';
+    context.fillText('sec:'+sec,2,20);
     context.fillText('framerate:'+last_framerate,2,40);
+    context.fillText('s_count:'+sound_count,2,50);
     
     var sec = lastTimestamp
 
