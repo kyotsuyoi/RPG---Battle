@@ -8,9 +8,9 @@ class Enemy{
             x : 0,
             y : 0
         }
-        this.width = 45
-        this.height = 45
-        this.speed = 0.6
+        this.width = 32
+        this.height = 32
+        
         this.targetRange = 150 
 
         this.frameTime = 100
@@ -41,36 +41,42 @@ class Enemy{
         this.sprites = {
             sprite : null         
         }
-        this.power = 0
-        this.agility = 0
-        this.dexterity = 0
-        this.vitality = 0     
 
         switch(type){
             case 'thief':
-                this.sprites.sprite = createImage('src/img/thief_male.png') 
-                this.power = 11
-                this.agility = 7
-                this.dexterity = 10
-                this.vitality = 11
+                this.sprites = {
+                    character : {
+                        sprite : createImage('src/img/thief_male.png'),
+                        cropWidth : 0,
+                        width : 46,
+                        height : 46
+                    }
+                } 
+                this.attributes = {
+                    power : 11,
+                    agility : 7,
+                    dexterity : 10,
+                    vitality : 11,
+                    inteligence : 5
+                }                
             break
 
             case 'thief_master':
-                this.sprites.sprite = createImage('src/img/thief_master_male.png') 
-                this.power = 12
-                this.agility = 10
-                this.dexterity = 18
-                this.vitality = 14
-            break
-        }
-
-        this.max_hp = hp_value(this.vitality, this.power)
-        this.max_sp = sp_value(0,0)
-
-        switch(type){            
-            case 'thief_master':
-                this.max_hp *=2
-                this.max_sp *=2
+                this.sprites = {
+                    character : {
+                        sprite : createImage('src/img/thief_master_male.png'),
+                        cropWidth : 0,
+                        width : 32,
+                        height : 45
+                    }
+                } 
+                this.attributes = {
+                    power : 12,
+                    agility : 10,
+                    dexterity : 18,
+                    vitality : 14,
+                    inteligence : 10
+                }
             break
         }
 
@@ -91,55 +97,71 @@ class Enemy{
             sp_recovery : 0   
         }
 
-        this.hp = this.max_hp
-        this.sp = this.max_sp
-        
-        this.attack = attack_value(this.power, this.dexterity)
-        this.defense = defense_value(this.vitality, this.dexterity)
-        this.flee = flee_value(this.agility, this.dexterity)
-        
-        this.speed = speed_value(this.agility)       
-        this.attack_speed = attack_speed_value(this.agility) 
-        this.hp_recovery = hp_recovery(this.vitality)
+        this.attributes_values.max_hp = hp_value(this.attributes.vitality, this.attributes.power)
+        this.attributes_values.max_sp = sp_value(0,0)
 
-        this.attributes_values.speed = this.speed
+        this.attributes_values.hp = this.attributes_values.max_hp 
+        this.attributes_values.sp = this.attributes_values.max_sp
+        
+        this.attributes_values.attack = attack_value(this.attributes.power, this.attributes.dexterity)
+        this.attributes_values.defense = defense_value(this.attributes.vitality, this.attributes.dexterity)
+        this.attributes_values.flee = flee_value(this.attributes.agility, this.attributes.dexterity)
+        
+        this.attributes_values.speed = speed_value(this.attributes.agility)       
+        this.attributes_values.attack_speed = attack_speed_value(this.attributes.agility) 
+        this.attributes_values.hp_recovery = hp_recovery(this.attributes.vitality)
 
-        this.currentSprite = this.sprites.sprite
+        switch(type){            
+            case 'thief_master':
+                this.attributes_values.max_hp *=2
+                this.attributes_values.max_sp *=2
+            break
+        }
+
+        this.currentSprite = this.sprites.character.sprite
         this.currentCropWidth = 46
         this.currentCropHeight = 0
     }
 
     draw(){
-        // context.fillStyle = 'green'
+        //area
+        // context.fillStyle = '#ff000055'
         // context.fillRect(this.position.x, this.position.y, this.width, this.height)
 
+        this.center_x = (this.position.x + this.width/2) - (this.sprites.character.width/2)
+        this.center_y = (this.position.y + this.height - this.sprites.character.height)
+
+        //draw character
         context.drawImage(          
             this.currentSprite, 
-            this.currentCropWidth * this.frames,
-            this.currentCropHeight,
-            this.currentCropWidth, //largura
-            45, //altura
-            this.position.x, 
-            this.position.y,
-            this.width,
-            this.height
+            this.currentCropWidth * this.frames, //corte no eixo x
+            this.currentCropHeight, //corte no eixo y
+            this.sprites.character.width, //largura do corte
+            this.sprites.character.height, //altura do corte
+            this.center_x, 
+            this.center_y,
+            this.sprites.character.width,
+            this.sprites.character.height
         )
         
         if(this.in_battle){
             // var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height+8, color : 'black', text : Math.round(this.hp), type : 'hp'})
             // displays.push(display)
 
+            var bar_width = 40
+            var center_x = (this.position.x + this.width/2) - (bar_width/2)
+            
             //HP bar
             context.fillStyle = 'black'
-            context.fillRect(this.position.x, this.position.y + this.height+1, 40, 4)    
-            var hp_percent = Math.round(this.hp * 100) / this.max_hp
-            var bar_value = (40 * hp_percent) / 100
+            context.fillRect(center_x, this.position.y + this.height+1, bar_width, 4)    
+            var hp_percent = Math.round(this.attributes_values.hp * 100) / this.attributes_values.max_hp 
+            var bar_value = (bar_width * hp_percent) / 100
             if(hp_percent<=25){
                 context.fillStyle = 'red'
             }else{
                 context.fillStyle = 'green'
             }            
-            context.fillRect(this.position.x, this.position.y + this.height+1, bar_value, 3)
+            context.fillRect(center_x, this.position.y + this.height+1, bar_value, 3)
         }
     }
 
@@ -162,8 +184,8 @@ class Enemy{
         
         if(lastTimestamp - this.recoveryTime > this.lastRecoveryTime){
             
-            if(this.hp < this.max_hp && this.hp > 0){
-                this.hp += this.hp_recovery
+            if(this.attributes_values.hp < this.attributes_values.max_hp && this.attributes_values.hp > 0){
+                this.attributes_values.hp += this.attributes_values.hp_recovery
             }
 
             if(this.attackCoolDown > 0){
@@ -173,7 +195,7 @@ class Enemy{
             this.lastRecoveryTime = lastTimestamp
         }
 
-        this.draw()
+        //this.draw()
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
     }
@@ -304,16 +326,16 @@ function patrol(enemy){
         //patrol left/right
         if(Math.round(enemy.patrol_x) != Math.round(enemy.position.x)){
             if(enemy.patrol_x >= enemy.position.x){
-                if(enemy.position.x + enemy.speed > enemy.patrol_x){
+                if(enemy.position.x + enemy.attributes_values.speed > enemy.patrol_x){
                     enemy.position.x = enemy.patrol_x
                 }else{
-                    enemy.position.x += enemy.speed
+                    enemy.position.x += enemy.attributes_values.speed
                 }
                 enemy.side = 'right'                                          
                 //console.log('right:'+enemy.position.x)
                 enemy.currentCropHeight = 46*1
             }else{
-                enemy.position.x -= enemy.speed                        
+                enemy.position.x -= enemy.attributes_values.speed                        
                 enemy.side = 'left'  
                 //console.log('left:'+enemy.position.x) 
                 enemy.currentCropHeight = 46*2
@@ -323,16 +345,16 @@ function patrol(enemy){
         //patrol down/up
         if(Math.round(enemy.patrol_y) != Math.round(enemy.position.y)){
             if(enemy.patrol_y >= enemy.position.y){
-                if(enemy.position.y + enemy.speed > enemy.patrol_y){
+                if(enemy.position.y + enemy.attributes_values.speed > enemy.patrol_y){
                     enemy.position.y = enemy.patrol_y
                 }else{
-                    enemy.position.y += enemy.speed 
+                    enemy.position.y += enemy.attributes_values.speed 
                 }                      
                 enemy.side = 'down'  
                 //console.log('down:'+enemy.position.y)                        
                 enemy.currentCropHeight = 46*0
             }else{
-                enemy.position.y -= enemy.speed                       
+                enemy.position.y -= enemy.attributes_values.speed                       
                 enemy.side = 'up'  
                 //console.log('up:'+enemy.position.y)                        
                 enemy.currentCropHeight = 46*3
@@ -350,7 +372,7 @@ function hunt(enemy, player, distance_x, distance_y){
         && distance_y < enemy.targetRange
         ){
         if(enemy.follow){
-            enemy.position.x += enemy.speed
+            enemy.position.x += enemy.attributes_values.speed
         }
         enemy.side = 'right'               
         enemy.currentCropHeight = 46*1  
@@ -362,7 +384,7 @@ function hunt(enemy, player, distance_x, distance_y){
         && distance_y < enemy.targetRange
         ){
         if(enemy.follow){
-            enemy.position.x -= enemy.speed
+            enemy.position.x -= enemy.attributes_values.speed
         }            
         enemy.side = 'left'  
         enemy.currentCropHeight = 46*2
@@ -375,7 +397,7 @@ function hunt(enemy, player, distance_x, distance_y){
         && distance_x < enemy.targetRange
         ){
         if(enemy.follow){
-            enemy.position.y+= enemy.speed
+            enemy.position.y+= enemy.attributes_values.speed
         }
         enemy.side = 'down'                       
         enemy.currentCropHeight = 46*0
@@ -387,7 +409,7 @@ function hunt(enemy, player, distance_x, distance_y){
         && distance_x < enemy.targetRange 
         ){
         if(enemy.follow){
-            enemy.position.y-= enemy.speed
+            enemy.position.y-= enemy.attributes_values.speed
         }
         enemy.side = 'up'                       
         enemy.currentCropHeight = 46*3
@@ -455,16 +477,16 @@ function hunt(enemy, player, distance_x, distance_y){
         var near_side = distance[0].side
 
         if(near_side == 'left' && (enemy.side == 'down' || enemy.side == 'up') && enemy.position.x + enemy.width /2 > player.position.x + player.width /2){
-            enemy.position.x -= enemy.speed
+            enemy.position.x -= enemy.attributes_values.speed
         }else 
         if(near_side == 'right' && (enemy.side == 'down' || enemy.side == 'up') && enemy.position.x < player.position.x){
-            enemy.position.x += enemy.speed
+            enemy.position.x += enemy.attributes_values.speed
         }else
         if(near_side == 'up' && (enemy.side == 'left' || enemy.side == 'right') && enemy.position.y + enemy.height /2 > player.position.y + player.height /2){
-            enemy.position.y -= enemy.speed
+            enemy.position.y -= enemy.attributes_values.speed
         }else
         if(near_side == 'down' && (enemy.side == 'left' || enemy.side == 'right') && enemy.position.y < player.position.y){
-            enemy.position.y += enemy.speed
+            enemy.position.y += enemy.attributes_values.speed
         }
     }
 }
@@ -480,7 +502,7 @@ function attack(enemy, player){
 
         //console.log("enemy attack")
 
-        enemy.attackCoolDown = enemy.attack_speed
+        enemy.attackCoolDown = enemy.attributes_values.attack_speed
         swordSound()
         switch (enemy.side){
             case 'up':                        

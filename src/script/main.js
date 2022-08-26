@@ -344,7 +344,7 @@ function animate(timestamp){
     damages = damages.filter(damage => damage.finished == false)
 
     //to kill enemies
-    enemies = enemies.filter(enemy => enemy.hp > 0)
+    enemies = enemies.filter(enemy => enemy.attributes_values.hp > 0)
     
     pad1Loop()
     pad2Loop()
@@ -353,8 +353,11 @@ function animate(timestamp){
         keypadLoop2()  
     }  
 
+    var layer = new Array() 
     enemies.forEach(enemy =>{        
         enemy_action(enemy)  
+        //layer.push(enemy)
+        enemy.draw()
     })    
     
     weapons.forEach(weapon => {
@@ -363,17 +366,16 @@ function animate(timestamp){
         }      
     })
 
+    player.update()
+    layer.push(player)
+
     if(player2 != null){
-        if(player.position.y > player2.position.y){
-            player2.update()
-            player.update()
-        }else{
-            player.update()
-            player2.update()
-        }  
-    }else{
-        player.update()
-    }      
+        player2.update()        
+        layer.push(player2)
+    } 
+    
+    //layer.sort((a,b) => a.position.y - b.position.y)
+    layer.forEach(element => element.draw())
 
     weapons = weapons.filter(weapon => weapon.frames <= 3)
     weapons.forEach(weapon => {
@@ -398,18 +400,6 @@ function animate(timestamp){
         hud.draw()
     })
 
-    // var dam_c = damages.length
-    // context.font = "12px Arial";
-    // context.fillStyle = 'black';
-    // context.fillText('dam_c:'+dam_c,2,20);
-
-    // var en = enemies.filter(enemy => enemy.id == '28')
-    // var dam_c = damages.length
-    // context.font = "12px Arial";
-    // context.fillStyle = 'black';
-    // context.fillText('enemy-patrol:'+ en[0].in_patrol,2,20+20);
-    // context.fillText('enemy-in_patrol_time:'+ en[0].in_patrol_time,2,20+40);
-    // context.fillText('enemy-patrol_time_wait:'+ en[0].patrol_time_wait,2,20+60);
 }
 
 start()

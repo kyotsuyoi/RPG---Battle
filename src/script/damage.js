@@ -35,13 +35,8 @@ class Damage{
         this.stun = 10
 
         this.sprites = {
-            sprite : createImage('src/img/sword_attack.png'),
-            width : this.width,
-            height : this.height               
-        }
-        
-        this.currentCropWidth = 42
-        this.currentCropHeight = 0
+            sprite : createImage('src/img/sword_attack.png')             
+        }        
 
         this.type = type   
         switch (type){
@@ -54,7 +49,13 @@ class Damage{
                 this.sprites.sprite = createImage('src/img/power_sword_attack.png')
                 this.time = 60
                 this.speed = 1.5
-                this.stun = 50
+                this.stun = 50              
+                this.sprites.width = 100
+                this.sprites.height = 100
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
             break
 
             case 'rapid_blade':
@@ -67,12 +68,18 @@ class Damage{
                 this.time = 10
                 this.damageCount = 3
                 this.speed = 2.5
-                this.stun = 30
+                this.stun = 30             
+                this.sprites.width = 50
+                this.sprites.height = 50
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
             break
             
             case 'phanton_blade':
                 this.power = 0
-                this.bonus_attack = -10
+                this.bonus_attack = 0
                 this.bonus_dexterity = 10
                 this.width = 100
                 this.height = 100
@@ -80,11 +87,13 @@ class Damage{
                 this.time = 80                
                 this.damageCount = 10
                 this.speed = 0
-                this.stun = 100                
-                this.currentCropWidth = 84
-                this.sprites.width = 84
-                this.sprites.height = 84
-                this.currentCropHeight = 0
+                this.stun = 100           
+                this.sprites.width = 100
+                this.sprites.height = 100     
+                this.sprites.currentCropWidth = 84
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 84
+                this.sprites.cropHeight = 84
                 this.isKnockBack = false
             break
 
@@ -93,16 +102,28 @@ class Damage{
                 this.width = 100
                 this.height = 100
                 this.sprites.sprite = createImage('src/img/cure.png')
-                this.time = 30                
+                this.time = 40                
                 this.damageCount = 6
                 this.speed = 0
                 this.stun = 0                
-                this.currentCropWidth = 84
-                this.sprites.width = 84
-                this.sprites.height = 84
-                this.currentCropHeight = 0
+                this.sprites.width = 100
+                this.sprites.height = 100     
+                this.sprites.currentCropWidth = 84
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 84
+                this.sprites.cropHeight = 84
                 this.isKnockBack = false
             break
+
+            default:
+                this.width = this.width
+                this.height = this.height 
+                this.sprites.width = 42
+                this.sprites.height = 42
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
         }
         
         this.currentSprite = this.sprites.sprite
@@ -111,35 +132,35 @@ class Damage{
         if(type == 'phanton_blade' || type == 'cure'){
             this.position.x = x - this.width/2 + character_width /2
             this.position.y = (y + character_height /2) - (this.height/2) 
-            this.currentCropHeight = 0
+            this.sprites.currentCropHeight = 0
 
         }else{
             switch (side){
                 case 'up':
                     this.position.x = (x + character_width /2) - (this.height/2)
                     this.position.y = y - this.height/2 + character_height /2//- this.width //- this.height
-                    this.currentCropHeight = 42*2
+                    this.sprites.currentCropHeight = this.sprites.cropHeight*2
                     this.velocity.y = -this.speed
                 break
     
                 case 'down':
                     this.position.x = (x + character_width /2) - (this.height/2)
                     this.position.y = y - this.height/2 + character_height /2 //+ character_height 
-                    this.currentCropHeight = 42*3
+                    this.sprites.currentCropHeight = this.sprites.cropHeight*3
                     this.velocity.y = this.speed
                 break
     
                 case 'left':
                     this.position.x = x - this.width/2 + character_width /2//- this.width
                     this.position.y = (y + character_height /2) - (this.height/2) 
-                    this.currentCropHeight = 0
+                    this.sprites.currentCropHeight = 0
                     this.velocity.x = -this.speed
                 break
     
                 case 'right':
                     this.position.x = x - this.width/2 + character_width /2//+ character_width 
                     this.position.y = (y + character_height /2) - (this.height/2)
-                    this.currentCropHeight = 42
+                    this.sprites.currentCropHeight = this.sprites.cropHeight
                     this.velocity.x = this.speed
                 break
             }
@@ -148,7 +169,7 @@ class Damage{
 
     draw(){
         // if(this.owner_id == 'p1'){
-        //     context.fillStyle = 'red'
+        //     context.fillStyle = '#ff000055'
         // }else{
         //     context.fillStyle = 'green'
         // }
@@ -173,16 +194,19 @@ class Damage{
             // context.fill()
         }
 
+        this.center_x = (this.position.x + this.width/2) - (this.sprites.width/2)
+        this.center_y = (this.position.y + this.height - this.sprites.height)
+
         context.drawImage(          
             this.currentSprite, 
-            this.currentCropWidth * this.frames,
-            this.currentCropHeight,
-            this.sprites.width, //largura
-            this.sprites.height, //altura
-            this.position.x, 
-            this.position.y,
-            this.width,
-            this.height
+            this.sprites.currentCropWidth * this.frames, //corte no eixo x
+            this.sprites.currentCropHeight, //corte no eixo y
+            this.sprites.cropWidth, //largura do corte
+            this.sprites.cropHeight, //altura do corte
+            this.center_x, 
+            this.center_y,
+            this.sprites.width,
+            this.sprites.height
         )
     }
 
@@ -320,14 +344,14 @@ function enemyDamage(damage, player){
         }
         damage.lastDamage.push(player.id)          
 
-        var is_hit = dexterity_vs_flee(enemy.dexterity, player.attributes.agility)            
+        var is_hit = dexterity_vs_flee(enemy.attributes.dexterity, player.attributes.agility)            
         if(player.defending){
             is_hit = true
         }
 
         if(is_hit){   
 
-            var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.attributes_values.defense)
+            var result = attack_vs_defense(enemy.attributes_values.attack, enemy.attributes.dexterity, player.attributes_values.defense)
             if(player.defending){ 
 
                 res_stm = player.attributes_values.stamina - result
@@ -354,7 +378,7 @@ function enemyDamage(damage, player){
                 player.staminaCoolDown = 50
 
             }else{
-                var result = attack_vs_defense(enemy.attack, enemy.dexterity, player.attributes_values.defense)
+                var result = attack_vs_defense(enemy.attributes_values.attack, enemy.attributes.dexterity, player.attributes_values.defense)
                 player.attributes_values.hp -= result  
                 if(player.attributes_values.hp < 0){
                     player.attributes_values.hp = 0
@@ -370,7 +394,7 @@ function enemyDamage(damage, player){
                         if(player.position.y <= 0){
                             player.position.y = 0
                         }else{
-                            player.position.y -= knock_back(damage.power, enemy.power, player.attributes.power)
+                            player.position.y -= knock_back(damage.power, enemy.attributes.power, player.attributes.power)
                         }                      
                     break
     
@@ -378,7 +402,7 @@ function enemyDamage(damage, player){
                         if(player.position.y + player.height >= background.height){
                             player.position.y = background.height - player.height
                         }else{
-                            player.position.y += knock_back(damage.power, enemy.power, player.attributes.power)
+                            player.position.y += knock_back(damage.power, enemy.attributes.power, player.attributes.power)
                         }
                     break
     
@@ -386,7 +410,7 @@ function enemyDamage(damage, player){
                         if(player.position.x <= 0){
                             player.position.x = 0
                         }else{
-                            player.position.x -= knock_back(damage.power, enemy.power, player.attributes.power)
+                            player.position.x -= knock_back(damage.power, enemy.attributes.power, player.attributes.power)
                         }
                     break
     
@@ -394,7 +418,7 @@ function enemyDamage(damage, player){
                         if(player.position.x + player.width >= background.width){
                             player.position.x = background.width - player.width
                         }else{
-                            player.position.x += knock_back(damage.power, enemy.power, player.attributes.power)
+                            player.position.x += knock_back(damage.power, enemy.attributes.power, player.attributes.power)
                         }
                     break                    
                 }
@@ -428,10 +452,10 @@ function playerDamage(damage){
             var is_hit = false
             switch(damage.owner_id){
                 case 'p1':
-                    is_hit = dexterity_vs_flee(player.attributes.dexterity + damage.bonus_dexterity, enemy.agility)
+                    is_hit = dexterity_vs_flee(player.attributes.dexterity + damage.bonus_dexterity, enemy.attributes.agility)
                 break
                 case 'p2':
-                    is_hit = dexterity_vs_flee(player.attributes.dexterity + damage.bonus_dexterity, enemy.agility)
+                    is_hit = dexterity_vs_flee(player.attributes.dexterity + damage.bonus_dexterity, enemy.attributes.agility)
                 break
             }                    
             
@@ -439,17 +463,17 @@ function playerDamage(damage){
                 var result = 0
                 switch(damage.owner_id){
                     case 'p1':
-                        result = attack_vs_defense(player.attributes_values.attack + damage.bonus_attack, player.attributes.dexterity + damage.bonus_dexterity, enemy.defense)
+                        result = attack_vs_defense(player.attributes_values.attack + damage.bonus_attack, player.attributes.dexterity + damage.bonus_dexterity, enemy.attributes_values.defense)
                     break
                     case 'p2':
-                        result = attack_vs_defense(player2.attributes_values.attack + damage.bonus_attack, player2.attributes.dexterity + damage.bonus_dexterity, enemy.defense)
+                        result = attack_vs_defense(player2.attributes_values.attack + damage.bonus_attack, player2.attributes.dexterity + damage.bonus_dexterity, enemy.attributes_values.defense)
                     break
                 }  
 
-                enemy.hp -= result   
+                enemy.attributes_values.hp -= result   
                 enemy.stunTime = damage.stun    
                 swordSlashSound()    
-                if(enemy.hp <= 0){
+                if(enemy.attributes_values.hp <= 0){
                     screamSound()
                 }          
                 display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'red', text : result, type : 'damage'})
@@ -463,19 +487,19 @@ function playerDamage(damage){
                     case 'p1':
                         switch (player.side){
                             case 'up':                        
-                                enemy.position.y -= knock_back(damage.power, player.attributes.power, enemy.power)
+                                enemy.position.y -= knock_back(damage.power, player.attributes.power, enemy.attributes.power)
                             break
         
                             case 'down':
-                                enemy.position.y += knock_back(damage.power, player.attributes.power, enemy.power)
+                                enemy.position.y += knock_back(damage.power, player.attributes.power, enemy.attributes.power)
                             break
         
                             case 'left':
-                                enemy.position.x -= knock_back(damage.power, player.attributes.power, enemy.power)
+                                enemy.position.x -= knock_back(damage.power, player.attributes.power, enemy.attributes.power)
                             break
         
                             case 'right':
-                                enemy.position.x += knock_back(damage.power, player.attributes.power, enemy.power)
+                                enemy.position.x += knock_back(damage.power, player.attributes.power, enemy.attributes.power)
                             break 
                         }
                     break  
@@ -483,19 +507,19 @@ function playerDamage(damage){
                     case 'p2':
                         switch (player2.side){
                             case 'up':                        
-                                enemy.position.y -= knock_back(damage.power, player2.power, enemy.power)
+                                enemy.position.y -= knock_back(damage.power, player2.power, enemy.attributes.power)
                             break
         
                             case 'down':
-                                enemy.position.y += knock_back(damage.power, player2.power, enemy.power)
+                                enemy.position.y += knock_back(damage.power, player2.power, enemy.attributes.power)
                             break
         
                             case 'left':
-                                enemy.position.x -= knock_back(damage.power, player2.power, enemy.power)
+                                enemy.position.x -= knock_back(damage.power, player2.power, enemy.attributes.power)
                             break
         
                             case 'right':
-                                enemy.position.x += knock_back(damage.power, player2.power, enemy.power)
+                                enemy.position.x += knock_back(damage.power, player2.power, enemy.attributes.power)
                             break 
                         }
                     break                             

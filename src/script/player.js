@@ -10,8 +10,8 @@ class Player{
             x : 0,
             y : 0
         }
-        this.width = 0
-        this.height = 0
+        this.width = 32
+        this.height = 32
 
         this.frames = 4
         this.lastTimestamp = lastTimestamp
@@ -95,9 +95,6 @@ class Player{
         this.side = 'down'
 
         if(id=='p1'){
-            this.width = 32
-            this.height = 43
-            
             this.currentCropWidth = 33
             this.currentCropHeight = 0
 
@@ -105,7 +102,10 @@ class Player{
                 character : {
                     sprite : createImage('src/img/knight_female.png'),
                     cropWidth : 0,
-                    width : this.width
+                    width : 32,
+                    height : 43,
+                    cropWidth : 32,
+                    cropHeight : 43
                 },
                 shield : {
                     sprite : createImage('src/img/shield_1.png'),
@@ -115,10 +115,7 @@ class Player{
             }
         }
 
-        if(id=='p2'){            
-            this.width = 32
-            this.height = 45
-            
+        if(id=='p2'){ 
             this.currentCropWidth = 34
             this.currentCropHeight = 0
 
@@ -126,7 +123,10 @@ class Player{
                 character : {
                     sprite : createImage('src/img/knight_male.png'),
                     cropWidth : 0,
-                    width : this.width
+                    width : 32,
+                    height : 50,
+                    cropWidth : 32,
+                    cropHeight : 45
                 },
                 shield : {
                     sprite : createImage('src/img/shield_2.png'),
@@ -143,7 +143,8 @@ class Player{
     }
 
     draw(){
-        // context.fillStyle = 'blue'
+        //area
+        // context.fillStyle = '#ff000055'
         // context.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         //draw shield first (up only)
@@ -161,120 +162,97 @@ class Player{
                 this.currentShieldSprite, 
                 this.currentShieldCropWidth * 3,
                 0,
-                45, //largura
-                45, //altura
+                45, 
+                45, 
                 this.position.x + posx, 
-                this.position.y + 8,
+                this.position.y - 4,
                 this.sprites.shield.width,
                 this.height
             )
         }
 
+        this.center_x = (this.position.x + this.width/2) - (this.sprites.character.width/2)
+        this.center_y = (this.position.y + this.height - this.sprites.character.height)
+
         //draw character
         context.drawImage(          
             this.currentSprite, 
-            this.currentCropWidth * this.frames,
-            this.currentCropHeight,
-            this.currentCropWidth, //largura
-            42, //altura
-            this.position.x, 
-            this.position.y,
-            this.width,
-            this.height
+            this.currentCropWidth * this.frames, //corte no eixo x
+            this.currentCropHeight, //corte no eixo y
+            this.sprites.character.cropWidth, //largura do corte
+            this.sprites.character.cropHeight, //altura do corte
+            this.center_x, 
+            this.center_y,
+            this.sprites.character.width,
+            this.sprites.character.height
         )
 
         // var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height+8, color : 'red', text : this.attributes_values.hp, type : 'hp'})
         // displays.push(display)
 
-        var x_abs = this.position.x - Math.abs(this.width/2 - 20)
+        var bar_width = 40
+        var center_x = (this.position.x + this.width/2) - (bar_width/2)
 
         //HP bar
         if(this.attributes_values.hp < this.attributes_values.max_hp){
             context.fillStyle = 'black'
-            context.fillRect(x_abs, this.position.y + this.height+1, 40, 4)
+            context.fillRect(center_x, this.position.y + this.height+1, bar_width, 4)
             var hp_percent = Math.round(this.attributes_values.hp * 100) / this.attributes_values.max_hp
-            var bar_value = (40 * hp_percent) / 100
+            var bar_value = (bar_width * hp_percent) / 100
             if(hp_percent<=25){
                 context.fillStyle = 'red'
             }else{
                 context.fillStyle = 'green'
             }
-            context.fillRect(x_abs, this.position.y + this.height+1, bar_value, 3)
+            context.fillRect(center_x, this.position.y + this.height+1, bar_value, 3)
         }
 
         //SP bar
         if(this.attributes_values.sp < this.attributes_values.max_sp){
             context.fillStyle = 'black'
-            context.fillRect(x_abs, this.position.y + this.height+4, 40, 4)
+            context.fillRect(center_x, this.position.y + this.height+4, bar_width, 4)
             var sp_percent = Math.round(this.attributes_values.sp * 100) / this.attributes_values.max_sp
-            var bar_value = (40 * sp_percent) / 100
+            var bar_value = (bar_width * sp_percent) / 100
             context.fillStyle = 'blue'        
-            context.fillRect(x_abs, this.position.y + this.height+4, bar_value, 3)
+            context.fillRect(center_x, this.position.y + this.height+4, bar_value, 3)
         }
 
         //Stamina bar
         if(this.attributes_values.stamina < this.attributes_values.max_stamina){
             context.fillStyle = 'black'
-            context.fillRect(x_abs, this.position.y + this.height+8, 40, 4)
+            context.fillRect(center_x, this.position.y + this.height+8, bar_width, 4)
             var stamina_percent = Math.round(this.attributes_values.stamina * 100) / this.attributes_values.max_stamina
-            var bar_value = (40 * stamina_percent) / 100
+            var bar_value = (bar_width * stamina_percent) / 100
             if(stamina_percent<=25){
                 context.fillStyle = 'orange'
             }else{
                 context.fillStyle = 'yellow'
             }       
-            context.fillRect(x_abs, this.position.y + this.height+8, bar_value, 3)
+            context.fillRect(center_x, this.position.y + this.height+8, bar_value, 3)
         }
 
         if(this.defending){
             
             var side_num = 0
             var pos_x = -2
-            var pos_y = 10
+            var pos_y = 2
 
-            if(this.id == 'p1'){
-                switch(this.side){
-                    case 'down':
-                        side_num = 0
-                        pos_x = -2
-                        pos_y = 10
-                    break
+            switch(this.side){
+                case 'down':
+                    side_num = 0
+                    pos_x = -2
+                break
 
-                    case 'left':
-                        side_num = 1
-                        pos_x = -14
-                        pos_y = 10
-                    break
+                case 'left':
+                    side_num = 1
+                    pos_x = -14
+                break
 
-                    case 'right':
-                        side_num = 2
-                        pos_x = 2
-                        pos_y = 10
-                    break
-                }
-            }
-
-            if(this.id == 'p2'){
-                switch(this.side){
-                    case 'down':
-                        side_num = 0
-                        pos_x = -2
-                        pos_y = 10
-                    break
-
-                    case 'left':
-                        side_num = 1
-                        pos_x = -14
-                        pos_y = 10
-                    break
-
-                    case 'right':
-                        side_num = 2
-                        pos_x = 2
-                        pos_y = 10
-                    break
-                }
-            }
+                case 'right':
+                    side_num = 2
+                    pos_x = 2
+                break
+            }            
 
             //draw shield (down/left/rigth)
             if(this.side != 'up'){
@@ -316,19 +294,19 @@ class Player{
         if(!this.isAttack && this.isWalking && this.id == 'p1'){
             if(keys.right.pressed && lastKey === 'right'){
                 this.side = 'right'
-                this.currentCropHeight = this.height * 1
+                this.currentCropHeight = this.sprites.character.cropHeight * 1
         
             } else if (keys.left.pressed && lastKey === 'left'){       
                 this.side = 'left'
-                this.currentCropHeight = this.height * 2
+                this.currentCropHeight = this.sprites.character.cropHeight * 2
             
             } else if (keys.down.pressed && lastKey === 'down'){        
                 this.side = 'down'
-                this.currentCropHeight = this.height * 0
+                this.currentCropHeight = this.sprites.character.cropHeight * 0
             
             } else if (keys.up.pressed && lastKey === 'up'){        
                 this.side = 'up'
-                this.currentCropHeight = this.height * 3
+                this.currentCropHeight = this.sprites.character.cropHeight * 3
             }
         }
 
@@ -336,19 +314,19 @@ class Player{
         if(!this.isAttack && this.isWalking && this.id == 'p2'){
             if(keys2.right.pressed && lastKey2 === 'right'){
                 this.side = 'right'
-                this.currentCropHeight = this.height * 1
+                this.currentCropHeight = this.sprites.character.cropHeight * 1
         
             } else if (keys2.left.pressed && lastKey2 === 'left'){       
                 this.side = 'left'
-                this.currentCropHeight = this.height * 2
+                this.currentCropHeight = this.sprites.character.cropHeight * 2
             
             } else if (keys2.down.pressed && lastKey2 === 'down'){        
                 this.side = 'down'
-                this.currentCropHeight = this.height * 0
+                this.currentCropHeight = this.sprites.character.cropHeight * 0
             
             } else if (keys2.up.pressed && lastKey2 === 'up'){        
                 this.side = 'up'
-                this.currentCropHeight = this.height * 3
+                this.currentCropHeight = this.sprites.character.cropHeight * 3
             }
         }
 
@@ -457,7 +435,7 @@ class Player{
             this.lastRecoveryTime = lastTimestamp
         }
 
-        this.draw()
+        //this.draw()
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
     }
