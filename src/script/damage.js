@@ -507,19 +507,19 @@ function playerDamage(damage){
                     case 'p2':
                         switch (player2.side){
                             case 'up':                        
-                                enemy.position.y -= knock_back(damage.power, player2.power, enemy.attributes.power)
+                                enemy.position.y -= knock_back(damage.power, player2.attributes.power, enemy.attributes.power)
                             break
         
                             case 'down':
-                                enemy.position.y += knock_back(damage.power, player2.power, enemy.attributes.power)
+                                enemy.position.y += knock_back(damage.power, player2.attributes.power, enemy.attributes.power)
                             break
         
                             case 'left':
-                                enemy.position.x -= knock_back(damage.power, player2.power, enemy.attributes.power)
+                                enemy.position.x -= knock_back(damage.power, player2.attributes.power, enemy.attributes.power)
                             break
         
                             case 'right':
-                                enemy.position.x += knock_back(damage.power, player2.power, enemy.attributes.power)
+                                enemy.position.x += knock_back(damage.power, player2.attributes.power, enemy.attributes.power)
                             break 
                         }
                     break                             

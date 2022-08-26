@@ -66,8 +66,8 @@ class Enemy{
                     character : {
                         sprite : createImage('src/img/thief_master_male.png'),
                         cropWidth : 0,
-                        width : 32,
-                        height : 45
+                        width : 46,
+                        height : 46
                     }
                 } 
                 this.attributes = {
@@ -100,6 +100,13 @@ class Enemy{
         this.attributes_values.max_hp = hp_value(this.attributes.vitality, this.attributes.power)
         this.attributes_values.max_sp = sp_value(0,0)
 
+        switch(type){            
+            case 'thief_master':
+                this.attributes_values.max_hp *=2
+                this.attributes_values.max_sp *=2
+            break
+        }
+
         this.attributes_values.hp = this.attributes_values.max_hp 
         this.attributes_values.sp = this.attributes_values.max_sp
         
@@ -109,14 +116,7 @@ class Enemy{
         
         this.attributes_values.speed = speed_value(this.attributes.agility)       
         this.attributes_values.attack_speed = attack_speed_value(this.attributes.agility) 
-        this.attributes_values.hp_recovery = hp_recovery(this.attributes.vitality)
-
-        switch(type){            
-            case 'thief_master':
-                this.attributes_values.max_hp *=2
-                this.attributes_values.max_sp *=2
-            break
-        }
+        this.attributes_values.hp_recovery = hp_recovery(this.attributes.vitality) 
 
         this.currentSprite = this.sprites.character.sprite
         this.currentCropWidth = 46
