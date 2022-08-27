@@ -8,6 +8,7 @@ const background_song = new sound("src/sound/35.mp3")
 const run_sound = new sound("src/sound/run_sound.wav")
 
 let sound_count = 0
+let timestamp_sound = 0
 
 function sound(src) {
     this.sound = document.createElement("audio")
@@ -43,7 +44,9 @@ function swordSound(  ) {
 
 function swordSlashSound(){
     
-    if(sound_count < 15){
+    if(lastTimestamp - 80 > timestamp_sound){ 
+        timestamp_sound = lastTimestamp 
+
         var sword_slash_sound = new Audio("./src/sound/_hit_dagger.wav")
         sword_slash_sound.play()
         sound_count++
@@ -54,8 +57,10 @@ function swordSlashSound(){
             sword_slash_sound.remove()
             sword_slash_sound = null
             sound_count--
-        }
-    }  
+        }        
+    }
+
+ 
 }
 
 function shieldSound(){

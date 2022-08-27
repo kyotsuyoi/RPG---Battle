@@ -126,19 +126,20 @@ function keyCodeDown(keyCode){
         //attack
         case 97:
             if(!keys.attack.pressed && player.attackCoolDown <= 0){
-                keys.attack.pressed = true      
-                lastKey = 'attack'
-                player.isAttack = true
-                //console.log('keydown:'+keyCode)
-
-                player.attackCoolDown = player.attributes_values.attack_speed
-                swordSound()
 
                 damage = new Damage({
                     x : player.position.x, y : player.position.y, 
                     owner_id : 'p1', owner : 'player', side : player.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
                 }); 
+
+                keys.attack.pressed = true      
+                lastKey = 'attack'
+                player.isAttack = true
+
+                player.attackCoolDown = player.attributes_values.attack_speed
+                swordSound()
+
                 damages.push(damage)   
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword_1', side : player.side})
                 weapons.push(weapon)
@@ -150,7 +151,13 @@ function keyCodeDown(keyCode){
         case 100:
             if(!keys.power_blade.pressed && player.powerBladeCoolDown == 0){
 
-                if(player.attributes_values.sp - 40 < 0){
+                damage = new Damage({
+                    x : player.position.x, y : player.position.y, 
+                    owner_id : 'p1', owner : 'player', type : 'power_blade', side : player.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                }); 
+
+                if(player.attributes_values.sp - damage.sp_value < 0){
                     return 
                 }
 
@@ -158,21 +165,16 @@ function keyCodeDown(keyCode){
                 lastKey = 'power_blade'
                 player.isAttack = true
 
-                player.powerBladeCoolDown = spell_cooldown(30, player.attributes.inteligence, player.attributes.dexterity)   
+                player.powerBladeCoolDown = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
                 rapidBladeSound()
                 powerSwordSound()             
 
                 if(player.attributes_values.sp <= 0){
                     player.attributes_values.sp = 0
                 }else{
-                    player.attributes_values.sp -= 40
+                    player.attributes_values.sp -= damage.sp_value
                 }
-                     
-                damage = new Damage({
-                    x : player.position.x, y : player.position.y, 
-                    owner_id : 'p1', owner : 'player', type : 'power_blade', side : player.side, 
-                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
-                }); 
+                 
                 damages.push(damage)                
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword_1', side : player.side})
                 weapons.push(weapon)
@@ -192,7 +194,7 @@ function keyCodeDown(keyCode){
         case 98:
             if(!keys.run.pressed && player.attributes_values.stamina>=5){
                 keys.run.pressed = true  
-                player.isRunning = true
+                player.isRunning = true                
                 player.staminaCoolDown = 50
                 runSound()
             }
@@ -201,31 +203,32 @@ function keyCodeDown(keyCode){
         //rapid_blade
         case 101:
             if(!keys.rapid_blade.pressed && player.rapidBladeCoolDown == 0){
-
-                if(player.attributes_values.sp - 20 < 0){
-                    return 
-                }
-
-                keys.power_blade.pressed = true      
-                lastKey2 = 'rapid_blade'
-                player.isAttack = true
-
-                player.rapidBladeCoolDown = spell_cooldown(28, player.attributes.inteligence, player.attributes.dexterity)  
-                rapidBladeSound()
-
-                if(player.attributes_values.sp <= 0){
-                    player.attributes_values.sp = 0
-                }else{
-                    player.attributes_values.sp -= 20
-                }
-
+                console.log("rapid")
                 damage = new Damage({
                     x : player.position.x, y : player.position.y, 
                     owner_id : 'p1', owner : 'player', type : 'rapid_blade', side : player.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
                 }); 
+
+                if(player.attributes_values.sp - damage.sp_value < 0){
+                    return 
+                }
+
+                keys.rapid_blade.pressed = true      
+                lastKey = 'rapid_blade'
+                player.isAttack = true
+
+                player.rapidBladeCoolDown = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)  
+                rapidBladeSound()
+
+                if(player.attributes_values.sp <= 0){
+                    player.attributes_values.sp = 0
+                }else{
+                    player.attributes_values.sp -= damage.sp_value
+                }
+
                 damages.push(damage)
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p2', type : 'sword_2', side : player.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword_2', side : player.side})
                 weapons.push(weapon)
             }
         break
@@ -233,29 +236,33 @@ function keyCodeDown(keyCode){
         //cure
         case 104:
             if(!keys.cure.pressed && player.cureCoolDown == 0){
-                if(player.attributes_values.sp - 40 < 0){
-                    return 
-                }
-
-                keys.cure.pressed = true      
-                lastKey2 = 'cure'
-                player.isAttack = true
-
-                player.cureCoolDown = spell_cooldown(100, player.attributes.inteligence, player.attributes.dexterity)   
-                cureSound()
-
-                if(player.attributes_values.sp <= 0){
-                    player.attributes_values.sp = 0
-                }else{
-                    player.attributes_values.sp -= 40
-                }
+                
+                console.log("cure")
                 damage = new Damage({
                     x : player.position.x, y : player.position.y, 
                     owner_id : 'p1', owner : 'player', type : 'cure', side : player.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
                 }); 
+
+                if(player.attributes_values.sp - damage.sp_value < 0){
+                    return 
+                }
+
+                keys.cure.pressed = true      
+                lastKey = 'cure'
+                player.isAttack = true
+
+                player.cureCoolDown = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
+                cureSound()
+
+                if(player.attributes_values.sp <= 0){
+                    player.attributes_values.sp = 0
+                }else{
+                    player.attributes_values.sp -= damage.sp_value
+                }
+
                 damages.push(damage)
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p2', type : 'sword_2', side : player.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p1', type : 'sword_2', side : player.side})
                 weapons.push(weapon)
             }
         break
@@ -317,6 +324,13 @@ function keyCodeDown(keyCode){
         //attack
         case 71:
             if(!keys2.attack.pressed && player2.attackCoolDown <= 0){
+                  
+                damage = new Damage({
+                    x : player2.position.x, y : player2.position.y, 
+                    owner_id : 'p2', owner : 'player2', side : player2.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                });
+                
                 keys2.attack.pressed = true      
                 lastKey2 = 'attack'
                 player2.isAttack = true
@@ -324,12 +338,7 @@ function keyCodeDown(keyCode){
                 swordSound()
 
                 player2.attackCoolDown = player2.attributes_values.attack_speed
-                     
-                damage = new Damage({
-                    x : player2.position.x, y : player2.position.y, 
-                    owner_id : 'p2', owner : 'player2', side : player2.side, 
-                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
-                });
+                   
                 damages.push(damage)   
                 weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
                 weapons.push(weapon)
@@ -340,29 +349,30 @@ function keyCodeDown(keyCode){
         case 89:
             if(!keys2.power_blade.pressed && player2.powerBladeCoolDown == 0){
 
-                if(player2.attributes_values.sp - 40 < 0){
+                damage = new Damage({
+                    x : player2.position.x, y : player2.position.y, 
+                    owner_id : 'p2', owner : 'player2', type : 'power_blade', side : player2.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                }); 
+
+                if(player2.attributes_values.sp - damage.sp_value < 0){
                     return 
                 }
 
                 keys2.power_blade.pressed = true      
                 lastKey2 = 'power_blade'
-                player2.isAttack = true
-
-                player2.powerBladeCoolDown = spell_cooldown(30, player2.attributes.inteligence, player.attributes.dexterity)   
+                player2.isAttack = true                  
+                
+                player2.powerBladeCoolDown = spell_cooldown(damage.coolDown, player2.attributes.inteligence, player.attributes.dexterity)   
                 rapidBladeSound()
                 powerSwordSound()
 
                 if(player2.attributes_values.sp <= 0){
                     player2.attributes_values.sp = 0
                 }else{
-                    player2.attributes_values.sp -= 40
+                    player2.attributes_values.sp -= damage.sp_value
                 }
 
-                damage = new Damage({
-                    x : player2.position.x, y : player2.position.y, 
-                    owner_id : 'p2', owner : 'player2', type : 'power_blade', side : player2.side, 
-                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
-                }); 
                 damages.push(damage)
                 weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
                 weapons.push(weapon)
@@ -389,32 +399,33 @@ function keyCodeDown(keyCode){
             }
         break
 
-        //rapid_blade
+        //ghost_blade
         case 74:
             if(!keys2.rapid_blade.pressed && player2.rapidBladeCoolDown == 0){
+                
+                damage = new Damage({
+                    x : player2.position.x, y : player2.position.y, 
+                    owner_id : 'p2', owner : 'player2', type : 'ghost_blade', side : player2.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                }); 
 
-                if(player2.attributes_values.sp - 35 < 0){
+                if(player2.attributes_values.sp - damage.sp_value < 0){
                     return 
                 }
 
-                keys2.power_blade.pressed = true      
+                keys2.rapid_blade.pressed = true      
                 lastKey2 = 'rapid_blade'
                 player2.isAttack = true
 
-                player2.rapidBladeCoolDown = spell_cooldown(28, player2.attributes.inteligence, player.attributes.dexterity)     
+                player2.rapidBladeCoolDown = spell_cooldown(damage.coolDown, player2.attributes.inteligence, player.attributes.dexterity)     
                 rapidBladeSound()
 
                 if(player2.attributes_values.sp <= 0){
                     player2.attributes_values.sp = 0
                 }else{
-                    player2.attributes_values.sp -= 35
+                    player2.attributes_values.sp -= damage.sp_value
                 }
 
-                damage = new Damage({
-                    x : player2.position.x, y : player2.position.y, 
-                    owner_id : 'p2', owner : 'player2', type : 'rapid_blade', side : player2.side, 
-                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
-                }); 
                 damages.push(damage)
                 weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
                 weapons.push(weapon)
@@ -425,7 +436,13 @@ function keyCodeDown(keyCode){
         case 73:
             if(!keys2.phanton_blade.pressed && player2.phantonBladeCoolDown == 0){
 
-                if(player2.attributes_values.sp - 20 < 0){
+                damage = new Damage({
+                    x : player2.position.x, y : player2.position.y, 
+                    owner_id : 'p2', owner : 'player2', type : 'phanton_blade', side : player2.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                }); 
+
+                if(player2.attributes_values.sp - damage.sp_value < 0){
                     return 
                 }
 
@@ -433,20 +450,15 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'phanton_blade'
                 player2.isAttack = true
 
-                player2.phantonBladeCoolDown = spell_cooldown(120, player2.attributes.inteligence, player.attributes.dexterity)      
+                player2.phantonBladeCoolDown = spell_cooldown(damage.coolDown, player2.attributes.inteligence, player.attributes.dexterity)      
                 phantonBladeSound()            
 
                 if(player2.attributes_values.sp <= 0){
                     player2.attributes_values.sp = 0
                 }else{
-                    player2.attributes_values.sp -= 25
+                    player2.attributes_values.sp -= damage.sp_value
                 }
 
-                damage = new Damage({
-                    x : player2.position.x, y : player2.position.y, 
-                    owner_id : 'p2', owner : 'player2', type : 'phanton_blade', side : player2.side, 
-                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
-                }); 
                 damages.push(damage)
                 weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
                 weapons.push(weapon)
@@ -605,7 +617,7 @@ function keyCodeUp(keyCode){
             }
         break
 
-        case 72:
+        case 74:
             keys2.rapid_blade.pressed = false 
         break
 

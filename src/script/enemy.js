@@ -504,11 +504,24 @@ function attack(enemy, player){
 
         enemy.attackCoolDown = enemy.attributes_values.attack_speed
         swordSound()
+        var percent = Math.round(Math.random() * ((100) - 0) + 0);
+        if(enemy.type == 'thief_master'){
+            percent-=5
+        }
+        var attack_type = ''
+        if(percent <= 15){
+            attack_type = 'rapid_blade'
+            enemy.stunTime = 50
+        }
+        if(percent <= 5){
+            attack_type = 'ghost_blade'
+            enemy.stunTime = 200
+        }
         switch (enemy.side){
             case 'up':                        
                 damage = new Damage({
                     x : enemy.position.x, y : enemy.position.y, 
-                    owner_id : enemy.id, owner : 'cpu', side : 'up', 
+                    owner_id : enemy.id, owner : 'cpu', type : attack_type, side : 'up', 
                     character_width : enemy.width, character_height: enemy.height, lastTimestamp : lastTimestamp
                 }); 
                 damages.push(damage)                   
@@ -518,7 +531,7 @@ function attack(enemy, player){
             case enemy.side = 'down':
                 damage = new Damage({
                     x : enemy.position.x, y : enemy.position.y, 
-                    owner_id : enemy.id, owner : 'cpu', side : 'down', 
+                    owner_id : enemy.id, owner : 'cpu', type : attack_type, side : 'down', 
                     character_width : enemy.width, character_height: enemy.height, lastTimestamp : lastTimestamp
                 }); 
                 damages.push(damage)                   
@@ -528,7 +541,7 @@ function attack(enemy, player){
             case enemy.side = 'left':
                 damage = new Damage({
                     x : enemy.position.x, y : enemy.position.y, 
-                    owner_id : enemy.id, owner : 'cpu', side : 'left', 
+                    owner_id : enemy.id, owner : 'cpu', type : attack_type, side : 'left', 
                     character_width : enemy.width, character_height: enemy.height, lastTimestamp : lastTimestamp
                 }); 
                 damages.push(damage)
@@ -539,7 +552,7 @@ function attack(enemy, player){
             case enemy.side = 'right':
                 damage = new Damage({
                     x : enemy.position.x, y : enemy.position.y, 
-                    owner_id : enemy.id, owner : 'cpu', side : 'right', 
+                    owner_id : enemy.id, owner : 'cpu', type : attack_type, side : 'right', 
                     character_width : enemy.width, character_height: enemy.height, lastTimestamp : lastTimestamp
                 }); 
                 damages.push(damage)

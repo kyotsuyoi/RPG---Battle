@@ -33,8 +33,8 @@ class Player{
         if(id == 'p1'){ //62
             this.attributes = {
                 power : 12,
-                agility : 8,
-                dexterity : 11,
+                agility : 9,
+                dexterity : 12,
                 vitality : 11,
                 inteligence : 20
             }
@@ -44,7 +44,7 @@ class Player{
             this.attributes = {
                 power : 16,
                 agility : 7,
-                dexterity : 12,
+                dexterity : 14,
                 vitality : 15,
                 inteligence : 12
             }
@@ -335,7 +335,12 @@ class Player{
         //need adjust: stamina on timestamp
         if(this.isRunning && !this.defending && this.attributes_values.stamina > 0){
             this.attributes_values.speed = speed_value(this.attributes.agility)*2
-            this.attributes_values.stamina -= 0.5
+            if (this.id=='p1' && (keys.up.pressed || keys.down.pressed || keys.left.pressed ||keys.right.pressed)){             
+                this.attributes_values.stamina -= 0.5
+            }
+            if (this.id=='p2' && (keys2.up.pressed || keys2.down.pressed || keys2.left.pressed ||keys2.right.pressed)){             
+                this.attributes_values.stamina -= 0.5
+            }
         }        
         if(this.defending){
             this.attributes_values.speed = speed_value(this.attributes.agility)/2

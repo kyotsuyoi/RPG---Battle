@@ -23,6 +23,7 @@ class Damage{
         this.positionTimestamp = lastTimestamp
         this.finished = false
         this.isKnockBack = true //enable or disable knock back
+        this.isSoundPlayed = false
 
         this.owner = owner
         this.owner_id = owner_id
@@ -44,6 +45,8 @@ class Damage{
                 this.count_time = 0  
                 this.speed = 1.5
                 this.stun = 50  
+                this.coolDown = 30
+                this.sp_value = 40
 
                 this.sprites.sprite = createImage('src/img/power_sword_attack.png')
                 this.sprites.width = 100
@@ -66,6 +69,8 @@ class Damage{
                 this.damageCount = 3
                 this.speed = 2.5
                 this.stun = 30    
+                this.coolDown = 28
+                this.sp_value = 35
 
                 this.sprites.sprite = createImage('src/img/power_sword_attack.png')
                 this.sprites.width = 50
@@ -87,7 +92,9 @@ class Damage{
                 this.count_time = 0                
                 this.damageCount = 30
                 this.speed = 0
-                this.stun = 100  
+                this.stun = 100    
+                this.coolDown = 120
+                this.sp_value = 30
 
                 this.isKnockBack = false
 
@@ -100,6 +107,32 @@ class Damage{
                 this.sprites.cropHeight = 84
             break
 
+            case 'ghost_blade':
+                this.width = 50
+                this.height = 50
+
+                this.power = 10
+                this.attack_percentage = 30
+                this.bonus_dexterity = 10
+                this.time = 10
+                this.count_time = 0  
+                this.damageCount = 50
+                this.speed = 0.2
+                this.stun = 4   
+                this.coolDown = 50
+                this.sp_value = 25
+
+                this.isKnockBack = true
+
+                this.sprites.sprite = createImage('src/img/power_sword_attack.png')
+                this.sprites.width = 50
+                this.sprites.height = 50
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+
             case 'cure':
                 this.width = 100
                 this.height = 100
@@ -107,9 +140,11 @@ class Damage{
                 this.power = 0 
                 this.time = 50   
                 this.count_time = 0            
-                this.damageCount = 8
+                this.damageCount = 10
                 this.speed = 0
-                this.stun = 0        
+                this.stun = 0    
+                this.coolDown = 100
+                this.sp_value = 40      
                 
                 this.isKnockBack = false
 
@@ -275,6 +310,17 @@ function damage_action(damage){
                 }  
             break
 
+            case 'ghost_blade':
+                if(damage.damageCount > 1){
+                    damage.lastDamage = new Array()
+                    damage.damageCount -= 1
+                    damage.count_time = damage.time
+                }else{
+                    //damages.pop(damage)  
+                    damage.finished = true
+                }  
+            break
+
             case 'phanton_blade':
                 if(damage.damageCount > 1){
                     switch(damage.owner_id){                
@@ -290,6 +336,7 @@ function damage_action(damage){
                     damage.lastDamage = new Array()
                     damage.damageCount -= 1
                     damage.count_time = 5
+                    damage.stun = 5
                 }else{
                     //damages.pop(damage)  
                     damage.finished = true
@@ -315,7 +362,14 @@ function damage_action(damage){
         damage.count_time -= 1
         //damage.draw()
 
+        //damage sound is played only 1 time per damage area
+        if(damage.lastDamage.length > 0 && damage.isSoundPlayed){                    
+            swordSlashSound() 
+            damage.isSoundPlayed = false
+        }
+
         if(damage.owner_id == 'p1' || damage.owner_id == 'p2'){
+
             var inteligence = null;
             if(damage.owner_id == 'p1'){
                 inteligence = player.attributes.inteligence
@@ -330,7 +384,7 @@ function damage_action(damage){
                     playerCure(damage, player2, inteligence)
                 }                
             }else{
-                playerDamage(damage)
+                playerDamage(damage)                
             }
         }  
         
@@ -383,21 +437,22 @@ function enemyDamage(damage, player){
                     if(player.attributes_values.hp <= 0){
                         player.attributes_values.hp = 0.0
                     }                       
-                    swordSlashSound()                         
+                    swordSlashSound()  
                     display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
-                    displays.push(display)
+                    displays.push(display)                     
 
                 }else{
                     shieldSound()
-                    player.attributes_values.stamina = player.attributes_values.stamina - stamina_vs_attack(player.attributes_values.defense, result)
+                    player.attributes_values.stamina = player.attributes_values.stamina - stamina_vs_attack(result)
                     //damages.pop(damage)
-                    damage.finished = true
+                    if(damage.type==''){  
+                        damage.finished = true
+                    }
                 }  
                 
                 player.staminaCoolDown = 50
 
             }else{
-                var result = attack_vs_defense(enemy.attributes_values.attack, enemy.attributes.dexterity, player.attributes_values.defense)
                 player.attributes_values.hp -= result  
                 if(player.attributes_values.hp < 0){
                     player.attributes_values.hp = 0
@@ -498,8 +553,13 @@ function playerDamage(damage){
                 }  
 
                 enemy.attributes_values.hp -= result   
-                enemy.stunTime = damage.stun    
-                swordSlashSound()    
+                enemy.stunTime = damage.stun  
+
+                if(!damage.isSoundPlayed){
+                    swordSlashSound() 
+                    damage.isSoundPlayed = true 
+                }    
+
                 if(enemy.attributes_values.hp <= 0){
                     screamSound()
                 }          
@@ -512,7 +572,7 @@ function playerDamage(damage){
 
                 switch(damage.owner_id){
                     case 'p1':
-                        switch (player.side){
+                        switch (damage.side){
                             case 'up':                        
                                 enemy.position.y -= knock_back(damage.power, player.attributes.power, enemy.attributes.power)
                             break
@@ -532,7 +592,7 @@ function playerDamage(damage){
                     break  
 
                     case 'p2':
-                        switch (player2.side){
+                        switch (damage.side){
                             case 'up':                        
                                 enemy.position.y -= knock_back(damage.power, player2.attributes.power, enemy.attributes.power)
                             break
