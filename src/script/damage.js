@@ -462,37 +462,38 @@ function enemyDamage(damage, player){
                 displays.push(display)
             }
             
+            var knock_val = knock_back(damage.power, enemy.attributes.power, player.attributes.power)
             if(damage.isKnockBack){
                 switch (damage.side){
                     case 'up': 
-                        if(player.position.y <= 0){
+                        if(player.position.y - knock_val <= 0){
                             player.position.y = 0
                         }else{
-                            player.position.y -= knock_back(damage.power, enemy.attributes.power, player.attributes.power)
+                            player.position.y -= knock_val
                         }                      
                     break
     
                     case 'down':
-                        if(player.position.y + player.height >= background.height){
+                        if(player.position.y + player.height + knock_val >= background.height){
                             player.position.y = background.height - player.height
                         }else{
-                            player.position.y += knock_back(damage.power, enemy.attributes.power, player.attributes.power)
+                            player.position.y += knock_val
                         }
                     break
     
                     case 'left':
-                        if(player.position.x <= 0){
+                        if(player.position.x - knock_val <= 0){
                             player.position.x = 0
                         }else{
-                            player.position.x -= knock_back(damage.power, enemy.attributes.power, player.attributes.power)
+                            player.position.x -= knock_val
                         }
                     break
     
                     case 'right':
-                        if(player.position.x + player.width >= background.width){
+                        if(player.position.x + player.width + knock_val >= background.width){
                             player.position.x = background.width - player.width
                         }else{
-                            player.position.x += knock_back(damage.power, enemy.attributes.power, player.attributes.power)
+                            player.position.x += knock_val
                         }
                     break                    
                 }
@@ -570,46 +571,51 @@ function playerDamage(damage){
                     return
                 }
 
+                var pl
                 switch(damage.owner_id){
                     case 'p1':
-                        switch (damage.side){
-                            case 'up':                        
-                                enemy.position.y -= knock_back(damage.power, player.attributes.power, enemy.attributes.power)
-                            break
-        
-                            case 'down':
-                                enemy.position.y += knock_back(damage.power, player.attributes.power, enemy.attributes.power)
-                            break
-        
-                            case 'left':
-                                enemy.position.x -= knock_back(damage.power, player.attributes.power, enemy.attributes.power)
-                            break
-        
-                            case 'right':
-                                enemy.position.x += knock_back(damage.power, player.attributes.power, enemy.attributes.power)
-                            break 
-                        }
-                    break  
+                        pl = player
+                    break                      
 
                     case 'p2':
-                        switch (damage.side){
-                            case 'up':                        
-                                enemy.position.y -= knock_back(damage.power, player2.attributes.power, enemy.attributes.power)
-                            break
-        
-                            case 'down':
-                                enemy.position.y += knock_back(damage.power, player2.attributes.power, enemy.attributes.power)
-                            break
-        
-                            case 'left':
-                                enemy.position.x -= knock_back(damage.power, player2.attributes.power, enemy.attributes.power)
-                            break
-        
-                            case 'right':
-                                enemy.position.x += knock_back(damage.power, player2.attributes.power, enemy.attributes.power)
-                            break 
-                        }
+                        pl = player2
                     break                             
+                }
+
+                var knock_val = knock_back(damage.power, pl.attributes.power, enemy.attributes.power)
+                switch (damage.side){
+                    case 'up':   
+                        
+                        if(enemy.position.y - knock_val <= 0){
+                            enemy.position.y = 0
+                        }else{                     
+                            enemy.position.y -= knock_val
+                        }
+                    break
+
+                    case 'down':
+                        if(enemy.position.y + enemy.height + knock_val >= background.height){
+                            enemy.position.y = background.height - enemy.height
+                        }else{
+                            enemy.position.y += knock_val
+                        }
+                    break
+
+                    case 'left':
+                        if(enemy.position.x - knock_val <= 0){
+                            enemy.position.x = 0
+                        }else{
+                            enemy.position.x -= knock_val
+                        }
+                    break
+
+                    case 'right':
+                        if(enemy.position.x + enemy.width + knock_val >= background.width){
+                            enemy.position.x = background.width - enemy.width
+                        }else{
+                            enemy.position.x += knock_val
+                        }
+                    break 
                 }
             }else{
                 display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'yellow', text : 'MISS', type : 'damage'})

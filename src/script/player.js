@@ -30,7 +30,7 @@ class Player{
         this.defending = false
         this.isRunning = false
 
-        if(id == 'p1'){ //62
+        if(id == 'p1'){ //64
             this.attributes = {
                 power : 12,
                 agility : 9,
@@ -40,7 +40,7 @@ class Player{
             }
         }
 
-        if(id == 'p2'){ //62
+        if(id == 'p2'){ //64
             this.attributes = {
                 power : 16,
                 agility : 7,
