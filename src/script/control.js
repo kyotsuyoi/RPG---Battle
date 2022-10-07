@@ -363,7 +363,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'power_blade'
                 player2.isAttack = true                  
                 
-                player2.powerBladeCoolDown = spell_cooldown(damage.coolDown, player2.attributes.inteligence, player.attributes.dexterity)   
+                player2.powerBladeCoolDown = spell_cooldown(damage.coolDown, player2.attributes.inteligence, player2.attributes.dexterity)   
                 rapidBladeSound()
                 powerSwordSound()
 
@@ -417,7 +417,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'rapid_blade'
                 player2.isAttack = true
 
-                player2.rapidBladeCoolDown = spell_cooldown(damage.coolDown, player2.attributes.inteligence, player.attributes.dexterity)     
+                player2.rapidBladeCoolDown = spell_cooldown(damage.coolDown, player2.attributes.inteligence, player2.attributes.dexterity)     
                 rapidBladeSound()
 
                 if(player2.attributes_values.sp <= 0){
@@ -450,7 +450,7 @@ function keyCodeDown(keyCode){
                 lastKey2 = 'phanton_blade'
                 player2.isAttack = true
 
-                player2.phantonBladeCoolDown = spell_cooldown(damage.coolDown, player2.attributes.inteligence, player.attributes.dexterity)      
+                player2.phantonBladeCoolDown = spell_cooldown(damage.coolDown, player2.attributes.inteligence, player2.attributes.dexterity)      
                 phantonBladeSound()            
 
                 if(player2.attributes_values.sp <= 0){
@@ -704,11 +704,52 @@ function pad1Loop() {
     if(gp==null)return
 
     //console.log(gp)
+
     //left
     if (buttonPressed(gp.buttons[14])) {
         keyCodeDown(37)
     }else{
         keyCodeUp(37)
+    }
+
+    if (buttonPressed(gp.axes[0])) {
+        console.log('ts l right')
+    }
+
+    if (buttonPressed(gp.axes[1])) {
+        console.log('ts l down')
+    }
+
+    if (buttonPressed(gp.axes[2])) {
+        console.log('ts r right')
+    }
+
+    if (buttonPressed(gp.axes[3])) {
+        console.log('3')
+    }
+
+    if (buttonPressed(gp.axes[4])) {
+        console.log('4')
+    }
+
+    if (buttonPressed(gp.axes[5])) {
+        console.log('ts r right')
+    }
+
+    if (buttonPressed(gp.axes[6])) {
+        console.log('6')
+    }
+
+    if (buttonPressed(gp.axes[7])) {
+        console.log('7')
+    }
+
+    if (buttonPressed(gp.axes[8])) {
+        console.log('8')
+    }
+
+    if (buttonPressed(gp.axes[9])) {
+        console.log('9')
     }
 
     //right

@@ -263,7 +263,7 @@ class Player{
                     45, //largura
                     45, //altura
                     this.position.x + pos_x, 
-                    this.position.y + pos_y,
+                    this.position.y + pos_y - 2,
                     this.sprites.shield.width,
                     this.height
                 )
@@ -290,7 +290,7 @@ class Player{
 
     update(){
 
-        //sprite switching player 1
+        //sprite switching - player 1
         if(!this.isAttack && this.isWalking && this.id == 'p1'){
             if(keys.right.pressed && lastKey === 'right'){
                 this.side = 'right'
@@ -310,7 +310,7 @@ class Player{
             }
         }
 
-        //sprite switching player 2
+        //sprite switching - player 2
         if(!this.isAttack && this.isWalking && this.id == 'p2'){
             if(keys2.right.pressed && lastKey2 === 'right'){
                 this.side = 'right'

@@ -129,7 +129,7 @@ class Hud {
         //HP text
         context.font = "8px Arial Black";
         context.fillStyle = 'black';
-        context.fillText(Math.round(hp) + '/' + Math.round(max_hp),this.position.x + 70, this.position.y + 12);
+        context.fillText(Math.round(hp) + '/' + Math.round(max_hp),this.position.x + 70, this.position.y + 12)
 
         //SP bar
         var sp_percent = Math.round(sp * 100) / max_sp
@@ -140,7 +140,7 @@ class Hud {
         //SP text
         context.font = "8px Arial Black";
         context.fillStyle = 'black';
-        context.fillText(Math.round(sp) + '/' + Math.round(max_sp),this.position.x + 70, this.position.y + 27);
+        context.fillText(Math.round(sp) + '/' + Math.round(max_sp),this.position.x + 70, this.position.y + 27)
         
         var stamina_percent = Math.round(stamina * 100) / max_stamina
         var bar_value = (76 * stamina_percent) / 100
@@ -154,31 +154,71 @@ class Hud {
         //Stamina text
         context.font = "8px Arial Black";
         context.fillStyle = 'black';
-        context.fillText(Math.round(stamina) + '/' + Math.round(max_stamina),this.position.x + 70, this.position.y + 42);
+        context.fillText(Math.round(stamina) + '/' + Math.round(max_stamina),this.position.x + 70, this.position.y + 42)
 
-        //Power Blade bar
-        var powerBladeCoolDown_percent = Math.round(powerBladeCoolDown * 100) / spell_cooldown(30, inteligence, dexterity)
-        var bar_value = (16 * powerBladeCoolDown_percent) / 100
+
+        //Power Blade bar 
+        damage = new Damage({
+            x : player.position.x, y : player.position.y, 
+            owner_id : 'p1', owner : 'player', type : 'power_blade', side : player.side, 
+            character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+        })       
+           
+        var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
+        var calc = Math.round(16 * powerBladeCoolDown / currentCoolDown) 
+
         context.fillStyle = '#555555dd'        
-        context.fillRect(this.position.x + 47, this.position.y - 20, bar_value, 16)  
+        context.fillRect(this.position.x + 47, this.position.y - 20, calc, 16) 
+
 
         //Rapid Blade bar
-        var rapidBladeCoolDown_percent = Math.round(rapidBladeCoolDown * 100) / spell_cooldown(28, inteligence, dexterity)
-        var bar_value = (16 * rapidBladeCoolDown_percent) / 100
+        var damage = null    
+        if (this.id=='p1'){
+            damage = new Damage({
+                x : player.position.x, y : player.position.y, 
+                owner_id : 'p1', owner : 'player', type : 'rapid_blade', side : player.side, 
+                character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+            }) 
+        }else{
+            damage = new Damage({
+                x : player.position.x, y : player.position.y, 
+                owner_id : 'p2', owner : 'player', type : 'ghost_blade', side : player.side, 
+                character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+            }) 
+        }  
+        var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
+        var calc = Math.round(16 * rapidBladeCoolDown / currentCoolDown)         
+
+        context.fillText(currentCoolDown + '/' + damage.coolDown,this.position.x, this.position.y + 27)
+        
         context.fillStyle = '#555555dd'        
-        context.fillRect(this.position.x + 72, this.position.y - 20, bar_value, 16) 
+        context.fillRect(this.position.x + 72, this.position.y - 20, calc, 16) 
+
 
         //Phanton Blade bar
-        var phantonBladeCoolDown_percent = Math.round(phantonBladeCoolDown * 100) / spell_cooldown(120, inteligence, dexterity)
-        var bar_value = (16 * phantonBladeCoolDown_percent) / 100
+        var damage = new Damage({
+            x : player.position.x, y : player.position.y, 
+            owner_id : 'p1', owner : 'player', type : 'phanton_blade', side : player.side, 
+            character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+        })    
+        var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
+        var calc = Math.round(16 * phantonBladeCoolDown / currentCoolDown) 
+
         context.fillStyle = '#555555dd'        
-        context.fillRect(this.position.x + 97, this.position.y - 20, bar_value, 16) 
+        context.fillRect(this.position.x + 97, this.position.y - 20, calc, 16) 
+
 
         //Cure bar
-        var cureCoolDown_percent = Math.round(cureCoolDown * 100) / spell_cooldown(100, inteligence, dexterity)
-        var bar_value = (16 * cureCoolDown_percent) / 100
+        var damage = new Damage({
+            x : player.position.x, y : player.position.y, 
+            owner_id : 'p1', owner : 'player', type : 'cure', side : player.side, 
+            character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+        })    
+        var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
+        var calc = Math.round(16 * cureCoolDown / currentCoolDown) 
+
         context.fillStyle = '#555555dd'        
-        context.fillRect(this.position.x + 97, this.position.y - 20, bar_value, 16) 
+        context.fillRect(this.position.x + 97, this.position.y - 20, calc, 16) 
         
     }
 }
